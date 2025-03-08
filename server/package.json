@@ -1,0 +1,23 @@
+{
+  "name": "server-ticket-booking-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node-dev index.ts"
+  },
+  "author": "Rozel",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "pg": "^8.13.3",
+    "socket.io": "^4.8.1",
+    "ts-node": "^10.9.2",
+    "typeorm": "^0.3.21"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
+}
