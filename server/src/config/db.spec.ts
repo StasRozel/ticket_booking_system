@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
-import { Route } from "../routes/entity/Route";
+import { Route } from "../modules/routes/entity/Route";
+import { Schedule } from "../modules/schedules/entity/Schedule";
+
 require('dotenv').config();
 
 export const AppDataSource = new DataSource({
@@ -11,6 +13,6 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [Route],
+    entities: [Route, Schedule],
 })
 

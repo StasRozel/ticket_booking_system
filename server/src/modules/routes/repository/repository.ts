@@ -1,8 +1,9 @@
 import { Repository, DataSource } from "typeorm";
 import { Route } from "../entity/Route";
-import { AppDataSource } from "../../config/db.spec";
+import { AppDataSource } from "../../../config/db.spec";
+import { IRepository } from "../../../shared/interfaces/IRepository";
 
-export class RouteRepository {
+export class RouteRepository implements IRepository<Route> {
   private repository: Repository<Route>;
 
   constructor(dataSource: DataSource) {

@@ -1,10 +1,33 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "removeComments": true,
-        "outDir": "build",
-        "sourceMap": true,
+        "allowJs": true,
+        "checkJs": false,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-    }
+        "lib": [
+            "es6",
+            "ES2021.String"
+        ],
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "outDir": "dist",
+        "removeComments": true,
+        "sourceMap": true,
+        "module": "commonjs",
+        "target": "es6",
+        "rootDirs": [
+            "src"
+        ],
+        "typeRoots": [
+            "./node_modules/@types"
+        ]
+    },
+    "compileOnSave": true,
+    "exclude": [
+        "node_modules",
+        "build"
+    ]
 }

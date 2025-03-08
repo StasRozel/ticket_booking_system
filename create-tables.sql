@@ -28,8 +28,8 @@ CREATE TABLE Buses (
 CREATE TABLE Schedules (
     id SERIAL PRIMARY KEY,
     route_id INTEGER NOT NULL,
-    departure_time TIMESTAMP NOT NULL,
-    arrival_time TIMESTAMP NOT NULL,
+    departure_time TIME NOT NULL,
+    arrival_time TIME NOT NULL,
     FOREIGN KEY (route_id) REFERENCES Routes(id)
 );
 
