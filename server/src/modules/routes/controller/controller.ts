@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-controllers';
-import { Route } from "../entity/Route";
+import { Route } from "../entities/Route";
 import { routeRepository } from '../repository/repository';
 
 @Controller()

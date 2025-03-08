@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-controllers';
 import { scheduleRepository } from '../repository/repository';
-import { Schedule } from '../entity/Schedule';
+import { Schedule } from '../entities/Schedule';
 
 @Controller()
 export class ScheduleController {

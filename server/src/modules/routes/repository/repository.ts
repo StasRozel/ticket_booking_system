@@ -1,5 +1,5 @@
 import { Repository, DataSource } from "typeorm";
-import { Route } from "../entity/Route";
+import { Route } from "../entities/Route";
 import { AppDataSource } from "../../../config/db.spec";
 import { IRepository } from "../../../shared/interfaces/IRepository";
 

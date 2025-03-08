@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
-import { Route } from "../../routes/entity/Route";
+import { Route } from "../../routes/entities/Route";
 
 @Entity("schedules")
 export class Schedule {

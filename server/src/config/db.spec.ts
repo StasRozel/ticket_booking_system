@@ -1,6 +1,4 @@
 import { DataSource } from "typeorm";
-import { Route } from "../modules/routes/entity/Route";
-import { Schedule } from "../modules/schedules/entity/Schedule";
 
 require('dotenv').config();
 
@@ -11,8 +9,9 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USERNAME ,
     password: String(process.env.DB_PASSWORD),
     database: process.env.DB_NAME,
-    synchronize: true,
+    synchronize: false,
+    entities: ["src/modules/**/entities/*.ts"],
+    migrations: ["src/migrations/*.ts"], 
     logging: false,
-    entities: [Route, Schedule],
 })
 

@@ -1,7 +1,7 @@
 import { Repository, DataSource } from "typeorm";
 import { AppDataSource } from "../../../config/db.spec";
 import { IRepository } from "../../../shared/interfaces/IRepository";
-import { Schedule } from "../entity/Schedule";
+import { Schedule } from "../entities/Schedule";
 
 export class ScheduleRepository implements IRepository<Schedule> {
   private repository: Repository<Schedule>;
