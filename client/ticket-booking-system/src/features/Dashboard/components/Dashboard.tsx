@@ -1,19 +1,28 @@
-// src/components/Dashboard.tsx
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Auth/context/AuthContext';
-import { Link } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
-    const { token, logout } = useAuth();
+    const { accessToken, logout } = useAuth();
+    const navigate = useNavigate(); // Добавляем для редиректа после выхода
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/login'); // Перенаправляем на страницу логина после выхода
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    };
 
     return (
         <div>
             <h2>Dashboard</h2>
-            {token ? (
+            {accessToken ? (
                 <>
                     <p>Welcome! You are successfully logged in or registered.</p>
-                    <p>Your token: {token}</p>
-                    <button onClick={logout}>Logout</button>
+                    <p>Your access token: {accessToken}</p>
+                    <button onClick={handleLogout}>Logout</button>
                 </>
             ) : (
                 <p>You are not logged in. Please <Link to="/login">login</Link>.</p>

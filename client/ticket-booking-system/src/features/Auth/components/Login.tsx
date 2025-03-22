@@ -11,8 +11,9 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await login(email, password);
-            navigate('/dashboard'); // Редирект на Dashboard после успешного логина
+            let isAdmin = await login(email, password);
+            if (isAdmin) navigate('/dashboard'); 
+            else navigate('/home')// Редирект на Dashboard после успешного логина
         } catch (error) {
             console.error('Login error:', error);
         }

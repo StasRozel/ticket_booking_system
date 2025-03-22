@@ -15,12 +15,20 @@ export class UserRepository implements IRepository<User> {
     return await this.repository.save(User);
   }
 
+  async save(data: User): Promise<void> {
+    await this.repository.save(data);
+  }
+
   async findOneById(id: number): Promise<User | null> {
     return await this.repository.findOneBy({ id });
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
     return await this.repository.findOneBy({ email });
+  }
+
+  async findOne(option: object): Promise<User | null> {
+    return await this.repository.findOneBy(option);
   }
 
   async findAll(): Promise<User[]> {

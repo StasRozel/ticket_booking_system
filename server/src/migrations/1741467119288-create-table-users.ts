@@ -10,6 +10,7 @@ export class CreateTableUsers1741467119288 implements MigrationInterface {
                 email VARCHAR(100) UNIQUE NOT NULL,
                 password VARCHAR(100) NOT NULL,
                 is_blocked BOOLEAN DEFAULT FALSE,
+                refresh_token VARCHAR(255),
                 FOREIGN KEY (role_id) REFERENCES Roles(id)
             );`
         );

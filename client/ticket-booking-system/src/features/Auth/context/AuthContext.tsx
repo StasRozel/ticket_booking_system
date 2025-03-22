@@ -1,38 +1,62 @@
 import React, { createContext, useState, useContext } from 'react';
 import { login as apiLogin, register as apiRegister } from '../services/api';
+import axios from 'axios';
 
 interface AuthContextType {
-    token: string | null;
-    login: (email: string, password: string) => Promise<void>;
-    register: (newUser: any) =>  Promise<void>;
-    logout: () => void;
+    accessToken: string | null;
+    refreshToken: string | null;
+    login: (email: string, password: string) => Promise<boolean>;
+    register: (newUser: any) => Promise<void>;
+    logout: () => Promise<void>;
+    refreshAccessToken: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+    const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'));
+    const [refreshToken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken'));
 
-    const login = async (email: string, password: string) => {
-        const newToken = await apiLogin(email, password); // Используем импортированную функцию
-        setToken(newToken);
-        localStorage.setItem('token', newToken);
+    const login = async (email: string, password: string): Promise<boolean> => {
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken , isAdmin} = await apiLogin(email, password);
+        setAccessToken(newAccessToken);
+        setRefreshToken(newRefreshToken);
+        localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
+
+        return isAdmin;
     };
-    
+
     const register = async (newUser: any) => {
-        const {name, role_id, email, password} = newUser;
-        const newToken = await apiRegister(name, role_id, email, password); // Используем импортированную функцию
-        setToken(newToken);
-        localStorage.setItem('token', newToken);
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await apiRegister(newUser);
+        setAccessToken(newAccessToken);
+        setRefreshToken(newRefreshToken);
+        localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
     };
 
-    const logout = () => {
-        setToken(null);
-        localStorage.removeItem('token');
+    const logout = async () => {
+        if (refreshToken) {
+            await axios.post('http://localhost:3001/auth/logout', { refreshToken });
+        }
+        setAccessToken(null);
+        setRefreshToken(null);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+    };
+
+    const refreshAccessToken = async () => {
+        if (!refreshToken) {
+            throw new Error('No refresh token available');
+        }
+        const response = await axios.post('http://localhost:3001/auth/refresh', { refreshToken });
+        const newAccessToken = response.data.accessToken;
+        setAccessToken(newAccessToken);
+        localStorage.setItem('accessToken', newAccessToken);
     };
 
     return (
-        <AuthContext.Provider value={{ token, login, register, logout }}>
+        <AuthContext.Provider value={{ accessToken, refreshToken, login, register, logout, refreshAccessToken }}>
             {children}
         </AuthContext.Provider>
     );

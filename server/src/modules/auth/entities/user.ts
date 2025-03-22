@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Role } from './role'; // Предполагается, что существует сущность Role
+import { Role } from './role';
 
-@Entity('users') // Имя таблицы в базе данных
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -40,7 +40,13 @@ export class User {
     })
     is_blocked: boolean;
 
-    // Связь многие-к-одному с таблицей Roles
+    @Column({ 
+        type: 'varchar', 
+        length: 255, 
+        nullable: true,
+     }) 
+    refresh_token: string;
+
     @ManyToOne(() => Role, role => role.users)
     @JoinColumn({ name: 'role_id' })
     role: Role;
