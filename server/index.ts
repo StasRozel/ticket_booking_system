@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors'
 import { RouteController } from './src/modules/routes/controller/controller';
 import { ScheduleController } from './src/modules/schedules/controller/controller';
+import { AuthController } from './src/modules/auth/conroller/controller';
+import { authMiddleware } from './src/shared/middlewares/auth';
 
 const app = express();
 
@@ -12,7 +14,18 @@ app.use(bodyParser.json());
 app.use(cors());
 
 useExpressServer(app, {
-  controllers: [RouteController, ScheduleController],
+  controllers: [RouteController, ScheduleController, AuthController],
+  authorizationChecker: async (action) => {
+    const token = action.request.headers.authorization?.split(' ')[1];
+    if (!token) return false;
+
+    try {
+        await authMiddleware(action.request, action.response, () => {});
+        return true;
+    } catch (error) {
+        return false;
+    }
+},
 });
 
 AppDataSource.initialize()
