@@ -1,7 +1,17 @@
 import React from 'react';
 import '../styles/css/Header.css';
+import { useAuth } from '../../Auth/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <header className="header">
       <div className="container">
@@ -18,7 +28,9 @@ const Header: React.FC = () => {
         </nav>
         <div className="header__actions">
           <button className="header__action">Поездки</button>
-          <button className="header__action"><a href='/login'>Войти</a></button>
+          <button className="sidebar__logout" onClick={handleLogout}>
+            Выйти
+          </button>
         </div>
       </div>
     </header>

@@ -8,7 +8,6 @@ const ProtectedRoute: React.FC = () => {
     if (!accessToken) {
         return <Navigate to="/login" replace />;
     }
-
     return <Outlet />;
 };
 

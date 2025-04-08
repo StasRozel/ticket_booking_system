@@ -1,0 +1,13 @@
+.add-entity-button {
+  padding: 10px 20px;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.add-entity-button:hover {
+  background: #0056b3;
+}

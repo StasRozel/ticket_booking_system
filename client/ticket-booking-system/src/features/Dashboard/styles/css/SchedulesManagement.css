@@ -1,0 +1,64 @@
+.schedules-management {
+  padding: 40px;
+}
+.schedules-management h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1a2a44;
+}
+.schedules-management__actions {
+  margin-bottom: 20px;
+}
+.schedules-management__button {
+  padding: 10px 20px;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.schedules-management__button:hover {
+  background: #0056b3;
+}
+.schedules-management__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.schedules-management__table th,
+.schedules-management__table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.schedules-management__table th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+.schedules-management__table td {
+  color: #333;
+}
+.schedules-management__action {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.schedules-management__action:first-child {
+  background: #007bff;
+  color: #fff;
+}
+.schedules-management__action--delete {
+  background: #ff4d4f;
+  color: #fff;
+}
+.schedules-management__action:hover {
+  opacity: 0.9;
+}

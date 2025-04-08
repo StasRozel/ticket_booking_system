@@ -1,0 +1,68 @@
+.routes-management {
+  padding: 40px;
+}
+.routes-management .container {
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+.routes-management h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1a2a44;
+}
+.routes-management__actions {
+  margin-bottom: 20px;
+}
+.routes-management__button {
+  padding: 10px 20px;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.routes-management__button:hover {
+  background: #0056b3;
+}
+.routes-management__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.routes-management__table th,
+.routes-management__table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.routes-management__table th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+.routes-management__table td {
+  color: #333;
+}
+.routes-management__action {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.routes-management__action:first-child {
+  background: #007bff;
+  color: #fff;
+}
+.routes-management__action--delete {
+  background: #f03023;
+  color: #fff;
+}
+.routes-management__action:hover {
+  opacity: 0.9;
+}

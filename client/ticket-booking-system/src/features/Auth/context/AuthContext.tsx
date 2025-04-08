@@ -18,11 +18,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [refreshToken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken'));
 
     const login = async (email: string, password: string): Promise<boolean> => {
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken , isAdmin} = await apiLogin(email, password);
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-        localStorage.setItem('accessToken', newAccessToken);
-        localStorage.setItem('refreshToken', newRefreshToken);
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken, isAdmin, isBlocked } = await apiLogin(email, password);
+        if (!isBlocked) {
+            setAccessToken(newAccessToken);
+            setRefreshToken(newRefreshToken);
+            localStorage.setItem('accessToken', newAccessToken);
+            localStorage.setItem('refreshToken', newRefreshToken);
+        }
+
 
         return isAdmin;
     };

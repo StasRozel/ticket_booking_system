@@ -8,6 +8,7 @@ import { setupAxiosInterceptors } from './features/Auth/services/api';
 import Dashboard from './features/Dashboard/components/Dashboard';
 import ProtectedRoute from './features/Auth/components/ProtectedRoute';
 import Home from './features/Home/components/Home';
+import { DashboardProvider } from './features/Dashboard/context/DashboardContext';
 
 const AppContent: React.FC = () => {
     const { refreshAccessToken, logout } = useAuth();
@@ -23,7 +24,7 @@ const AppContent: React.FC = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/" element={<Login />} />
                 <Route element={<ProtectedRoute />}> 
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
                     <Route path="/home" element={<Home />} />
                 </Route>
             </Routes>
