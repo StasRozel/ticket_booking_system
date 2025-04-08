@@ -37,6 +37,11 @@ export class ScheduleRepository implements IRepository<Schedule> {
     const result = await this.repository.delete(id);
     return result.affected !== 0;
   }
+
+  async deleteByRouteId(route_id: number): Promise<number> {
+    const result = await this.repository.delete({ route: { id: route_id } });
+    return result.affected;
+  }
 }
 
 export const scheduleRepository = new ScheduleRepository(AppDataSource);

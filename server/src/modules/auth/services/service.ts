@@ -44,9 +44,10 @@ export const login = async (email: string, password: string) => {
     const { accessToken, refreshToken } = generateTokens(user);
     
     user.refresh_token = refreshToken;
+    let isBlocked = user.is_blocked;
     await userRepository.save(user);
 
-    return { accessToken, refreshToken, isAdmin };
+    return { accessToken, refreshToken, isAdmin, isBlocked };
 };
 
 export const refreshAccessToken = async (refreshToken: string) => {

@@ -24,6 +24,6 @@ export class Route {
   @Column({ type: "float" })
   price: number;
 
-  @OneToMany(() => Schedule, (schedule) => schedule.route_id)
+  @OneToMany(() => Schedule, (schedule) => schedule.route)
   schedules: Schedule[];
 }

@@ -26,8 +26,8 @@ export class AuthController {
     ) {
         try {
           const { email, password } = user;
-            const { accessToken, refreshToken, isAdmin } = await login(email, password);
-            return res.status(200).json({ accessToken, refreshToken, isAdmin });
+            const { accessToken, refreshToken, isAdmin, isBlocked } = await login(email, password);
+            return res.status(200).json({ accessToken, refreshToken, isAdmin, isBlocked });
         } catch (error) {
             return res.status(401).json({ message: (error as Error).message });
         }

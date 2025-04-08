@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Route } from "../../routes/entities/Route";
+import { BusSchedule } from "../../busschedules/entities/BusSchedule";
 
 @Entity("schedules")
 export class Schedule {
@@ -7,7 +8,6 @@ export class Schedule {
   id: number;
 
   @Column()
-  @ManyToOne(() => Route, (route) => route.schedules, { onDelete: "CASCADE" })
   route_id: number;
 
   @Column({ type: "time" })
@@ -15,4 +15,11 @@ export class Schedule {
 
   @Column({ type: "time" })
   arrival_time: Date;
+
+  @ManyToOne(() => Route, (route) => route.schedules)
+  @JoinColumn({ name: "route_id" })
+  route: Route;
+
+  @OneToMany(() => BusSchedule, busSchedule => busSchedule.schedule)
+  busSchedules: BusSchedule[];
 }

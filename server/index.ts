@@ -5,8 +5,11 @@ import bodyParser from 'body-parser';
 import cors from 'cors'
 import { RouteController } from './src/modules/routes/controller/controller';
 import { ScheduleController } from './src/modules/schedules/controller/controller';
-import { AuthController } from './src/modules/auth/conroller/controller';
+import { AuthController } from './src/modules/auth/conroller/authController';
 import { authMiddleware } from './src/shared/middlewares/auth';
+import { BusController } from './src/modules/buses/controller/controller';
+import { BusScheduleController } from './src/modules/busschedules/controller/controller';
+import { UserController } from './src/modules/auth/conroller/userController';
 
 const app = express();
 
@@ -14,7 +17,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 useExpressServer(app, {
-  controllers: [RouteController, ScheduleController, AuthController],
+  controllers: [RouteController, ScheduleController, AuthController, BusController, BusScheduleController, UserController],
   authorizationChecker: async (action) => {
     const token = action.request.headers.authorization?.split(' ')[1];
     if (!token) return false;

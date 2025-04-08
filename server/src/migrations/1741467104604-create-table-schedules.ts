@@ -8,7 +8,7 @@ export class CreateTableSchedules1741467104604 implements MigrationInterface {
                 route_id INTEGER NOT NULL,
                 departure_time TIME NOT NULL,
                 arrival_time TIME NOT NULL,
-                FOREIGN KEY (route_id) REFERENCES Routes(id)
+                FOREIGN KEY (route_id) REFERENCES Routes(id) ON DELETE CASCADE
             );`
         );
     }

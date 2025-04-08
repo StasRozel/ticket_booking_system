@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-controllers';
 import { Route } from "../entities/Route";
 import { routeRepository } from '../repository/repository';
+import { scheduleRepository } from '../../schedules/repository/repository';
 
 @Controller()
 export class RouteController {
