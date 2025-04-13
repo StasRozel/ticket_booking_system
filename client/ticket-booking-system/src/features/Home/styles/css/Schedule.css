@@ -1,0 +1,263 @@
+.minibus-schedule {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+  font-family: "Inter", sans-serif;
+}
+.minibus-schedule .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.minibus-schedule__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.5s ease-out;
+}
+.minibus-schedule h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a2a44;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+.minibus-schedule__refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.minibus-schedule__refresh-button:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.minibus-schedule__refresh-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.minibus-schedule__spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #fff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.minibus-schedule__loading {
+  font-size: 18px;
+  color: #007bff;
+  text-align: center;
+  margin-top: 40px;
+  font-weight: 500;
+  animation: fadeIn 0.5s ease-in;
+}
+.minibus-schedule__error-container {
+  text-align: center;
+  margin-top: 40px;
+  animation: fadeIn 0.5s ease-in;
+}
+.minibus-schedule__error {
+  font-size: 18px;
+  color: #ff4d4f;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+.minibus-schedule__retry-button {
+  padding: 12px 24px;
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.minibus-schedule__retry-button:hover {
+  background: #e63946;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 77, 79, 0.3);
+}
+.minibus-schedule__empty {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin-top: 40px;
+  font-weight: 500;
+  animation: fadeIn 0.5s ease-in;
+}
+.minibus-schedule__table-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  overflow-x: auto;
+  animation: fadeInUp 0.5s ease-out;
+}
+.minibus-schedule__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.minibus-schedule__table th,
+.minibus-schedule__table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid #ebedf0;
+  font-size: 15px;
+}
+.minibus-schedule__table th {
+  background: #1a2a44;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.minibus-schedule__table th:first-child {
+  border-top-left-radius: 12px;
+}
+.minibus-schedule__table th:last-child {
+  border-top-right-radius: 12px;
+}
+.minibus-schedule__table td {
+  color: #333;
+  background: #fff;
+  transition: color 0.3s ease;
+}
+.minibus-schedule__table tr {
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.minibus-schedule__table tr:hover {
+  background: #e6e9ee;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.minibus-schedule__table tr:hover td {
+  color: #1a2a44;
+}
+.minibus-schedule__table tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+.minibus-schedule__table tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+.minibus-schedule__availability {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.3s ease;
+}
+.minibus-schedule__availability:hover {
+  transform: scale(1.05);
+}
+.minibus-schedule__availability--available {
+  background: #e6f4ea;
+  color: #28a745;
+}
+.minibus-schedule__availability--unavailable {
+  background: #fce4e4;
+  color: #ff4d4f;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 768px) {
+  .minibus-schedule {
+    padding: 60px 0;
+  }
+  .minibus-schedule .container {
+    padding: 0 15px;
+  }
+  .minibus-schedule h2 {
+    font-size: 28px;
+  }
+  .minibus-schedule__refresh-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .minibus-schedule__table th,
+  .minibus-schedule__table td {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+  .minibus-schedule__availability {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .minibus-schedule {
+    padding: 40px 0;
+  }
+  .minibus-schedule__header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .minibus-schedule h2 {
+    font-size: 24px;
+  }
+  .minibus-schedule__refresh-button {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .minibus-schedule__table th,
+  .minibus-schedule__table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

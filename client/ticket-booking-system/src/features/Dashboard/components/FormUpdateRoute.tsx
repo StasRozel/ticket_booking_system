@@ -3,7 +3,7 @@ import AddEntityButton from "./AddEntityButton";
 import "../styles/css/FormNewEntity.css"
 import { useDashboard } from "../context/DashboardContext";
 
-const FormUpdateEntity: React.FC = () => {
+const FormUpdateRoute: React.FC = () => {
     const [id, setId] = useState(0);
     const [name, setName] = useState('');
     const [starting_point, setStartingPoint] = useState('');
@@ -12,7 +12,7 @@ const FormUpdateEntity: React.FC = () => {
     const [distance, setDistance] = useState(0);
     const [price, setPrice] = useState(0);
 
-    const { UpdateRoute,  } = useDashboard();
+    const { UpdateRoute } = useDashboard();
 
 
     const handleSubmit = async () => {
@@ -109,4 +109,4 @@ const FormUpdateEntity: React.FC = () => {
     )
 }
 
-export default FormUpdateEntity;
+export default FormUpdateRoute;

@@ -1,0 +1,311 @@
+.minibus-schedule {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+    font-family: 'Inter', sans-serif;
+  
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+  
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      animation: fadeInDown 0.5s ease-out;
+    }
+  
+    h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1a2a44;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+  
+    &__refresh-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  
+      &:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      }
+  
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  
+    &__spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  
+    &__loading {
+      font-size: 18px;
+      color: #007bff;
+      text-align: center;
+      margin-top: 40px;
+      font-weight: 500;
+      animation: fadeIn 0.5s ease-in;
+    }
+  
+    &__error-container {
+      text-align: center;
+      margin-top: 40px;
+      animation: fadeIn 0.5s ease-in;
+    }
+  
+    &__error {
+      font-size: 18px;
+      color: #ff4d4f;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+  
+    &__retry-button {
+      padding: 12px 24px;
+      background: #ff4d4f;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  
+      &:hover {
+        background: #e63946;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 77, 79, 0.3);
+      }
+    }
+  
+    &__empty {
+      font-size: 18px;
+      color: #666;
+      text-align: center;
+      margin-top: 40px;
+      font-weight: 500;
+      animation: fadeIn 0.5s ease-in;
+    }
+  
+    &__table-wrapper {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      overflow-x: auto;
+      animation: fadeInUp 0.5s ease-out;
+    }
+  
+    &__table {
+      width: 100%;
+      border-collapse: separate; // Изменяем на separate для скруглений
+      border-spacing: 0; // Убираем лишние пробелы между ячейками
+  
+      th,
+      td {
+        padding: 16px 20px;
+        text-align: left;
+        border-bottom: 1px solid #ebedf0;
+        font-size: 15px;
+      }
+  
+      th {
+        background: #1a2a44;
+        color: #fff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+  
+        // Скругления для верхних углов заголовков
+        &:first-child {
+          border-top-left-radius: 12px; // Скругление левого верхнего угла
+        }
+  
+        &:last-child {
+          border-top-right-radius: 12px; // Скругление правого верхнего угла
+        }
+      }
+  
+      td {
+        color: #333;
+        background: #fff;
+        transition: color 0.3s ease;
+      }
+  
+      tr {
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  
+        &:hover {
+          background: #e6e9ee;
+          transform: translateY(-2px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+          td {
+            color: #1a2a44;
+          }
+        }
+  
+        // Скругления для нижних углов последней строки
+        &:last-child {
+          td:first-child {
+            border-bottom-left-radius: 12px; // Скругление левого нижнего угла
+          }
+  
+          td:last-child {
+            border-bottom-right-radius: 12px; // Скругление правого нижнего угла
+          }
+        }
+      }
+    }
+  
+    &__availability {
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: transform 0.3s ease;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+  
+      &--available {
+        background: #e6f4ea;
+        color: #28a745;
+      }
+  
+      &--unavailable {
+        background: #fce4e4;
+        color: #ff4d4f;
+      }
+    }
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    // Адаптивность
+    @media (max-width: 768px) {
+      padding: 60px 0;
+  
+      .container {
+        padding: 0 15px;
+      }
+  
+      h2 {
+        font-size: 28px;
+      }
+  
+      &__refresh-button {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+  
+      &__table {
+        th,
+        td {
+          padding: 12px 15px;
+          font-size: 14px;
+        }
+      }
+  
+      &__availability {
+        padding: 4px 8px;
+        font-size: 12px;
+      }
+    }
+  
+    @media (max-width: 480px) {
+      padding: 40px 0;
+  
+      &__header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+  
+      h2 {
+        font-size: 24px;
+      }
+  
+      &__refresh-button {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        font-size: 13px;
+      }
+  
+      &__table {
+        th,
+        td {
+          padding: 10px 12px;
+          font-size: 13px;
+        }
+      }
+    }
+  }

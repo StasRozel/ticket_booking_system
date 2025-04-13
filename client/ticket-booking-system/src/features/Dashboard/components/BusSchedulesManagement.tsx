@@ -1,21 +1,17 @@
 import React, { useEffect } from 'react';
 import '../styles/css/RoutesManagement.css';
-import FormNewEntity from './FormNewEntity';
-import FormUpdateEntity from './FormUpdateEntity';
+import FormNewBusSchedule from './FormNewBusSchedule';
+import FormUpdateBusSchedule from './FormUpdateBusSchedule';
 import { useDashboard } from '../context/DashboardContext';
 
-let IS_UPDATE = false;
-
-const handleEdit = async () => {
-    IS_UPDATE = true;
-};
-
-const BusSchedulesManagement: React.FC = () => {  
-    const { routes, trigger, is_update, handleEdit, fetchRoutes, DeleteRoute } = useDashboard();
+const BusSchedulesManagement: React.FC = () => {
+    const { buses, schedules, busSchedules, trigger, is_update, handleEdit, fetchBusSchedules, fetchBuses, fetchSchedules, DeleteBusSchedule } = useDashboard();
 
     // eslint-disable-next-line 
-    useEffect(() => {   
-        fetchRoutes();
+    useEffect(() => {
+        fetchBusSchedules();
+        fetchBuses();
+        fetchSchedules();
     }, [trigger]);
 
     return (
@@ -23,29 +19,25 @@ const BusSchedulesManagement: React.FC = () => {
             <h2>BusSchedulesManagement</h2>
             <div className="container">
                 <div className="routes-management__actions">
-                    {!is_update ? <FormNewEntity /> : <FormUpdateEntity />}
+                    {!is_update ? <FormNewBusSchedule /> : <FormUpdateBusSchedule />}
                 </div>
                 <table className="routes-management__table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Название маршрута</th>
-                            <th>Маршрут</th>
-                            <th>Промежуточные остановки</th>
-                            <th>Расстояние</th>
-                            <th>Стоимость</th>
+                            <th>Schedule ID</th>
+                            <th>Bus ID</th>
+                            <th>Operating Days</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {routes.map((route: any) => (
+                        {busSchedules.map((route: any) => (
                             <tr key={route.id}>
                                 <td>{route.id}</td>
-                                <td>{route.name}</td>
-                                <td>{`${route.starting_point} → ${route.ending_point}`}</td>
-                                <td>{route.stops ? route.stops : 'Нет остановок'}</td>
-                                <td>{route.distance} км</td>
-                                <td>{route.price} руб.</td>
+                                <td>{route.schedule_id}</td>
+                                <td>{route.bus_id}</td>
+                                <td>{route.operating_days}</td>
                                 <td>
                                     <button
                                         className="routes-management__action"
@@ -55,11 +47,53 @@ const BusSchedulesManagement: React.FC = () => {
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => DeleteRoute(route.id)}
+                                        onClick={() => DeleteBusSchedule(route.id)}
                                     >
                                         🗑️
                                     </button>
                                 </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <table className="routes-management__table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Номер автобуса</th>
+                            <th>Вместимость</th>
+                            <th>Тип</th>
+                            <th>Доступность</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {buses.map((bus: any) => (
+                            <tr key={bus.id}>
+                                <td>{bus.id}</td>
+                                <td>{bus.bus_number}</td>
+                                <td>{bus.capacity} мест</td>
+                                <td>{bus.type}</td>
+                                <td>{bus.available ? 'Доступен' : 'Недоступен'}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <table className="routes-management__table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ID маршрута</th>
+                            <th>Время отправки</th>
+                            <th>Время пребытия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {schedules.map((schedule: any) => (
+                            <tr key={schedule.id}>
+                                <td>{schedule.id}</td>
+                                <td>{schedule.route_id}</td>
+                                <td>{schedule.departure_time} км</td>
+                                <td>{schedule.arrival_time} руб.</td>
                             </tr>
                         ))}
                     </tbody>

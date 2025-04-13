@@ -3,7 +3,7 @@ import AddEntityButton from "./AddEntityButton";
 import "../styles/css/FormNewEntity.css"
 import { useDashboard } from "../context/DashboardContext";
 
-const FormNewEntity: React.FC = () => {
+const FormNewRoute: React.FC = () => {
     const [name, setName] = useState('');
     const [starting_point, setStartingPoint] = useState('');
     const [ending_point, setEndingPoint] = useState('');
@@ -97,4 +97,4 @@ const FormNewEntity: React.FC = () => {
     )
 }
 
-export default FormNewEntity;
+export default FormNewRoute;

@@ -1,14 +1,8 @@
 import React, { useEffect } from 'react';
 import '../styles/css/RoutesManagement.css';
-import FormNewEntity from './FormNewEntity';
-import FormUpdateEntity from './FormUpdateEntity';
+import FormNewRoute from './FormNewRoute';
+import FormUpdateRoute from './FormUpdateRoute';
 import { useDashboard } from '../context/DashboardContext';
-
-let IS_UPDATE = false;
-
-const handleEdit = async () => {
-    IS_UPDATE = true;
-};
 
 const RoutesManagement: React.FC = () => {  
     const { routes, trigger, is_update, handleEdit, fetchRoutes, DeleteRoute } = useDashboard();
@@ -23,7 +17,7 @@ const RoutesManagement: React.FC = () => {
             <h2>Работа с маршрутами</h2>
             <div className="container">
                 <div className="routes-management__actions">
-                    {!is_update ? <FormNewEntity /> : <FormUpdateEntity />}
+                    {!is_update ? <FormNewRoute /> : <FormUpdateRoute />}
                 </div>
                 <table className="routes-management__table">
                     <thead>

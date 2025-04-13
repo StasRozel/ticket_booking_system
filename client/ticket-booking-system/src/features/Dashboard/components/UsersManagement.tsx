@@ -1,54 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/css/UsersManagement.css';
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  blocked: boolean;
-}
+import { useDashboard } from '../context/DashboardContext';
 
 const api = axios.create({
   baseURL: 'http://localhost:3001/',
 });
 
 const UsersManagement: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchUsers = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get('/users/');
-      setUsers(response.data);
-    } catch (err) {
-      console.error('Ошибка при загрузке пользователей:', err);
-      setError('Не удалось загрузить список пользователей. Попробуйте снова.');
-    } finally {
-      setLoading(false);
-    }
-  };
-  const toggleUserBlock = async (userId: number, blocked: boolean) => {
-    try {
-      await api.patch(`/users/blocked/${userId}`, { is_blocked: !blocked });
-      console.log(`Пользователь ${userId} ${blocked ? 'разблокирован' : 'заблокирован'}`);
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === userId ? { ...user, blocked: !blocked } : user
-        )
-      );
-    } catch (err) {
-      console.error('Ошибка при обновлении статуса пользователя:', err);
-      setError('Не удалось обновить статус пользователя. Попробуйте снова.');
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const { users, loading, error, trigger, fetchUsers, toggleUserBlock } = useDashboard();
+  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {   
+      fetchUsers();
+    }, [trigger]);
 
   return (
     <div className="user-management">

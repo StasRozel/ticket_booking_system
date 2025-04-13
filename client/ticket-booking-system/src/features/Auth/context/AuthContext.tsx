@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 import { login as apiLogin, register as apiRegister } from '../services/api';
 import axios from 'axios';
+import { socket } from '../../..';
 
 interface AuthContextType {
     accessToken: string | null;
@@ -11,21 +12,39 @@ interface AuthContextType {
     refreshAccessToken: () => Promise<void>;
 }
 
+
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'));
     const [refreshToken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken'));
+    const [id, setId] = useState<number>(() => {
+        const savedText = localStorage.getItem('userId');
+        return savedText ? parseInt(savedText) : 0; // Если есть сохранённое значение, используем его, иначе пустая строка
+      });
+
+    
+    socket.on('blocked', (userId: number) => {
+        console.log('aboba')
+        console.log(id, userId);
+        if (id === userId) {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            window.location.reload();
+        }   
+    }); 
 
     const login = async (email: string, password: string): Promise<boolean> => {
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken, isAdmin, isBlocked } = await apiLogin(email, password);
+        const { user_id: userId, accessToken: newAccessToken, refreshToken: newRefreshToken, isAdmin, isBlocked } = await apiLogin(email, password);
         if (!isBlocked) {
             setAccessToken(newAccessToken);
             setRefreshToken(newRefreshToken);
+            setId(userId);
+            localStorage.setItem('userId', userId);
             localStorage.setItem('accessToken', newAccessToken);
             localStorage.setItem('refreshToken', newRefreshToken);
         }
-
 
         return isAdmin;
     };

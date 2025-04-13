@@ -1,0 +1,221 @@
+.about-us {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+  
+    &__header {
+      text-align: center;
+      margin-bottom: 50px;
+      animation: fadeInDown 0.5s ease-out;
+    }
+  
+    h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1a2a44;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+  
+    &__intro {
+      font-size: 18px;
+      color: #666;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+      transition: color 0.3s ease;
+  
+      &:hover {
+        color: #333;
+      }
+    }
+  
+    &__content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+  
+    &__card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      animation: fadeInUp 0.5s ease-out;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      }
+  
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1a2a44;
+        margin-bottom: 15px;
+      }
+  
+      p {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+        transition: color 0.3s ease;
+  
+        &:hover {
+          color: #333;
+        }
+      }
+  
+      ul {
+        list-style: none;
+        padding: 0;
+  
+        li {
+          font-size: 16px;
+          color: #666;
+          line-height: 1.6;
+          margin-bottom: 10px;
+          position: relative;
+          padding-left: 20px;
+          transition: color 0.3s ease;
+  
+          &:before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #007bff;
+            font-size: 14px;
+          }
+  
+          &:hover {
+            color: #333;
+          }
+        }
+      }
+    }
+  
+    &__cta {
+      text-align: center;
+      animation: fadeInUp 0.5s ease-out;
+    }
+  
+    &__cta-button {
+      display: inline-block;
+      padding: 12px 30px;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  
+      &:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      }
+  
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+      }
+    }
+  
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    @media (max-width: 768px) {
+      padding: 60px 0;
+  
+      .container {
+        padding: 0 15px;
+      }
+  
+      h2 {
+        font-size: 28px;
+        margin-bottom: 15px;
+      }
+  
+      &__intro {
+        font-size: 16px;
+      }
+  
+      &__card {
+        padding: 20px;
+  
+        h3 {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+  
+        p,
+        ul li {
+          font-size: 14px;
+        }
+      }
+  
+      &__cta-button {
+        padding: 10px 25px;
+        font-size: 14px;
+      }
+    }
+  
+    @media (max-width: 480px) {
+      padding: 40px 0;
+  
+      h2 {
+        font-size: 24px;
+      }
+  
+      &__intro {
+        font-size: 14px;
+      }
+  
+      &__card {
+        padding: 15px;
+  
+        h3 {
+          font-size: 18px;
+        }
+  
+        p,
+        ul li {
+          font-size: 13px;
+        }
+      }
+  
+      &__cta-button {
+        padding: 8px 20px;
+        font-size: 13px;
+      }
+    }
+  }

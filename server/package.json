@@ -2,7 +2,6 @@
   "name": "server-ticket-booking-system",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start": "ts-node-dev index.ts",

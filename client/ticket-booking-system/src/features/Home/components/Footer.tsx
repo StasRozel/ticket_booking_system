@@ -16,7 +16,6 @@ const Footer: React.FC = () => {
               <li><a href="#contacts">Контакты</a></li>
               <li><a href="#help">Помощь</a></li>
               <li><a href="#privacy">Политика конфиденциальности</a></li>
-              <li><a href="#cookies">Настройка cookie-файлов</a></li>
               <li><a href="#terms">Условия использования</a></li>
             </ul>
           </div>
@@ -42,21 +41,9 @@ const Footer: React.FC = () => {
           <div className="footer__column">
             <h3>Социальные сети</h3>
             <div className="footer__socials">
-              <a href="#vk"><img src="/vk-icon.png" alt="VK" /></a>
-              <a href="#telegram"><img src="/telegram-icon.png" alt="Telegram" /></a>
-              <a href="#tiktok"><img src="/tiktok-icon.png" alt="TikTok" /></a>
-              <a href="#youtube"><img src="/youtube-icon.png" alt="YouTube" /></a>
-              <a href="#instagram"><img src="/instagram-icon.png" alt="Instagram" /></a>
-            </div>
-          </div>
-
-          {/* Колонка 5: Мобильное приложение */}
-          <div className="footer__column">
-            <h3>Мобильное приложение</h3>
-            <div className="footer__app-links">
-              <a href="#appstore"><img src="/appstore-icon.png" alt="App Store" /></a>
-              <a href="#googleplay"><img src="/googleplay-icon.png" alt="Google Play" /></a>
-              <a href="#ruapp"><img src="/ruapp-icon.png" alt="RuApp" /></a>
+              <a href="#vk"><img src="/home/rozel/Документы/Универ/Ticket_booking_system/client/ticket-booking-system/src/features/Home/img/instagram-icon.png" alt="VK" /></a>
+              <a href="#telegram"><img src="../img/telegram-icon.png" alt="Telegram" /></a>
+              <a href="#instagram"><img src="../img/instagram-icon.png" alt="Instagram" /></a>
             </div>
           </div>
         </div>

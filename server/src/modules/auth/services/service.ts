@@ -32,7 +32,7 @@ export const register = async (newUser: any) => {
 export const login = async (email: string, password: string) => {
     let isAdmin = false;
     const user = await userRepository.findOneByEmail(email);
-    
+    const user_id = user.id;
     if (!user || !(await bcrypt.compare(password, user.password))) {
         throw new Error('Invalid credentials');
     }
@@ -47,7 +47,7 @@ export const login = async (email: string, password: string) => {
     let isBlocked = user.is_blocked;
     await userRepository.save(user);
 
-    return { accessToken, refreshToken, isAdmin, isBlocked };
+    return { user_id, accessToken, refreshToken, isAdmin, isBlocked };
 };
 
 export const refreshAccessToken = async (refreshToken: string) => {

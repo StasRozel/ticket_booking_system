@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-controllers';
+import { Controller, Param, Body, Get, Patch } from 'routing-controllers';
 import { userRepository } from '../repository/repository';
 import { User } from '../entities/user';
 
