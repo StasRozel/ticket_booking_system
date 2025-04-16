@@ -6,7 +6,7 @@ const Hero: React.FC = () => {
     <section className="hero">
       <div className="hero__background">
         <div className="container">
-          <h1>Купить билет на маршрут или автобус по Беларуси и России</h1>
+          <h1>Купить билет на маршрут или автобус по Беларуси</h1>
           <div className="hero__search">
             <input type="text" placeholder="Откуда?" />
             <input type="text" placeholder="Куда?" />

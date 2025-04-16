@@ -24,7 +24,8 @@
   justify-content: space-between;
 }
 .header__logo img {
-  height: 50px;
+  width: 120px;
+  height: 60px;
   transition: transform 0.3s ease;
 }
 .header__logo img:hover {

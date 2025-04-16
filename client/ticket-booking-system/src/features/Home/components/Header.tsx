@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/css/Header.css';
 import { useAuth } from '../../Auth/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import Logo from '../img/logo.png';
 
 const Header: React.FC = () => {
   const { logout } = useAuth();
@@ -16,14 +17,14 @@ const Header: React.FC = () => {
     <header className="header">
       <div className="container">
         <div className="header__logo">
-          <img src="/logo.png" alt="Atlas Logo" />
+          <img src={Logo} alt="Atlas Logo" />
         </div>
         <nav className="header__nav">
           <ul>
             
             <li><Link to="/home">Главная</Link></li>
             <li><Link to="/profile">Профиль</Link></li>
-            <li><a href="#contacts">Контакты</a></li>
+            <li><Link to="/contacts">Контакты</Link></li>
             <li><Link to="/about">О нас</Link></li>
           </ul>
         </nav>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/css/AboutUs.css';
 import Header from '../../Home/components/Header';
+import Footer from '../../Home/components/Footer';
 
 const AboutUs: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,6 +63,8 @@ const AboutUs: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </>
   );
 };

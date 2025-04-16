@@ -118,6 +118,8 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  animation: fadeInUp 0.5s ease-out 0.2s;
+  animation-fill-mode: both;
 }
 .minibus-schedule__table th,
 .minibus-schedule__table td {

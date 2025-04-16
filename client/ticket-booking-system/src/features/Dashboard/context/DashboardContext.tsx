@@ -4,7 +4,7 @@ import { RouteType } from '../types/RouteType';
 import { DashboardContextType } from '../types/DashboardContextType';
 import { ScheduleType } from '../types/ScheduleType';
 import { socket } from '../../..';
-import { User } from '../types/UserType';
+import { UserType } from '../types/UserType';
 import { BusType } from '../types/BusType';
 import { BusScheduleType } from '../types/BusScheduleType';
 
@@ -17,7 +17,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [schedules, setSchedules] = useState([]);
     const [busSchedules, setBusSchedules] = useState([]);
     const [is_update, setUpdate] = useState(false);
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserType[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -114,18 +114,21 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
-    const NewBusSchedule = async (newSchedule: BusScheduleType): Promise<void> => {
-        await api.post('/bus-schedules/create/', newSchedule);
+    const NewBusSchedule = async (newBusSchedule: BusScheduleType): Promise<void> => {
+        //await api.post('/bus-schedules/create/', newSchedule);
+        socket.emit('newBusSchedule', newBusSchedule);
         setTrigger(next => ++next);
     };
 
     const UpdateBusSchedule = async (id: number, updSchedule: BusScheduleType): Promise<void> => {
-        await api.patch(`/bus-schedules/update/${id}`, updSchedule);
+        //await api.patch(`/bus-schedules/update/${id}`, updSchedule);
+        socket.emit('updateBusSchedule', id, updSchedule);
         setTrigger(next => ++next);
     };
 
     const DeleteBusSchedule = async (id: number) => {
-        await api.delete(`/bus-schedules/delete/${id}`);
+        //await api.delete(`/bus-schedules/delete/${id}`);
+        socket.emit('deleteBusSchedule', id);
         setTrigger(next => ++next);
         console.log(`Deleting route ${trigger}`);
     };

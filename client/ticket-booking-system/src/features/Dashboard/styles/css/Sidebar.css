@@ -14,7 +14,7 @@
   margin-bottom: 40px;
 }
 .sidebar__logo img {
-  height: 40px;
+  height: 70px;
 }
 .sidebar__menu {
   flex: 1;
@@ -55,4 +55,10 @@
 }
 .sidebar__logout:hover {
   background: #d9363e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.sidebar__logout:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }

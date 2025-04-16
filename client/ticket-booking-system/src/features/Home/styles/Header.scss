@@ -27,7 +27,8 @@
 
   &__logo {
     img {
-      height: 50px; // Увеличиваем размер логотипа
+      width: 120px;
+      height: 60px; // Увеличиваем размер логотипа
       transition: transform 0.3s ease;
 
       &:hover {

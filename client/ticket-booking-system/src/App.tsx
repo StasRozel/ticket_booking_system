@@ -11,10 +11,7 @@ import Home from './features/Home/components/Home';
 import { DashboardProvider } from './features/Dashboard/context/DashboardContext';
 import Profile from './features/Profile/components/Profile';
 import AboutUs from './features/AboutUs/components/AboutUs';
-
-
-
-
+import Contacts from './features/Contacts/components/Contacts';
 
 const AppContent: React.FC = () => {
     const { refreshAccessToken, logout } = useAuth();
@@ -34,6 +31,7 @@ const AppContent: React.FC = () => {
                     <Route path="/home" element={<Home />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/about" element={<AboutUs />} />
+                    <Route path="/contacts" element={<Contacts />} />
                 </Route>
             </Routes>
         </Router>

@@ -26,8 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     
     socket.on('blocked', (userId: number) => {
-        console.log('aboba')
-        console.log(id, userId);
+
         if (id === userId) {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");

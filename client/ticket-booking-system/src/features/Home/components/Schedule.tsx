@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/css/Schedule.css';
+import { socket } from '../../..';
 
 interface Route {
   id: number;
@@ -45,7 +46,10 @@ const Schedule: React.FC = () => {
   const [schedules, setSchedules] = useState<MinibusSchedule[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [trigger, setTrigger] = useState<number>(0);
+  socket.on('update', () => {
+    setTrigger(next => ++next);
+})
   // Загрузка данных с бэкенда
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -62,7 +66,7 @@ const Schedule: React.FC = () => {
       }
     };
     fetchSchedules();
-  }, []);
+  }, [trigger]);
 
   // Форматирование времени (убираем секунды)
   const formatTime = (time: string) => time.slice(0, 5); // HH:mm:ss -> HH:mm

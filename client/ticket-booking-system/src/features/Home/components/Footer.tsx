@@ -1,5 +1,9 @@
 import React from 'react';
 import '../styles/css/Footer.css';
+import Telegram from '../img/telegram-icon.png';
+import Instagram from '../img/instagram-icon.png';
+import Vk from '../img/vk-icon.png';
+
 
 const Footer: React.FC = () => {
   return (
@@ -41,9 +45,9 @@ const Footer: React.FC = () => {
           <div className="footer__column">
             <h3>Социальные сети</h3>
             <div className="footer__socials">
-              <a href="#vk"><img src="/home/rozel/Документы/Универ/Ticket_booking_system/client/ticket-booking-system/src/features/Home/img/instagram-icon.png" alt="VK" /></a>
-              <a href="#telegram"><img src="../img/telegram-icon.png" alt="Telegram" /></a>
-              <a href="#instagram"><img src="../img/instagram-icon.png" alt="Instagram" /></a>
+              <a href="#vk"><img src={Vk} alt="VK" /></a>
+              <a href="#telegram"><img src={Telegram} alt="Telegram" /></a>
+              <a href="#instagram"><img src={Instagram} alt="Instagram" /></a>
             </div>
           </div>
         </div>

@@ -128,12 +128,14 @@
       overflow-x: auto;
       animation: fadeInUp 0.5s ease-out;
     }
-  
+    
     &__table {
       width: 100%;
-      border-collapse: separate; // Изменяем на separate для скруглений
-      border-spacing: 0; // Убираем лишние пробелы между ячейками
-  
+      border-collapse: separate;
+      border-spacing: 0;
+      animation: fadeInUp 0.5s ease-out 0.2s; // Добавляем анимацию с задержкой 0.2с
+      animation-fill-mode: both; // Гарантирует, что таблица останется видимой после анимации
+    
       th,
       td {
         padding: 16px 20px;

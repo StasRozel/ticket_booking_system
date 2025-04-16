@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/css/Profile.css';
 import Header from '../../Home/components/Header';
+import Footer from '../../Home/components/Footer';
 
 interface User {
   id: number;
@@ -121,6 +122,7 @@ const UserProfile: React.FC = () => {
           )}
         </div>
       </section>
+      <Footer />
     </>
   );
 };
