@@ -3,6 +3,9 @@ import React, { useState, FormEvent } from 'react';
 import '../styles/css/Contacts.css';
 import Footer from '../../Home/components/Footer';
 import Header from '../../Home/components/Header';
+import Telegram from '../../Home/img/telegram-icon.png';
+import Instagram from '../../Home/img/instagram-icon.png';
+import Vk from '../../Home/img/vk-icon.png';
 
 interface FormData {
     name: string;
@@ -91,13 +94,13 @@ const Contacts: React.FC = () => {
                                 <h3>Мы в соцсетях</h3>
                                 <div className="social-links">
                                     <a href="#" className="social-link">
-                                        <img src="/telegram-icon.png" alt="Telegram" />
+                                        <img src={Telegram} alt="Telegram" />
                                     </a>
                                     <a href="#" className="social-link">
-                                        <img src="/instagram-icon.png" alt="Instagram" />
+                                        <img src={Instagram} alt="Instagram" />
                                     </a>
                                     <a href="#" className="social-link">
-                                        <img src="/facebook-icon.png" alt="Facebook" />
+                                        <img src={Vk} alt="Facebook" />
                                     </a>
                                 </div>
                             </div>

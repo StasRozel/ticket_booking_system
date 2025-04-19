@@ -3,7 +3,7 @@ import { userRepository } from "../modules/auth/repository/repository";
 import { busScheduleRepository } from "../modules/busschedules/repository/repository";
 
 io.on('connection', (socket) => {
-    console.log('Пользователь подключился:', socket.id);
+    console.log('User connect:', socket.id);
 
     // Обработка получения сообщения
     socket.on('setBlock', async ({userId, is_blocked}) => {
@@ -30,6 +30,6 @@ io.on('connection', (socket) => {
 
     // Обработка отключения
     socket.on('disconnect', () => {
-        console.log('Пользователь отключился:', socket.id);
+        console.log('User disconnect:', socket.id);
     });
 });

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { socket } from '../../..';
 
 interface AuthContextType {
+    id: number;
     accessToken: string | null;
     refreshToken: string | null;
     login: (email: string, password: string) => Promise<boolean>;
@@ -77,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ accessToken, refreshToken, login, register, logout, refreshAccessToken }}>
+        <AuthContext.Provider value={{ id, accessToken, refreshToken, login, register, logout, refreshAccessToken }}>
             {children}
         </AuthContext.Provider>
     );

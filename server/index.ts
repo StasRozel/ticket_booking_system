@@ -11,16 +11,24 @@ import { authMiddleware } from './src/shared/middlewares/auth';
 import { BusController } from './src/modules/buses/controller/controller';
 import { BusScheduleController } from './src/modules/busschedules/controller/controller';
 import { UserController } from './src/modules/auth/conroller/userController';
-import { Server, Socket } from 'socket.io';
+import { BookingController } from './src/modules/bookings/controller/controller';
+import { TicketController } from './src/modules/tickets/controller/controller';
+import { Server } from 'socket.io';
+require('dotenv');
 
 const app = express();
 const server = http.createServer(app);
+
+const HTTP_PORT = process.env.HTTP_PORT;
+const SOCK_PORT = process.env.SOCK_PORT;
 
 app.use(bodyParser.json());
 app.use(cors());
 
 useExpressServer(app, {
-  controllers: [RouteController, ScheduleController, AuthController, BusController, BusScheduleController, UserController],
+  controllers: [RouteController, ScheduleController, AuthController, 
+                BusController, BusScheduleController, UserController, 
+               BookingController, TicketController],
   authorizationChecker: async (action) => {
     const token = action.request.headers.authorization?.split(' ')[1];
     if (!token) return false;
@@ -46,13 +54,12 @@ AppDataSource.initialize()
   })
   .catch((error) => console.log(error))
 
-app.listen(3001, () => {
-  console.log("\x1b[32m", "Server running in http://localhost:3001");
+app.listen(HTTP_PORT, () => {
+  console.log("\x1b[32m", `Server running on http://localhost:${HTTP_PORT}`);
 });
 
 import './src/shared/socketHandlers';
 
-const PORT: number = 4029;
-server.listen(4029, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
+server.listen(SOCK_PORT, () => {
+  console.log(`\x1b[32m`, `Sockets running on  port ${SOCK_PORT}`);
 });
