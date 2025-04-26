@@ -5,7 +5,7 @@ import { BusSchedule } from '../../busschedules/entities/BusSchedule';
 @Entity('bookings')
 export class Booking {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column({
         type: 'integer',

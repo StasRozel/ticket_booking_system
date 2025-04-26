@@ -1,11 +1,11 @@
 // src/components/Contacts.tsx
 import React, { useState, FormEvent } from 'react';
 import '../styles/css/Contacts.css';
-import Footer from '../../Home/components/Footer';
-import Header from '../../Home/components/Header';
-import Telegram from '../../Home/img/telegram-icon.png';
-import Instagram from '../../Home/img/instagram-icon.png';
-import Vk from '../../Home/img/vk-icon.png';
+import Footer from '../../../shared/components/Footer';
+import Header from '../../../shared/components/Header';
+import Telegram from '../../../shared/img/telegram-icon.png';
+import Instagram from '../../../shared/img/instagram-icon.png';
+import Vk from '../../../shared/img/vk-icon.png';
 
 interface FormData {
     name: string;

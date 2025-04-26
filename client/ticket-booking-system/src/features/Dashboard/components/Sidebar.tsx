@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/css/Sidebar.css';
 import { useAuth } from '../../Auth/context/AuthContext';
-import Logo from '../../Home/img/logo.png'
+import Logo from '../../../shared/img/logo.png'
 
 const Sidebar: React.FC = () => {
   const { logout } = useAuth();

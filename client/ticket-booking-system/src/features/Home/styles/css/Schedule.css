@@ -8,6 +8,26 @@
   margin: 0 auto;
   padding: 0 20px;
 }
+.minibus-schedule .header__action {
+  padding: 12px 40px;
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.minibus-schedule .header__action:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.minibus-schedule .header__action:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
 .minibus-schedule__header {
   display: flex;
   justify-content: space-between;

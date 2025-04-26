@@ -10,7 +10,6 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="container">
         <div className="footer__grid">
-          {/* Колонка 1: Логотип и ссылки */}
           <div className="footer__column">
             <div className="footer__logo">
               <img src="/logo.png" alt="Atlas Logo" />
@@ -24,7 +23,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Колонка 2: Сотрудничество */}
           <div className="footer__column">
             <h3>Сотрудничество</h3>
             <ul>
@@ -33,7 +31,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Колонка 3: Проекты */}
           <div className="footer__column">
             <h3>Проекты</h3>
             <ul>
@@ -41,7 +38,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Колонка 4: Социальные сети */}
           <div className="footer__column">
             <h3>Социальные сети</h3>
             <div className="footer__socials">

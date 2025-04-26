@@ -12,6 +12,8 @@ import { DashboardProvider } from './features/Dashboard/context/DashboardContext
 import Profile from './features/Profile/components/Profile';
 import AboutUs from './features/AboutUs/components/AboutUs';
 import Contacts from './features/Contacts/components/Contacts';
+import { ProfileProvider } from './features/Profile/ context/ProfileContext';
+import { HomeProvider } from './features/Home/context/HomeContext';
 
 const AppContent: React.FC = () => {
     const { refreshAccessToken, logout } = useAuth();
@@ -28,8 +30,8 @@ const AppContent: React.FC = () => {
                 <Route path="/" element={<Login />} />
                 <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/home" element={<HomeProvider><Home /></HomeProvider>} />
+                    <Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
                     <Route path="/about" element={<AboutUs />} />
                     <Route path="/contacts" element={<Contacts />} />
                 </Route>

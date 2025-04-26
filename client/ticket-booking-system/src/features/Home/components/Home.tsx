@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
+import Header from '../../../shared/components/Header';
 import Hero from '../components/Hero';
 import AppPromo from '../components/AppPromo';
 import '../styles/css/Home.css';
-import Footer from './Footer';
+import Footer from '../../../shared/components/Footer';
 import Schedule from './Schedule';
 
 const Home: React.FC = () => {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/css/AboutUs.css';
-import Header from '../../Home/components/Header';
-import Footer from '../../Home/components/Footer';
+import Header from '../../../shared/components/Header';
+import Footer from '../../../shared/components/Footer';
+import { Link } from 'react-router';
 
 const AboutUs: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,9 +58,9 @@ const AboutUs: React.FC = () => {
             </div>
           </div>
           <div className="about-us__cta">
-            <a href="/routes" className="about-us__cta-button">
+            <Link to="/home" className="about-us__cta-button">
               Посмотреть маршруты
-            </a>
+            </Link>
           </div>
         </div>
       </section>

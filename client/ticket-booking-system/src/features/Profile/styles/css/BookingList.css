@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .booking-list {
   padding: 10px 0;
   background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
@@ -47,6 +48,18 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   animation: fadeInUp 0.5s ease-out;
 }
+.booking-item--выбран {
+  background: #fff3cd;
+}
+.booking-item--забронирован {
+  background: #d4edda;
+}
+.booking-item--отменен {
+  background: #f8d7da;
+}
+.booking-item--истек {
+  background: #d1ecf1;
+}
 .booking-item__header {
   display: flex;
   align-items: center;
@@ -70,13 +83,21 @@
   font-size: 14px;
   font-weight: 500;
 }
-.booking-item__header__status--aboba {
-  background: #e6f4ea;
-  color: #28a745;
+.booking-item__header__status--желтый {
+  background: #ffeeba;
+  color: #856404;
 }
-.booking-item__header__status--aboba {
-  background: #fce4e4;
-  color: #ff4d4f;
+.booking-item__header__status--забронирован {
+  background: #c3e6cb;
+  color: #155724;
+}
+.booking-item__header__status--отменен {
+  background: #f5c6cb;
+  color: #721c24;
+}
+.booking-item__header__status--истек {
+  background: #bee5eb;
+  color: #0c5460;
 }
 .booking-item__details {
   margin-bottom: 20px;
@@ -117,6 +138,45 @@
   font-size: 15px;
   color: #666;
   font-style: italic;
+}
+.booking-item .button__action {
+  padding: 12px 40px;
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.booking-item .button__action:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.booking-item .button__action:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+.booking-item .buttin__cansel {
+  background: #ff4d4f;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.booking-item .buttin__cansel:hover {
+  background: #d9363e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.booking-item .buttin__cansel:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }
 
 @keyframes fadeIn {

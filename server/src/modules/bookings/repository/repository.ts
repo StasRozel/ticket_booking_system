@@ -10,7 +10,11 @@ class BookingRepository implements IRepository<Booking> {
     this.repository = dataSource.getRepository(Booking);
   }
 
-  async create(data: Partial<Booking>): Promise<Booking> {
+  async create(data: Partial<Booking>): Promise<Booking | null> {
+    const id = await this.checkByIsSelect(data.user_id, data.bus_schedule_id);
+
+    if (id) return await this.findOneById(id);
+
     const Booking = this.repository.create(data);
     return await this.repository.save(Booking);
   }
@@ -33,6 +37,11 @@ class BookingRepository implements IRepository<Booking> {
       .where({ user_id })
       .getMany();
     return booking;
+  }
+
+  async checkByIsSelect(user_id: number, bus_schedule_id: number): Promise<number> {
+    const booking: Booking[] = await this.repository.findBy({ user_id, bus_schedule_id, status: "Выбран" });
+    return booking[0]?.id ?? 0;
   }
 
   async update(id: number, data: Partial<Booking>): Promise<Booking | null> {

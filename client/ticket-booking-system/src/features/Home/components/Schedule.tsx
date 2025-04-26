@@ -1,82 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import '../styles/css/Schedule.css';
 import { socket } from '../../..';
-
-interface Route {
-  id: number;
-  name: string;
-  starting_point: string;
-  ending_point: string;
-  stops: string;
-  distance: string;
-  price: string;
-}
-
-interface Schedule {
-  id: number;
-  route_id: number;
-  departure_time: string;
-  arrival_time: string;
-  route: Route;
-}
-
-interface Bus {
-  id: number;
-  bus_number: string;
-  capacity: number;
-  type: string;
-  available: boolean;
-}
-
-interface MinibusSchedule {
-  id: number;
-  schedule_id: number;
-  bus_id: number;
-  operating_days: string;
-  schedule: Schedule;
-  bus: Bus;
-}
-
-const api = axios.create({
-  baseURL: 'http://localhost:3001',
-});
+import { useHome } from '../context/HomeContext';
 
 const Schedule: React.FC = () => {
-  const [schedules, setSchedules] = useState<MinibusSchedule[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const { busSchedules, loading, error, fetchBusSchedule, booking } = useHome();
   const [trigger, setTrigger] = useState<number>(0);
   socket.on('update', () => {
     setTrigger(next => ++next);
-})
-  // Загрузка данных с бэкенда
+  })
+
+  // eslint-disable-next-line 
   useEffect(() => {
-    const fetchSchedules = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await api.get<MinibusSchedule[]>('/bus-schedules/');
-        setSchedules(response.data);
-      } catch (err) {
-        console.error('Ошибка при загрузке расписания:', err);
-        setError('Не удалось загрузить расписание. Попробуйте снова.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSchedules();
+    fetchBusSchedule();
   }, [trigger]);
 
-  // Форматирование времени (убираем секунды)
-  const formatTime = (time: string) => time.slice(0, 5); // HH:mm:ss -> HH:mm
+  const formatTime = (time: string) => time.slice(0, 10);
 
   return (
     <div className="minibus-schedule">
       <div className="container">
         {loading && <p className="minibus-schedule__loading">Загрузка...</p>}
         {error && <p className="minibus-schedule__error">{error}</p>}
-        {!loading && !error && schedules.length === 0 ? (
+        {!loading && !error && busSchedules.length === 0 ? (
           <p className="minibus-schedule__empty">Расписание отсутствует.</p>
         ) : (
           !loading &&
@@ -90,17 +36,19 @@ const Schedule: React.FC = () => {
                   <th>Дни работы</th>
                   <th>Автобус</th>
                   <th>Стоимость</th>
+                  <th>Купить</th>
                 </tr>
               </thead>
               <tbody>
-                {schedules.map((schedule) => (
+                {busSchedules.map((schedule) => (
                   <tr key={schedule.id}>
-                    <td>{schedule.schedule.route.name}</td>
-                    <td>{formatTime(schedule.schedule.departure_time)}</td>
-                    <td>{formatTime(schedule.schedule.arrival_time)}</td>
+                    <td>{schedule.schedule?.route?.name}</td>
+                    <td>{formatTime(schedule.schedule?.departure_time as string)}</td>
+                    <td>{formatTime(schedule.schedule?.arrival_time as string)}</td>
                     <td>{schedule.operating_days}</td>
-                    <td>{`${schedule.bus.bus_number} (${schedule.bus.type})`}</td>
-                    <td>{schedule.schedule.route.price} руб.</td>
+                    <td>{`${schedule.bus?.bus_number} (${schedule.bus?.type})`}</td>
+                    <td>{schedule.schedule?.route?.price} руб.</td>
+                    <td><button className='header__action' onClick={() => booking(schedule)}>Выбрать</button></td>
                   </tr>
                 ))}
               </tbody>
