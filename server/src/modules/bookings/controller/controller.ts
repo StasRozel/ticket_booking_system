@@ -25,6 +25,11 @@ export class BookingController {
     return await bookingRepository.update(id, schedule);
   }
 
+  @Patch("/cansel/:id")
+  async canselBookingById(@Param('id') id: number, @Body() data: Booking) {
+    return await bookingRepository.cansel(id, data);
+  }
+
   @Delete("/delete/:id")
   async deleteBookingById(@Param('id') id: number) {
     return await bookingRepository.delete(id);

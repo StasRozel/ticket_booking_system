@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import '../styles/css/RoutesManagement.css';
+import '../styles/css/EntitesManagement.css';
 import { useDashboard } from '../context/DashboardContext';
 import FormNewSchedule from './FormNewSchedule';
 import FormUpdateSchedule from './FormUpdateSchedule';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
+import { useModal } from '../../../shared/context/ModalContext';
 
 
 const SchedulesManagement: React.FC = () => {
   const { schedules, trigger, is_update, handleEdit, fetchSchedules, DeleteSchedule } = useDashboard();
-
+  const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {   
     fetchSchedules();
@@ -46,7 +48,7 @@ const SchedulesManagement: React.FC = () => {
                                   </button>
                                   <button
                                       className="routes-management__action routes-management__action--delete"
-                                      onClick={() => DeleteSchedule(schedule.id)}
+                                      onClick={() => openModal('Вы точно хотите удалить расписание?', () => DeleteSchedule(schedule.id))}
                                   >
                                       🗑️
                                   </button>
@@ -56,6 +58,11 @@ const SchedulesManagement: React.FC = () => {
                   </tbody>
               </table>
           </div>
+          <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+      />
       </div>
   );
 };

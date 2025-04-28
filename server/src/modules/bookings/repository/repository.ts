@@ -2,6 +2,9 @@ import { Repository, DataSource } from "typeorm";
 import { AppDataSource } from "../../../config/db.spec";
 import { IRepository } from "../../../shared/interfaces/IRepository";
 import { Booking } from "../entities/booking";
+import { busScheduleRepository } from "../../busschedules/repository/repository";
+import { busRepository } from "../../buses/repository/repository";
+import { ticketRepository } from "../../tickets/repository/repository";
 
 class BookingRepository implements IRepository<Booking> {
   private repository: Repository<Booking>;
@@ -50,6 +53,20 @@ class BookingRepository implements IRepository<Booking> {
       return null;
     }
 
+    await this.repository.update(id, data);
+    return await this.findOneById(id);
+  }
+
+  async cansel(id: number, data: Partial<Booking>) {
+    const tickets = await ticketRepository.findByBookingId(id);
+    const booking = await bookingRepository.findOneById(id);
+    const busSchedule = await busScheduleRepository.findOneById(booking.bus_schedule_id);
+    const bus = await busRepository.findOneById(busSchedule.bus_id);
+    const seats = new Set(bus.capacity);
+    tickets.forEach(ticket => {
+      seats.add(ticket.seat_number);
+    });
+    await busRepository.update(bus.id, { capacity: [...seats] });
     await this.repository.update(id, data);
     return await this.findOneById(id);
   }

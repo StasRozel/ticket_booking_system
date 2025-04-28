@@ -14,10 +14,11 @@ export class Bus {
     bus_number: string;
 
     @Column({
-        type: "integer",
+        type: "int",
+        array: true,
         nullable: false
     })
-    capacity: number;
+    capacity: number[];
 
     @Column({
         type: "varchar",

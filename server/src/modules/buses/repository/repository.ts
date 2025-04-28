@@ -11,9 +11,12 @@ export class BusRepository implements IRepository<Bus> {
   }
 
   async create(data: Partial<Bus>): Promise<Bus> {
+    data.capacity = [...this.range(1, Number(data.capacity))];
     const Bus = this.repository.create(data);
     return await this.repository.save(Bus);
   }
+
+  private *range(s: number, e: number) { while (s <= e) yield s++ }
 
   async findOneById(id: number): Promise<Bus | null> {
     return await this.repository.findOneBy({ id });

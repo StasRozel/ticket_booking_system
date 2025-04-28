@@ -1,10 +1,11 @@
 .header {
   background: #fff;
   padding: 20px 0;
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
   width: 100%;
   top: 0;
-  z-index: 1000;
+  z-index: 5;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: background 0.3s ease, transform 0.3s ease;
   animation: slideDown 0.5s ease-out;
@@ -72,7 +73,10 @@
   align-items: center;
   gap: 15px;
 }
-.header__actions .header__action {
+.header__action-wrapper {
+  position: relative;
+}
+.header__action {
   padding: 12px 40px;
   background: #007bff;
   border: none;
@@ -83,14 +87,35 @@
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
-.header__actions .header__action:hover {
+.header__action:hover {
   background: #0056b3;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
-.header__actions .header__action:active {
+.header__action:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+.header__action a {
+  color: #fff;
+  text-decoration: none;
+}
+.header__notification {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4d4f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: pop 0.3s ease-out;
 }
 @keyframes slideDown {
   from {
@@ -100,6 +125,14 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
   }
 }
 @media (max-width: 768px) {
@@ -118,9 +151,16 @@
   .header__actions {
     gap: 10px;
   }
-  .header__actions .header__action {
+  .header__action {
     padding: 8px 15px;
     font-size: 13px;
+  }
+  .header__notification {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    top: -3px;
+    right: -3px;
   }
 }
 @media (max-width: 480px) {
@@ -133,5 +173,12 @@
   .header__actions .header__action {
     padding: 6px 12px;
     font-size: 12px;
+  }
+  .header__actions .header__notification {
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+    top: -2px;
+    right: -2px;
   }
 }

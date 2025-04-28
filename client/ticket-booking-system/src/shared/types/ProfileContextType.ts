@@ -4,6 +4,7 @@ import { UserType } from "./UserType";
 
 
 export type ProfileContextType = {
+    trigger: number;
     user: UserType | null;
     loading: boolean;
     error: string | null;
@@ -14,4 +15,10 @@ export type ProfileContextType = {
     bookings: BookingType[];
     tickets: {[bookingId: number]: TicketType[]};
     fetchBookings: () => Promise<void>;
+    handleBooking: (id: number) => void;
+    handleCanselBooking: (id: number) => void;
+    handleCanselTicket: (data: TicketType) => void;
+    fetchPendingBookings: () => Promise<void>;
+    formatDate: (stringData: string) => string;
+    handleTicketTypeChange: (ticketId: number, bookingId: number, isChild: boolean) => Promise<void>;
 }

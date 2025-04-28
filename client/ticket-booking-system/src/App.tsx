@@ -14,6 +14,8 @@ import AboutUs from './features/AboutUs/components/AboutUs';
 import Contacts from './features/Contacts/components/Contacts';
 import { ProfileProvider } from './features/Profile/ context/ProfileContext';
 import { HomeProvider } from './features/Home/context/HomeContext';
+import PendingBookings from './features/Profile/components/PendingBookings';
+import { ModalProvider } from './shared/context/ModalContext';
 
 const AppContent: React.FC = () => {
     const { refreshAccessToken, logout } = useAuth();
@@ -32,6 +34,7 @@ const AppContent: React.FC = () => {
                     <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
                     <Route path="/home" element={<HomeProvider><Home /></HomeProvider>} />
                     <Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
+                    <Route path="/pending-bookings" element={<ProfileProvider> <PendingBookings /></ProfileProvider>} />
                     <Route path="/about" element={<AboutUs />} />
                     <Route path="/contacts" element={<Contacts />} />
                 </Route>
@@ -43,7 +46,9 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
     return (
         <AuthProvider>
-            <AppContent />
+            <ModalProvider>
+                <AppContent />
+            </ModalProvider>
         </AuthProvider>
     );
 };

@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
-import '../styles/css/RoutesManagement.css';
+import '../styles/css/EntitesManagement.css';
 import FormNewBusSchedule from './FormNewBusSchedule';
 import FormUpdateBusSchedule from './FormUpdateBusSchedule';
 import { useDashboard } from '../context/DashboardContext';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
+import { useModal } from '../../../shared/context/ModalContext';
 
 const BusSchedulesManagement: React.FC = () => {
     const { buses, schedules, busSchedules, trigger, is_update, handleEdit, fetchBusSchedules, fetchBuses, fetchSchedules, DeleteBusSchedule } = useDashboard();
-
+    const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line 
     useEffect(() => {
         fetchBusSchedules();
@@ -47,7 +49,7 @@ const BusSchedulesManagement: React.FC = () => {
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => DeleteBusSchedule(route.id)}
+                                        onClick={() => openModal('Вы точно хотите удалить движение транспорта по этому пути?', () => DeleteBusSchedule(route.id))}
                                     >
                                         🗑️
                                     </button>
@@ -99,6 +101,11 @@ const BusSchedulesManagement: React.FC = () => {
                     </tbody>
                 </table>
             </div>
+            <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+      />
         </div>
     );
 };

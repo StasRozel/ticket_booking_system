@@ -40,7 +40,7 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { id } = response.data;
         const ticketObj = {
             booking_id: id,
-            seat_number: 1,
+            seat_number: 0,
             is_child: true,
             price: busSchedule.schedule?.route?.price
         }

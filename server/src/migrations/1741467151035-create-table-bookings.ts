@@ -9,7 +9,6 @@ export class CreateTableBookings1741467151035 implements MigrationInterface {
                 user_id INTEGER NOT NULL,
                 booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 status VARCHAR(20) NOT NULL,
-                total_price DECIMAL(10, 2) NOT NULL,
                 FOREIGN KEY (bus_schedule_id) REFERENCES BusSchedules(id),
                 FOREIGN KEY (user_id) REFERENCES Users(id)
             );`

@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
-import '../styles/css/RoutesManagement.css';
+import '../styles/css/EntitesManagement.css';
 import { useDashboard } from '../context/DashboardContext';
 import FormNewBus from './FormNewBus';
 import FormUpdateBus from './FormUpdateBus';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
+import { useModal } from '../../../shared/context/ModalContext';
 
 const BusesManagement: React.FC = () => {  
     const { buses, trigger, is_update, handleEdit, fetchBuses, DeleteBus } = useDashboard();
-
+    const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line 
     useEffect(() => {   
         fetchBuses();
@@ -47,7 +49,7 @@ const BusesManagement: React.FC = () => {
                       </button>
                       <button
                         className="routes-management__action routes-management__action--delete"
-                        onClick={() => DeleteBus(bus.id)}
+                        onClick={() => openModal('Вы точно хотите удалить транспорт?', () => DeleteBus(bus.id))}
                       >
                         🗑️
                       </button>
@@ -57,6 +59,11 @@ const BusesManagement: React.FC = () => {
               </tbody>
             </table>
           </div>
+          <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+      />
         </div>
       );    
 };

@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
-import '../styles/css/RoutesManagement.css';
+import '../styles/css/EntitesManagement.css';
 import FormNewRoute from './FormNewRoute';
 import FormUpdateRoute from './FormUpdateRoute';
 import { useDashboard } from '../context/DashboardContext';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
+import { useModal } from '../../../shared/context/ModalContext';
 
-const RoutesManagement: React.FC = () => {  
+const RoutesManagement: React.FC = () => {
     const { routes, trigger, is_update, handleEdit, fetchRoutes, DeleteRoute } = useDashboard();
-
+    const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line 
-    useEffect(() => {   
+    useEffect(() => {
         fetchRoutes();
     }, [trigger]);
 
@@ -49,7 +51,7 @@ const RoutesManagement: React.FC = () => {
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => DeleteRoute(route.id)}
+                                        onClick={() => openModal('Вы уверены, что хотите удалить путь?', () => DeleteRoute(route.id))}
                                     >
                                         🗑️
                                     </button>
@@ -59,6 +61,11 @@ const RoutesManagement: React.FC = () => {
                     </tbody>
                 </table>
             </div>
+            <ConfirmModal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                message={modalMessage}
+            />
         </div>
     );
 };

@@ -1,25 +1,25 @@
+// src/styles/css/Header.css (переименовано в SCSS для удобства)
 .header {
   background: #fff;
-  padding: 20px 0; // Увеличиваем отступы для более просторного вида
-  position: fixed;
+  padding: 20px 0;
+  position: sticky;
   width: 100%;
   top: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); // Более мягкая тень
+  z-index: 5;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: background 0.3s ease, transform 0.3s ease;
-  animation: slideDown 0.5s ease-out; // Анимация появления
+  animation: slideDown 0.5s ease-out;
 
-  // Эффект при скролле (можно добавить через JS)
   &.scrolled {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px); // Эффект размытия фона
+    backdrop-filter: blur(10px);
     transform: translateY(0);
   }
 
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px; // Добавляем отступы для мобильных
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,11 +28,11 @@
   &__logo {
     img {
       width: 120px;
-      height: 60px; // Увеличиваем размер логотипа
+      height: 60px;
       transition: transform 0.3s ease;
 
       &:hover {
-        transform: scale(1.05); // Лёгкое увеличение при наведении
+        transform: scale(1.05);
       }
     }
   }
@@ -41,7 +41,7 @@
     ul {
       display: flex;
       list-style: none;
-      gap: 30px; // Увеличиваем расстояние между ссылками
+      gap: 30px;
 
       a {
         text-decoration: none;
@@ -49,10 +49,9 @@
         font-weight: 600;
         font-size: 16px;
         font-family: 'Inter', sans-serif;
-        position: relative; // Для эффекта подчёркивания
+        position: relative;
         transition: color 0.3s ease;
 
-        // Эффект подчёркивания при наведении
         &::after {
           content: '';
           position: absolute;
@@ -68,12 +67,12 @@
           color: #007bff;
 
           &::after {
-            width: 100%; // Подчёркивание появляется при наведении
+            width: 100%;
           }
         }
 
         &.active {
-          color: #007bff; // Активная ссылка
+          color: #007bff;
           &::after {
             width: 100%;
           }
@@ -85,33 +84,59 @@
   &__actions {
     display: flex;
     align-items: center;
-    gap: 15px; // Увеличиваем расстояние между кнопками
+    gap: 15px;
+  }
 
-    .header__action {
-      padding: 12px 40px;
-      background: #007bff;
-      border: none;
-      border-radius: 8px;
+  &__action-wrapper {
+    position: relative; // Для позиционирования уведомления
+  }
+
+  &__action {
+    padding: 12px 40px;
+    background: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    a {
       color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-
-      &:hover {
-        background: #0056b3;
-        transform: translateY(-2px); // Лёгкое поднятие при наведении
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); // Тень при наведении
-      }
-
-      &:active {
-        transform: translateY(0); // Эффект нажатия
-        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-      }
+      text-decoration: none;
     }
   }
 
-  // Анимация появления хедера
+  &__notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4d4f; // Красный кружок
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: pop 0.3s ease-out;
+  }
+
   @keyframes slideDown {
     from {
       opacity: 0;
@@ -123,7 +148,15 @@
     }
   }
 
-  // Адаптивность
+  @keyframes pop {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
   @media (max-width: 768px) {
     padding: 15px 0;
 
@@ -138,16 +171,24 @@
     }
 
     &__nav {
-      display: none; // Скрываем навигацию на мобильных (можно добавить бургер-меню)
+      display: none;
     }
 
     &__actions {
       gap: 10px;
+    }
 
-      .header__action {
-        padding: 8px 15px;
-        font-size: 13px;
-      }
+    &__action {
+      padding: 8px 15px;
+      font-size: 13px;
+    }
+
+    &__notification {
+      width: 16px;
+      height: 16px;
+      font-size: 10px;
+      top: -3px;
+      right: -3px;
     }
   }
 
@@ -164,6 +205,14 @@
       .header__action {
         padding: 6px 12px;
         font-size: 12px;
+      }
+
+      .header__notification {
+        width: 14px;
+        height: 14px;
+        font-size: 9px;
+        top: -2px;
+        right: -2px;
       }
     }
   }

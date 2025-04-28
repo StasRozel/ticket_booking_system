@@ -15,7 +15,6 @@ export class TicketController {
     return await ticketRepository.findByBookingId(id);
   }
 
-
   @Post("/create/")
   async createTicket(@Body() ticket: Ticket) {
     return await ticketRepository.create(ticket);
@@ -24,6 +23,11 @@ export class TicketController {
   @Patch("/update/:id")
   async updateTicketById(@Param('id') id: number, @Body() ticket: Ticket) {
     return await ticketRepository.update(id, ticket);
+  }
+
+  @Patch("/cansel/:id")
+  async canselTicketById(@Param('id') id: number, @Body() ticket: Ticket) {
+    return await ticketRepository.cansel(id, ticket);
   }
 
   @Delete("/delete/:id")

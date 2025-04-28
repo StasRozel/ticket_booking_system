@@ -2,9 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { User } from '../entities/user';
 import { userRepository } from '../repository/repository';
-
-const ACCESS_TOKEN_SECRET = 'your-access-token-secret';
-const REFRESH_TOKEN_SECRET = 'your-refresh-token-secret';
+require('dotnet');
 
 export const register = async (newUser: any) => {
     const { name, role_id, email, password } = newUser;
@@ -57,7 +55,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
     }
 
     try {
-        jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     } catch (error) {
         throw new Error('Invalid refresh token');
     }
@@ -76,18 +74,18 @@ export const logout = async (refresh_token: string) => {
 
 const generateTokens = (user: User) => {
     const accessToken = generateAccessToken(user);
-    const refreshToken = jwt.sign({ id: user.id, email: user.email }, REFRESH_TOKEN_SECRET, {
+    const refreshToken = jwt.sign({ id: user.id, email: user.email }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '7d',
     });
     return { accessToken, refreshToken };
 };
 
 const generateAccessToken = (user: User) => {
-    return jwt.sign({ id: user.id, email: user.email }, ACCESS_TOKEN_SECRET, {
+    return jwt.sign({ id: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '15m',
     });
 };
 
 export const verifyAccessToken = (token: string) => {
-    return jwt.verify(token, ACCESS_TOKEN_SECRET);
+    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 };

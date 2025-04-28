@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import '../styles/css/UsersManagement.css';
 import { useDashboard } from '../context/DashboardContext';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
+import { useModal } from '../../../shared/context/ModalContext';
 
 const api = axios.create({
   baseURL: 'http://localhost:3001/',
@@ -9,7 +11,7 @@ const api = axios.create({
 
 const UsersManagement: React.FC = () => {
   const { users, loading, error, trigger, fetchUsers, toggleUserBlock } = useDashboard();
-  
+  const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {   
       fetchUsers();
@@ -43,7 +45,7 @@ const UsersManagement: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={user.blocked}
-                      onChange={() => toggleUserBlock(user.id, user.is_blocked)}
+                      onChange={() => openModal(`Вы точно хотите заблокировать пользователя ${user.name}?`, () => toggleUserBlock(user.id, user.is_blocked))}
                       className="user-management__checkbox"
                     />
                     {user.is_blocked ? 'Разблокировать' : 'Заблокировать'}
@@ -54,6 +56,11 @@ const UsersManagement: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+      />
     </div>
   );
 };

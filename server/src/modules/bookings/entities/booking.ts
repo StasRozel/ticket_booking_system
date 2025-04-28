@@ -32,14 +32,6 @@ export class Booking {
     })
     status: string;
 
-    @Column({
-        type: 'numeric',
-        precision: 10,
-        scale: 2,
-        nullable: false
-    })
-    total_price: number;
-
     @ManyToOne(() => BusSchedule, busSchedule => busSchedule.id)
     @JoinColumn({ name: 'bus_schedule_id' })
     busSchedule: BusSchedule;

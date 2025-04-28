@@ -1,4 +1,10 @@
--- Вставка данных в таблицу Routes (Маршруты)
+import { MigrationInterface, QueryRunner } from "typeorm";
+
+export class InsertData1745784562351 implements MigrationInterface {
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(
+            `-- Вставка данных в таблицу Routes (Маршруты)
 INSERT INTO Routes (name, starting_point, ending_point, stops, distance, price) VALUES
 ('Минск - Гродно', 'Минск', 'Гродно', 'Лида, Щучин', 280.00, 15.00),
 ('Минск - Брест', 'Минск', 'Брест', 'Барановичи, Кобрин', 340.00, 18.00),
@@ -18,18 +24,18 @@ INSERT INTO Routes (name, starting_point, ending_point, stops, distance, price) 
 
 -- Вставка данных в таблицу Buses (Автобусы)
 INSERT INTO Buses (bus_number, capacity, type, available) VALUES
-('BY1234', 20, 'Микроавтобус Mercedes Sprinter', TRUE),
-('BY5678', 18, 'Микроавтобус Ford Transit', TRUE),
-('BY9012', 22, 'Микроавтобус Volkswagen Crafter', TRUE),
-('BY3456', 19, 'Микроавтобус Iveco Daily', TRUE),
-('BY7890', 21, 'Микроавтобус Peugeot Boxer', TRUE),
-('BY2345', 20, 'Микроавтобус Mercedes Sprinter', TRUE),
-('BY6789', 17, 'Микроавтобус Fiat Ducato', TRUE),
-('BY0123', 23, 'Микроавтобус Volkswagen Crafter', TRUE),
-('BY4567', 18, 'Микроавтобус Ford Transit', TRUE),
-('BY8901', 21, 'Микроавтобус Iveco Daily', TRUE),
-('BY1122', 19, 'Микроавтобус Peugeot Boxer', TRUE),
-('BY3344', 20, 'Микроавтобус Mercedes Sprinter', TRUE);
+('BY1234', ARRAY(SELECT generate_series(1, 20)), 'Микроавтобус Mercedes Sprinter', TRUE),
+('BY5678', ARRAY(SELECT generate_series(1, 18)), 'Микроавтобус Ford Transit', TRUE),
+('BY9012', ARRAY(SELECT generate_series(1, 22)), 'Микроавтобус Volkswagen Crafter', TRUE),
+('BY3456', ARRAY(SELECT generate_series(1, 19)), 'Микроавтобус Iveco Daily', TRUE),
+('BY7890', ARRAY(SELECT generate_series(1, 21)), 'Микроавтобус Peugeot Boxer', TRUE),
+('BY2345', ARRAY(SELECT generate_series(1, 20)), 'Микроавтобус Mercedes Sprinter', TRUE),
+('BY6789', ARRAY(SELECT generate_series(1, 17)), 'Микроавтобус Fiat Ducato', TRUE),
+('BY0123', ARRAY(SELECT generate_series(1, 23)), 'Микроавтобус Volkswagen Crafter', TRUE),
+('BY4567', ARRAY(SELECT generate_series(1, 18)), 'Микроавтобус Ford Transit', TRUE),
+('BY8901', ARRAY(SELECT generate_series(1, 21)), 'Микроавтобус Iveco Daily', TRUE),
+('BY1122', ARRAY(SELECT generate_series(1, 19)), 'Микроавтобус Peugeot Boxer', TRUE),
+('BY3344', ARRAY(SELECT generate_series(1, 20)), 'Микроавтобус Mercedes Sprinter', TRUE);
 
 -- Вставка данных в таблицу Schedules (Расписания)
 INSERT INTO Schedules (route_id, departure_time, arrival_time) VALUES
@@ -67,41 +73,50 @@ INSERT INTO Schedules (route_id, departure_time, arrival_time) VALUES
 
 -- Вставка данных в таблицу BusSchedules (Привязка автобусов к расписанию)
 INSERT INTO BusSchedules (schedule_id, bus_id, operating_days) VALUES
-(1, 1, 'Ежедневно'), -- Минск - Гродно, утренний
-(2, 2, 'Ежедневно'), -- Минск - Гродно, дневной
-(3, 3, 'Пн, Ср, Пт, Вс'), -- Минск - Гродно, вечерний
-(4, 4, 'Ежедневно'), -- Минск - Брест, утренний
-(5, 5, 'Ежедневно'), -- Минск - Брест, дневной
-(6, 6, 'Вт, Чт, Сб'), -- Минск - Брест, вечерний
-(7, 7, 'Ежедневно'), -- Витебск - Гомель, утренний
-(8, 8, 'Пн, Ср, Пт, Вс'), -- Витебск - Гомель, дневной
-(9, 9, 'Ежедневно'), -- Гродно - Брест, утренний
-(10, 10, 'Вт, Чт, Сб'), -- Гродно - Брест, дневной
-(11, 11, 'Ежедневно'), -- Минск - Витебск, утренний
-(12, 12, 'Ежедневно'), -- Минск - Витебск, дневной
-(13, 1, 'Пн, Ср, Пт, Вс'), -- Минск - Витебск, вечерний
-(14, 2, 'Ежедневно'), -- Минск - Могилёв, утренний
-(15, 3, 'Вт, Чт, Сб'), -- Минск - Могилёв, дневной
-(16, 4, 'Ежедневно'), -- Брест - Пинск, утренний
-(17, 5, 'Пн, Ср, Пт, Вс'), -- Брест - Пинск, дневной
-(18, 6, 'Ежедневно'), -- Гомель - Бобруйск, утренний
-(19, 7, 'Вт, Чт, Сб'), -- Гомель - Бобруйск, дневной
-(20, 8, 'Ежедневно'), -- Витебск - Новополоцк, утренний
-(21, 9, 'Пн, Ср, Пт, Вс');
+(1, 1, '2025-05-20'), -- Минск - Гродно, утренний
+(2, 2, '2025-05-21'), -- Минск - Гродно, дневной
+(3, 3, '2025-05-22'), -- Минск - Гродно, вечерний
+(4, 4, '2025-05-23'), -- Минск - Брест, утренний
+(5, 5, '2025-05-24'), -- Минск - Брест, дневной
+(6, 6, '2025-05-25'), -- Минск - Брест, вечерний
+(7, 7, '2025-05-26'), -- Витебск - Гомель, утренний
+(8, 8, '2025-05-27'), -- Витебск - Гомель, дневной
+(9, 9, '2025-05-28'), -- Гродно - Брест, утренний
+(10, 10, '2025-05-29'), -- Гродно - Брест, дневной
+(11, 11, '2025-05-30'), -- Минск - Витебск, утренний
+(12, 12, '2025-05-31'), -- Минск - Витебск, дневной
+(13, 1, '2025-06-01'), -- Минск - Витебск, вечерний
+(14, 2, '2025-06-02'), -- Минск - Могилёв, утренний
+(15, 3, '2025-06-03'), -- Минск - Могилёв, дневной
+(16, 4, '2025-06-04'), -- Брест - Пинск, утренний
+(17, 5, '2025-06-05'), -- Брест - Пинск, дневной
+(18, 6, '2025-06-06'), -- Гомель - Бобруйск, утренний
+(19, 7, '2025-06-07'), -- Гомель - Бобруйск, дневной
+(20, 8, '2025-06-08'), -- Витебск - Новополоцк, утренний
+(21, 9, '2025-06-09'); 
 
+INSERT INTO roles(name) VALUES ('admin'), ('user');`
+        );
+    }
 
--- Отключение проверки внешних ключей (на время очистки)
--- SET CONSTRAINTS ALL DEFERRED;
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`
+            --Отключение проверки внешних ключей (на время очистки)
+SET CONSTRAINTS ALL DEFERRED;
 
--- -- Очистка таблиц
--- -- Очистка всех таблиц с учётом зависимостей
--- TRUNCATE TABLE Routes, Buses, Schedules, BusSchedules CASCADE;
+-- Очистка таблиц
+-- Очистка всех таблиц с учётом зависимостей
+TRUNCATE TABLE Routes, Buses, Schedules, BusSchedules CASCADE;
 
--- -- Сброс последовательностей для автоинкрементных полей
--- ALTER SEQUENCE busSchedules_id_seq RESTART WITH 1;
--- ALTER SEQUENCE schedules_id_seq RESTART WITH 1;
--- ALTER SEQUENCE routes_id_seq RESTART WITH 1;
--- ALTER SEQUENCE buses_id_seq RESTART WITH 1;
+-- Сброс последовательностей для автоинкрементных полей
+ALTER SEQUENCE busSchedules_id_seq RESTART WITH 1;
+ALTER SEQUENCE schedules_id_seq RESTART WITH 1;
+ALTER SEQUENCE routes_id_seq RESTART WITH 1;
+ALTER SEQUENCE buses_id_seq RESTART WITH 1;
 
--- -- Включение проверки внешних ключей обратно
--- SET CONSTRAINTS ALL IMMEDIATE;
+-- Включение проверки внешних ключей обратно
+SET CONSTRAINTS ALL IMMEDIATE;
+            `)
+    }
+
+}

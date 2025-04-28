@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'; 
 import '../styles/css/BookingList.css';
 import { useProfile } from '../ context/ProfileContext';
+import { useModal } from '../../../shared/context/ModalContext';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
 
 const BookingList: React.FC = () => {
-  const {bookings, tickets, fetchBookings, error, loading } = useProfile();
-
+  const {trigger, bookings, tickets, fetchBookings, handleBooking, handleCanselBooking, error, loading , handleCanselTicket} = useProfile();
+  const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
   // eslint-disable-next-line 
   useEffect(() => {
     fetchBookings();
-  }, []);
+  }, [trigger]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -60,9 +62,6 @@ const BookingList: React.FC = () => {
                 <p>
                   <strong>Автобус:</strong> {booking.busSchedule?.bus?.type} ({booking.busSchedule?.bus?.bus_number})
                 </p>
-                <p>
-                  <strong>Общая стоимость:</strong> {booking.total_price} BYN
-                </p>
               </div>
               <div className="booking-item__tickets">
                 <h4>Билеты:</h4>
@@ -73,6 +72,9 @@ const BookingList: React.FC = () => {
                         <span>Место: {ticket.seat_number}</span>
                         <span>{ticket.is_child ? 'Детский' : 'Взрослый'}</span>
                         <span>Цена: {ticket.price} BYN</span>
+                        {booking.status === 'Забронирован' ? 
+                        <button className='buttin__cansel' onClick={() => openModal('Вы уверены, что хотите удалить билет?', () => handleCanselTicket(ticket))}>Отменить</button> : 
+                        ''}
                       </li>
                     ))}
                   </ul>
@@ -80,12 +82,21 @@ const BookingList: React.FC = () => {
                   <p>Билеты не найдены.</p>
                 )}
               </div>
-              {booking.status === 'Забронирован' ? <button className='buttin__cansel'>Отменить</button> : ''}
-              {booking.status === 'Выбран' ? <button className='button__action'>Забронировать</button> : '' }
+              {booking.status === 'Забронирован' ? 
+              <button className='buttin__cansel' onClick={() => openModal('Вы уверены, что хотите отменить всю бронь?', () => handleCanselBooking(booking.id))}>Отменить бронь</button> :
+              ''}
+              {booking.status === 'Выбран' ? 
+              <button className='button__action' onClick={() => handleBooking(booking.id)}>Забронировать</button> : 
+              ''}
             </div>
           ))}
         </div>
       </div>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+      />
     </section>
   );
 };
