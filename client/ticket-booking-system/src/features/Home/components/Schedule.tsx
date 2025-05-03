@@ -1,21 +1,106 @@
+// src/components/Schedule.tsx
 import React, { useEffect, useState } from 'react';
 import '../styles/css/Schedule.css';
 import { socket } from '../../..';
 import { useHome } from '../context/HomeContext';
+import { formatTime, formatDate } from '../../../shared/services/formatDateTime';
+import { BusScheduleType } from '../../../shared/types/BusScheduleType';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  ColumnDef,
+  SortingState,
+  flexRender,
+} from '@tanstack/react-table';
 
 const Schedule: React.FC = () => {
-  const { busSchedules, loading, error, fetchBusSchedule, booking } = useHome();
+  const {
+    busSchedules,
+    loading,
+    error,
+    fetchBusSchedule,
+    booking
+  } = useHome();
   const [trigger, setTrigger] = useState<number>(0);
-  socket.on('update', () => {
-    setTrigger(next => ++next);
-  })
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  // eslint-disable-next-line 
+  socket.on('update', () => {
+    setTrigger((next) => ++next);
+  });
+
   useEffect(() => {
     fetchBusSchedule();
   }, [trigger]);
 
-  const formatTime = (time: string) => time.slice(0, 10);
+  // Функция для парсинга даты в формате дд.мм.гггг
+  const parseDate = (dateStr: string): Date => {
+    if (!dateStr || !/^\d{2}\.\d{2}\.\d{4}$/.test(dateStr)) {
+      return new Date(0); // Возвращаем минимальную дату в случае ошибки
+    }
+    const [day, month, year] = dateStr.split('.').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  // Определение колонок таблицы
+  const columns: ColumnDef<BusScheduleType>[] = [
+    {
+      header: 'Маршрут',
+      accessorKey: 'schedule.route.name',
+      cell: (info) => info.row.original.schedule?.route?.name || '-',
+    },
+    {
+      header: 'Время отправления',
+      accessorKey: 'schedule.departure_time',
+      cell: (info) => (info.row.original.schedule?.departure_time ? formatTime(info.row.original.schedule.departure_time) : '-'),
+    },
+    {
+      header: 'Время прибытия',
+      accessorKey: 'schedule.arrival_time',
+      cell: (info) => (info.row.original.schedule?.arrival_time ? formatTime(info.row.original.schedule.arrival_time) : '-'),
+    },
+    {
+      header: 'Дни работы',
+      accessorKey: 'operating_days',
+      cell: (info) => formatDate(info.getValue() as string) || '-',
+      sortingFn: (rowA, rowB, columnId) => {
+        const aDate = parseDate(formatDate(rowA.getValue(columnId)));
+        const bDate = parseDate(formatDate(rowB.getValue(columnId)));
+        return aDate.getTime() - bDate.getTime();
+      },
+    },
+    {
+      header: 'Автобус',
+      accessorKey: 'bus.bus_number',
+      cell: (info) => `${info.row.original.bus?.bus_number || '-'} (${info.row.original.bus?.type || '-'})`,
+    },
+    {
+      header: 'Стоимость',
+      accessorKey: 'schedule.route.price',
+      cell: (info) => `${info.row.original.schedule?.route?.price || '0'} руб.`,
+    },
+    {
+      header: 'Купить',
+      cell: (info) => (
+        <button className="header__action" onClick={() => booking(info.row.original)}>
+          Выбрать
+        </button>
+      ),
+    },
+  ];
+
+  // Инициализация таблицы
+  const table = useReactTable({
+    columns,
+    data: busSchedules,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    debugTable: true,
+  });
 
   return (
     <div className="minibus-schedule">
@@ -27,32 +112,40 @@ const Schedule: React.FC = () => {
         ) : (
           !loading &&
           !error && (
-            <table className="minibus-schedule__table">
-              <thead>
-                <tr>
-                  <th>Маршрут</th>
-                  <th>Время отправления</th>
-                  <th>Время прибытия</th>
-                  <th>Дни работы</th>
-                  <th>Автобус</th>
-                  <th>Стоимость</th>
-                  <th>Купить</th>
-                </tr>
-              </thead>
-              <tbody>
-                {busSchedules.map((schedule) => (
-                  <tr key={schedule.id}>
-                    <td>{schedule.schedule?.route?.name}</td>
-                    <td>{formatTime(schedule.schedule?.departure_time as string)}</td>
-                    <td>{formatTime(schedule.schedule?.arrival_time as string)}</td>
-                    <td>{schedule.operating_days}</td>
-                    <td>{`${schedule.bus?.bus_number} (${schedule.bus?.type})`}</td>
-                    <td>{schedule.schedule?.route?.price} руб.</td>
-                    <td><button className='header__action' onClick={() => booking(schedule)}>Выбрать</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <>
+              <table className="minibus-schedule__table">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <th
+                          key={header.id}
+                          onClick={header.column.getToggleSortingHandler()}
+                          style={{ cursor: header.column.getCanSort() ? 'pointer' : 'default' }}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: ' ↑',
+                            desc: ' ↓',
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
           )
         )}
       </div>

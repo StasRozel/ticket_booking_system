@@ -3,6 +3,7 @@ import '../styles/css/Footer.css';
 import Telegram from '../img/telegram-icon.png';
 import Instagram from '../img/instagram-icon.png';
 import Vk from '../img/vk-icon.png';
+import Logo from '../img/logo.png';
 
 
 const Footer: React.FC = () => {
@@ -12,7 +13,7 @@ const Footer: React.FC = () => {
         <div className="footer__grid">
           <div className="footer__column">
             <div className="footer__logo">
-              <img src="/logo.png" alt="Atlas Logo" />
+            <img src={Logo} alt="Atlas Logo" />
             </div>
             <ul>
               <li><a href="#about">О нас</a></li>

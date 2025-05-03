@@ -12,8 +12,8 @@ export class AuthController {
         @Res() res: Response
     ) {
         try {
-            const { accessToken, refreshToken } = await register(newUser);
-            return res.status(201).json({ accessToken, refreshToken });
+            const { user_id, accessToken, refreshToken } = await register(newUser);
+            return res.status(201).json({ user_id, accessToken, refreshToken });
         } catch (error) {
             return res.status(400).json({ message: (error as Error).message });
         }

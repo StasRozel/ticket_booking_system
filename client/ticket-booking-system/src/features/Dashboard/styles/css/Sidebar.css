@@ -1,11 +1,8 @@
 .sidebar {
-  width: 250px;
+  width: auto;
   background: #1a2a44;
   color: #fff;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
+  height: 96vh;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -52,6 +49,7 @@
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
+  margin: 30px 0px;
 }
 .sidebar__logout:hover {
   background: #d9363e;

@@ -50,7 +50,7 @@ export const io = new Server(server, {
 
 AppDataSource.initialize()
   .then(() => {
-    console.log("\x1b[32m", "Database initialise successfully")
+    console.log("\x1b[32m", "Database initialize successfully")
   })
   .catch((error) => console.log(error))
 

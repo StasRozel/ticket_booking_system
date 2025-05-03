@@ -25,8 +25,8 @@
   justify-content: space-between;
 }
 .header__logo img {
-  width: 120px;
-  height: 60px;
+  width: 160px;
+  height: 80px;
   transition: transform 0.3s ease;
 }
 .header__logo img:hover {

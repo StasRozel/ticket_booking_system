@@ -11,12 +11,12 @@ export class UserController {
   }
 
   @Get("/:id")
-  async getBusById(@Param('id') id: number) {
+  async getUserById(@Param('id') id: number) {
     return await userRepository.findOneById(id);
   }
 
   @Patch("/blocked/:id")
-  async updateBusById(@Param('id') id: number, @Body() user: User) {
+  async updateUserById(@Param('id') id: number, @Body() user: User) {
     return await userRepository.update(id, user);
   }
 }

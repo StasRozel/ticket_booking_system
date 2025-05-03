@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { User } from '../entities/user';
 import { userRepository } from '../repository/repository';
-require('dotnet');
+require('dotenv');
 
 export const register = async (newUser: any) => {
     const { name, role_id, email, password } = newUser;
@@ -20,11 +20,11 @@ export const register = async (newUser: any) => {
     });
 
     const { accessToken, refreshToken } = generateTokens(user);
-    
+    const user_id = user.id;
     user.refresh_token = refreshToken;
     await userRepository.save(user);
 
-    return { accessToken, refreshToken };
+    return { user_id, accessToken, refreshToken };
 };
 
 export const login = async (email: string, password: string) => {

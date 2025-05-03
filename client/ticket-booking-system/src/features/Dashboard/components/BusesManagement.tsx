@@ -37,7 +37,7 @@ const BusesManagement: React.FC = () => {
                   <tr key={bus.id}>
                     <td>{bus.id}</td>
                     <td>{bus.bus_number}</td>
-                    <td>{bus.capacity} мест</td>
+                    <td>{bus.capacity.join(', ')} мест</td>
                     <td>{bus.type}</td>
                     <td>{bus.available ? 'Доступен' : 'Недоступен'}</td>
                     <td>

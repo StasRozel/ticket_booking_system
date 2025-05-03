@@ -5,6 +5,7 @@ import FormUpdateBusSchedule from './FormUpdateBusSchedule';
 import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
+import { formatDate, formatTime } from '../../../shared/services/formatDateTime';
 
 const BusSchedulesManagement: React.FC = () => {
     const { buses, schedules, busSchedules, trigger, is_update, handleEdit, fetchBusSchedules, fetchBuses, fetchSchedules, DeleteBusSchedule } = useDashboard();
@@ -39,7 +40,7 @@ const BusSchedulesManagement: React.FC = () => {
                                 <td>{route.id}</td>
                                 <td>{route.schedule_id}</td>
                                 <td>{route.bus_id}</td>
-                                <td>{route.operating_days}</td>
+                                <td>{formatDate(route.operating_days)}</td>
                                 <td>
                                     <button
                                         className="routes-management__action"
@@ -73,7 +74,7 @@ const BusSchedulesManagement: React.FC = () => {
                             <tr key={bus.id}>
                                 <td>{bus.id}</td>
                                 <td>{bus.bus_number}</td>
-                                <td>{bus.capacity} мест</td>
+                                <td>{bus.capacity.join(', ')}</td>
                                 <td>{bus.type}</td>
                                 <td>{bus.available ? 'Доступен' : 'Недоступен'}</td>
                             </tr>
@@ -94,8 +95,8 @@ const BusSchedulesManagement: React.FC = () => {
                             <tr key={schedule.id}>
                                 <td>{schedule.id}</td>
                                 <td>{schedule.route_id}</td>
-                                <td>{schedule.departure_time} км</td>
-                                <td>{schedule.arrival_time} руб.</td>
+                                <td>{formatTime(schedule.departure_time)} км</td>
+                                <td>{formatTime(schedule.arrival_time)} руб.</td>
                             </tr>
                         ))}
                     </tbody>

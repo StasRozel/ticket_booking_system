@@ -5,6 +5,7 @@ import FormNewSchedule from './FormNewSchedule';
 import FormUpdateSchedule from './FormUpdateSchedule';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
+import { formatTime } from '../../../shared/services/formatDateTime';
 
 
 const SchedulesManagement: React.FC = () => {
@@ -37,8 +38,8 @@ const SchedulesManagement: React.FC = () => {
                           <tr key={schedule.id}>
                               <td>{schedule.id}</td>
                               <td>{schedule.route_id}</td>
-                              <td>{schedule.departure_time} км</td>
-                              <td>{schedule.arrival_time} руб.</td>
+                              <td>{formatTime(schedule.departure_time)}</td>
+                              <td>{formatTime(schedule.arrival_time)}</td>
                               <td>
                                   <button
                                       className="routes-management__action"

@@ -9,15 +9,11 @@ import { useModal } from '../context/ModalContext';
 import ConfirmModal from './ConfirmModal';
 
 const Header: React.FC = () => {
-  const { logout } = useAuth();
-
+  const { id, logout } = useAuth();
   const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
   const navigate = useNavigate();
   const [pendingBookingsCount, setPendingBookingsCount] = useState<number>(0);
 
-  
-
-  // Загружаем количество незавершенных бронирований
   useEffect(() => {
     const fetchPendingBookings = async () => {
       try {
@@ -40,8 +36,16 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
+    if (id) logout();
     navigate('/login');
+  };
+
+  const handleLogoutClick = () => {
+    if (id) {
+      openModal('Вы уверены, что хотите выйти?', handleLogout);
+    } else {
+      handleLogout();
+    }
   };
 
   return (
@@ -67,8 +71,8 @@ const Header: React.FC = () => {
               <span className="header__notification">{pendingBookingsCount}</span>
             )}
           </div>
-          <button className="sidebar__logout" onClick={() => {openModal('Вы уверены, что хотите выйти?', handleLogout)}}>
-            Выйти
+          <button className="sidebar__logout" onClick={handleLogoutClick}>
+            { id ? "Выйти" : "Войти"}
           </button>
         </div>
       </div>
