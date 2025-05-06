@@ -16,8 +16,9 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [trigger, setTrigger] = useState(0);
     const [schedules, setSchedules] = useState([]);
     const [busSchedules, setBusSchedules] = useState([]);
-    const [is_update, setUpdate] = useState(false);
     const [users, setUsers] = useState<UserType[]>([]);
+    const [isModalFormOpen, setIsModalFormOpen] = useState(false);
+    const [isAddMode, setIsAddMode] = useState(true);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -42,10 +43,6 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         } catch (error) {
             console.error('Error fetching routes:', error);
         }
-    };
-
-    const handleEdit = () => {
-        setUpdate(true);
     };
 
     const DeleteRoute = async (id: number) => {
@@ -163,13 +160,18 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
+    const OpenModalForm = (flag: boolean) => { setIsModalFormOpen(true); setIsAddMode(flag); }
+
+    const CloseModalForm = () => setIsModalFormOpen(false);
+
     return (
         <DashboardContext.Provider value={{
-            routes, trigger, is_update, handleEdit, NewRoute, UpdateRoute, fetchRoutes, DeleteRoute,
+            routes, trigger, NewRoute, UpdateRoute, fetchRoutes, DeleteRoute,
             schedules, fetchSchedules, NewSchedule, UpdateSchedule, DeleteSchedule,
             users, loading, error, fetchUsers, toggleUserBlock,
             buses, fetchBuses, NewBus, UpdateBus, DeleteBus,
-            busSchedules, fetchBusSchedules, NewBusSchedule, UpdateBusSchedule, DeleteBusSchedule
+            busSchedules, fetchBusSchedules, NewBusSchedule, UpdateBusSchedule, DeleteBusSchedule,
+            isModalFormOpen, isAddMode, OpenModalForm, CloseModalForm
         }}>
             {children}
         </DashboardContext.Provider>

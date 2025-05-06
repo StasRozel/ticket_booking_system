@@ -18,6 +18,7 @@ import { ModalProvider } from './shared/context/ModalContext';
 import AuthProtectedRoute from './features/Auth/components/AuthProtectedRoute';
 import AdminProtectedRoute from './features/Auth/components/AdminProtectedRoute';
 import ErrorPage from './features/Error/components/ErrorPage';
+import { NotificationProvider } from './shared/context/NotificationContext';
 
 const AppContent: React.FC = () => {
     const { refreshAccessToken, logout } = useAuth();
@@ -31,7 +32,6 @@ const AppContent: React.FC = () => {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/home" element={<HomeProvider><Home /></HomeProvider>} />
                 <Route path="/" element={<HomeProvider><Home /></HomeProvider>} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/contacts" element={<Contacts />} />
@@ -54,7 +54,9 @@ const App: React.FC = () => {
     return (
         <AuthProvider>
             <ModalProvider>
-                <AppContent />
+                <NotificationProvider>
+                    <AppContent />
+                </NotificationProvider>
             </ModalProvider>
         </AuthProvider>
     );

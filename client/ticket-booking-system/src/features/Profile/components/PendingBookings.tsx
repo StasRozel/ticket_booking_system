@@ -116,13 +116,13 @@ const PendingBookings: React.FC= () => {
                   </div>
                   <div className="booking-item__actions">
                     <button
-                      className="booking-item__button booking-item__button--confirm"
+                      className="button__action"
                       onClick={() =>handleBooking(booking.id)}
                     >
                       Забронировать
                     </button>
                     <button
-                      className="booking-item__button booking-item__button--cancel"
+                      className="button__cansel"
                       onClick={() =>
                         openModal(
                           'Вы уверены, что хотите отменить это бронирование?',

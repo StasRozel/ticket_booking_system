@@ -6,6 +6,7 @@ import { HomeContextType } from '../../../shared/types/HomeContextType';
 import { useNavigate } from 'react-router-dom';
 import { formatDate } from '../../../shared/services/formatDateTime';
 import { useAuth } from '../../Auth/context/AuthContext';
+import { useNotification } from '../../../shared/context/NotificationContext';
 
 const HomeContext = createContext<HomeContextType | undefined>(undefined);
 
@@ -21,8 +22,10 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [searchTo, setSearchTo] = useState<string>(''); // Куда
   const [searchDate, setSearchDate] = useState<string>(''); // Дата
   const [searchPassengers, setSearchPassengers] = useState<string>(''); // Пассажиры
+
   const navigate = useNavigate();
   const { accessToken } = useAuth();
+  const { setOptionNotification } = useNotification();
   const currentDate = new Date();
 
   const fetchBusSchedule = async () => {
@@ -48,7 +51,10 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const booking = async (busSchedule: BusScheduleType) => {
-    if (!accessToken) return;
+    if (!accessToken) {
+      setOptionNotification("Вы не авторизованны", "error");
+      return;
+    };
 
     const bookingObj = {
       bus_schedule_id: busSchedule.id ?? 0, // Если id undefined, используем 0
@@ -88,7 +94,7 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
         searchDate,
         setSearchDate,
         searchPassengers,
-        setSearchPassengers,
+        setSearchPassengers
       }}
     >
       {children}

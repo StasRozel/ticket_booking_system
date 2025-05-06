@@ -5,6 +5,7 @@ import { socket } from '../../..';
 import { useHome } from '../context/HomeContext';
 import { formatTime, formatDate } from '../../../shared/services/formatDateTime';
 import { BusScheduleType } from '../../../shared/types/BusScheduleType';
+import Notification from '../../../shared/components/Notification'
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,6 +14,7 @@ import {
   SortingState,
   flexRender,
 } from '@tanstack/react-table';
+import { useNotification } from '../../../shared/context/NotificationContext';
 
 const Schedule: React.FC = () => {
   const {
@@ -22,8 +24,10 @@ const Schedule: React.FC = () => {
     fetchBusSchedule,
     booking
   } = useHome();
+  const { notification } = useNotification();
   const [trigger, setTrigger] = useState<number>(0);
   const [sorting, setSorting] = useState<SortingState>([]);
+
 
   socket.on('update', () => {
     setTrigger((next) => ++next);
@@ -103,6 +107,7 @@ const Schedule: React.FC = () => {
   });
 
   return (
+    <>
     <div className="minibus-schedule">
       <div className="container">
         {loading && <p className="minibus-schedule__loading">Загрузка...</p>}
@@ -150,6 +155,13 @@ const Schedule: React.FC = () => {
         )}
       </div>
     </div>
+    <Notification
+          message={notification?.message}
+          type={notification?.type}
+          duration={5000}
+          isClose={true}
+        />
+    </>
   );
 };
 

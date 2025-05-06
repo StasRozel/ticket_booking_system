@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import '../styles/css/EntitesManagement.css';
 import { useDashboard } from '../context/DashboardContext';
-import FormNewBus from './FormNewBus';
-import FormUpdateBus from './FormUpdateBus';
+import FormUpdateBus from './FormBus';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
 
 const BusesManagement: React.FC = () => {  
-    const { buses, trigger, is_update, handleEdit, fetchBuses, DeleteBus } = useDashboard();
+    const { buses, trigger,  fetchBuses, DeleteBus, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line 
     useEffect(() => {   
@@ -18,9 +17,6 @@ const BusesManagement: React.FC = () => {
         <div className="routes-management">
           <h2>BusesManagement</h2>
           <div className="container">
-            <div className="routes-management__actions">
-              {!is_update ? <FormNewBus /> : <FormUpdateBus />}
-            </div>
             <table className="routes-management__table">
               <thead>
                 <tr>
@@ -43,7 +39,7 @@ const BusesManagement: React.FC = () => {
                     <td>
                       <button
                         className="routes-management__action"
-                        onClick={() => handleEdit()}
+                        onClick={() => OpenModalForm(false)}
                       >
                         ✏️
                       </button>
@@ -58,6 +54,14 @@ const BusesManagement: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            <div className="routes-management__actions">
+            <button className='routes-management__button__confirm' onClick={() => OpenModalForm(true)}>Добавить транспорт</button>
+                    <FormUpdateBus
+                        isOpen={isModalFormOpen}
+                        onClose={CloseModalForm}
+                        isActive={isAddMode}
+                    />
+            </div>
           </div>
           <ConfirmModal
         isOpen={isModalOpen}

@@ -83,7 +83,7 @@
   font-size: 14px;
   font-weight: 500;
 }
-.booking-item__header__status--желтый {
+.booking-item__header__status--выбран {
   background: #ffeeba;
   color: #856404;
 }
@@ -149,6 +149,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  margin: 5px;
 }
 .booking-item .button__action:hover {
   background: #0056b3;
@@ -159,7 +160,11 @@
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }
-.booking-item .buttin__cansel {
+.booking-item .button__action a {
+  color: #fff;
+  text-decoration: none;
+}
+.booking-item .button__cansel {
   background: #ff4d4f;
   border: none;
   border-radius: 5px;
@@ -168,13 +173,14 @@
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
+  margin: 5px;
 }
-.booking-item .buttin__cansel:hover {
+.booking-item .button__cansel:hover {
   background: #d9363e;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
-.booking-item .buttin__cansel:active {
+.booking-item .button__cansel:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }

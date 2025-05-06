@@ -73,7 +73,7 @@ const BookingList: React.FC = () => {
                         <span>{ticket.is_child ? 'Детский' : 'Взрослый'}</span>
                         <span>Цена: {ticket.price} BYN</span>
                         {booking.status === 'Забронирован' ? 
-                        <button className='buttin__cansel' onClick={() => openModal('Вы уверены, что хотите удалить билет?', () => handleCanselTicket(ticket))}>Отменить</button> : 
+                        <button className='button__cansel' onClick={() => openModal('Вы уверены, что хотите удалить билет?', () => handleCanselTicket(ticket))}>Отменить</button> : 
                         ''}
                       </li>
                     ))}
@@ -83,7 +83,7 @@ const BookingList: React.FC = () => {
                 )}
               </div>
               {booking.status === 'Забронирован' ? 
-              <button className='buttin__cansel' onClick={() => openModal('Вы уверены, что хотите отменить всю бронь?', () => handleCanselBooking(booking.id))}>Отменить бронь</button> :
+              <button className='button__cansel' onClick={() => openModal('Вы уверены, что хотите отменить всю бронь?', () => handleCanselBooking(booking.id))}>Отменить бронь</button> :
               ''}
               {booking.status === 'Выбран' ? 
               <button className='button__action' onClick={() => handleBooking(booking.id)}>Забронировать</button> : 

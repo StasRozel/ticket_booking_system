@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import '../styles/css/EntitesManagement.css';
 import { useDashboard } from '../context/DashboardContext';
-import FormNewSchedule from './FormNewSchedule';
-import FormUpdateSchedule from './FormUpdateSchedule';
+import FormUpdateSchedule from './FormSchedule';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
 import { formatTime } from '../../../shared/services/formatDateTime';
 
 
 const SchedulesManagement: React.FC = () => {
-  const { schedules, trigger, is_update, handleEdit, fetchSchedules, DeleteSchedule } = useDashboard();
+  const { schedules, trigger, fetchSchedules, DeleteSchedule, OpenModalForm, isAddMode, isModalFormOpen, CloseModalForm } = useDashboard();
   const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {   
@@ -20,9 +19,6 @@ const SchedulesManagement: React.FC = () => {
       <div className="routes-management">
           <h2>Работа с расписанием</h2>
           <div className="container">
-              <div className="routes-management__actions">
-                  {!is_update ? <FormNewSchedule /> : <FormUpdateSchedule />}
-              </div>
               <table className="routes-management__table">
                   <thead>
                       <tr>
@@ -43,7 +39,7 @@ const SchedulesManagement: React.FC = () => {
                               <td>
                                   <button
                                       className="routes-management__action"
-                                      onClick={() => handleEdit()}
+                                      onClick={() => OpenModalForm(false)}
                                   >
                                       ✏️
                                   </button>
@@ -58,6 +54,14 @@ const SchedulesManagement: React.FC = () => {
                       ))}
                   </tbody>
               </table>
+              <div className="routes-management__actions">
+              <button className='routes-management__button__confirm' onClick={() => OpenModalForm(true)}>Добавить расписание</button>
+                    <FormUpdateSchedule
+                        isOpen={isModalFormOpen}
+                        onClose={CloseModalForm}
+                        isActive={isAddMode}
+                    />
+              </div>
           </div>
           <ConfirmModal
         isOpen={isModalOpen}

@@ -3,7 +3,17 @@
 }
 .routes-management .container {
   display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
   place-items: center;
+}
+.routes-management .table__busschedules {
+  width: 90%;
+  grid-column: 1/3;
+}
+.routes-management .table_buses .table_schedules {
+  width: 80%;
 }
 .routes-management h2 {
   font-size: 28px;
@@ -17,6 +27,7 @@
 .routes-management__button__confirm {
   width: 1150px;
   margin: 15px 0px;
+  text-align: center;
   padding: 12px 40px;
   background: #007bff;
   border: none;
@@ -41,8 +52,8 @@
   text-decoration: none;
 }
 .routes-management__table {
-  width: 70%;
-  height: 700px;
+  width: 80%;
+  height: 350px;
   border-collapse: collapse;
   background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

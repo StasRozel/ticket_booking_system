@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import '../styles/css/EntitesManagement.css';
-import FormNewRoute from './FormNewRoute';
-import FormUpdateRoute from './FormUpdateRoute';
+import FormUpdateRoute from './FormRoute';
 import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
 
 const RoutesManagement: React.FC = () => {
-    const { routes, trigger, is_update, handleEdit, fetchRoutes, DeleteRoute } = useDashboard();
+    const { routes, trigger, fetchRoutes, DeleteRoute, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line 
     useEffect(() => {
@@ -17,10 +16,8 @@ const RoutesManagement: React.FC = () => {
     return (
         <div className="routes-management">
             <h2>Работа с маршрутами</h2>
+
             <div className="container">
-                <div className="routes-management__actions">
-                    {!is_update ? <FormNewRoute /> : <FormUpdateRoute />}
-                </div>
                 <table className="routes-management__table">
                     <thead>
                         <tr>
@@ -45,7 +42,7 @@ const RoutesManagement: React.FC = () => {
                                 <td>
                                     <button
                                         className="routes-management__action"
-                                        onClick={() => handleEdit()}
+                                        onClick={() => OpenModalForm(false)}
                                     >
                                         ✏️
                                     </button>
@@ -60,6 +57,14 @@ const RoutesManagement: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
+                <div className="routes-management__actions">
+                    <button className='routes-management__button__confirm' onClick={() => OpenModalForm(true)}>Добавить маршрут</button>
+                    <FormUpdateRoute
+                        isOpen={isModalFormOpen}
+                        onClose={CloseModalForm}
+                        isActive={isAddMode}
+                    />
+                </div>
             </div>
             <ConfirmModal
                 isOpen={isModalOpen}

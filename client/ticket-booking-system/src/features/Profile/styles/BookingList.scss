@@ -1,4 +1,6 @@
-// src/styles/BookingList.scss
+@import '../../../shared/styles/ConfirmButton.scss';
+@import '../../../shared/styles/CanselButton.scss';
+
 .booking-list {
   padding: 10px 0;
   background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
@@ -95,7 +97,7 @@
       font-size: 14px;
       font-weight: 500;
 
-      &--желтый {
+      &--выбран {
         background: #ffeeba;
         color: #856404;
       }
@@ -169,48 +171,13 @@
   }
 
   .button__action {
-    padding: 12px 40px;
-    background: #007bff;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      background: #0056b3;
-      transform: translateY(-2px); // Лёгкое поднятие при наведении
-      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); // Тень при наведении
-    }
-
-    &:active {
-      transform: translateY(0); // Эффект нажатия
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-    }
+    @include button-confirm;
+    margin: 5px;
   }
 
-  .buttin__cansel {
-    background: #ff4d4f;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-    
-    &:hover {
-      background: #d9363e;
-      transform: translateY(-2px); // Лёгкое поднятие при наведении
-      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); // Тень при наведении
-    }
-
-    &:active {
-      transform: translateY(0); // Эффект нажатия
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-    }
+  .button__cansel {
+    @include button-cansel;
+    margin: 5px;
   }
 }
 

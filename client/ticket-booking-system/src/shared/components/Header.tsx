@@ -18,14 +18,16 @@ const Header: React.FC = () => {
     const fetchPendingBookings = async () => {
       try {
         const userId = localStorage.getItem('userId'); // Предполагаем, что userId доступен (можно взять из контекста авторизации)
-        const bookingResponse = await axios.get(`http://localhost:3001/booking/${userId}`);
-        const data = bookingResponse.data;
+        if (userId) {
+          const bookingResponse = await axios.get(`http://localhost:3001/booking/${userId}`);
+          const data = bookingResponse.data;
 
-        if (data) {
-          const pendingCount = data.filter((booking: { status: string }) =>
-            booking.status.toLowerCase() === 'выбран'
-          ).length;
-          setPendingBookingsCount(pendingCount);
+          if (data) {
+            const pendingCount = data.filter((booking: { status: string }) =>
+              booking.status.toLowerCase() === 'выбран'
+            ).length;
+            setPendingBookingsCount(pendingCount);
+          }
         }
       } catch (err) {
         console.error('Ошибка при загрузке бронирований:', err);
@@ -72,7 +74,7 @@ const Header: React.FC = () => {
             )}
           </div>
           <button className="sidebar__logout" onClick={handleLogoutClick}>
-            { id ? "Выйти" : "Войти"}
+            {id ? "Выйти" : "Войти"}
           </button>
         </div>
       </div>

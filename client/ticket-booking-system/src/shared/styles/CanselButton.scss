@@ -1,0 +1,21 @@
+@mixin button-cansel {
+    background: #ff4d4f;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    
+    &:hover {
+      background: #d9363e;
+      transform: translateY(-2px); // Лёгкое поднятие при наведении
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); // Тень при наведении
+    }
+
+    &:active {
+      transform: translateY(0); // Эффект нажатия
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    }
+}

@@ -7,8 +7,10 @@ import { UserType } from "./UserType";
 export type DashboardContextType = {
     routes: RouteType[];
     trigger: number;
-    is_update: boolean;
-    handleEdit: () => void;
+    isAddMode: boolean;
+    isModalFormOpen: boolean;
+    OpenModalForm: (flag: boolean) => void;
+    CloseModalForm: () => void;
     NewRoute: (newRoute: RouteType) => Promise<void>;
     UpdateRoute: (id: number, updRoute: RouteType) => Promise<void>;
     fetchRoutes: () => Promise<void>;
