@@ -11,7 +11,15 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  name: z
+  first_name: z
+    .string()
+    .min(2, 'Имя должно содержать минимум 2 символа')
+    .max(50, 'Имя не может быть длиннее 50 символов'),
+    last_name: z
+    .string()
+    .min(2, 'Имя должно содержать минимум 2 символа')
+    .max(50, 'Имя не может быть длиннее 50 символов'),
+    middle_name: z
     .string()
     .min(2, 'Имя должно содержать минимум 2 символа')
     .max(50, 'Имя не может быть длиннее 50 символов'),

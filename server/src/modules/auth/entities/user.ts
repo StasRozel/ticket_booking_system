@@ -6,45 +6,73 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ 
+    @Column({
         name: 'role_id',
-        nullable: false 
+        type: 'integer',
+        nullable: false
     })
     role_id: number;
 
-    @Column({ 
-        type: 'varchar', 
-        length: 100, 
-        nullable: false 
+    @Column({
+        type: 'varchar',
+        length: 100,
+        nullable: false
     })
-    name: string;
+    first_name: string;
 
-    @Column({ 
-        type: 'varchar', 
-        length: 100, 
-        unique: true, 
-        nullable: false 
+    @Column({
+        type: 'varchar',
+        length: 100,
+        nullable: false
+    })
+    last_name: string;
+
+    @Column({
+        type: 'varchar',
+        length: 100,
+        nullable: false
+    })
+    middle_name: string;
+
+    @Column({
+        type: 'varchar',
+        length: 20,
+        default: ''
+    })
+    phone_number: string;
+
+    @Column({
+        type: 'varchar',
+        length: 100,
+        unique: true,
+        nullable: false
     })
     email: string;
 
-    @Column({ 
-        type: 'varchar', 
-        length: 100, 
-        nullable: false 
+    @Column({
+        type: 'varchar',
+        length: 100,
+        nullable: false
     })
     password: string;
 
-    @Column({ 
-        type: 'boolean', 
-        default: false 
+    @Column({
+        type: 'integer',
+        default: 0
+    })
+    count_trips: number;
+
+    @Column({
+        type: 'boolean',
+        default: false
     })
     is_blocked: boolean;
 
-    @Column({ 
-        type: 'varchar', 
-        length: 255, 
-        nullable: true,
-     }) 
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true
+    })
     refresh_token: string;
 
     @ManyToOne(() => Role, role => role.users)

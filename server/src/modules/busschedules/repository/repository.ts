@@ -32,6 +32,7 @@ export class BusScheduleRepository implements IRepository<BusSchedule> {
       .leftJoinAndSelect("busSchedule.schedule", "schedule")
       .leftJoinAndSelect("schedule.route", "route")
       .leftJoinAndSelect("busSchedule.bus", "bus")
+      .where("bus.capacity != :capacity", { capacity: {} }) // Условие: исключаем capacity = 0
       .getMany();
     return busSchedules;
   }

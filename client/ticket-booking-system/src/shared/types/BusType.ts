@@ -1,7 +1,7 @@
 export type BusType = {
     id?: number;
     bus_number: string;
-    capacity: number;
+    capacity: number[];
     type: string;
     available: boolean;
   }

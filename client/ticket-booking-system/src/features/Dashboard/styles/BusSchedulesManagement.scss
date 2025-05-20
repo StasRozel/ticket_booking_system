@@ -1,9 +1,9 @@
 @import '../../../shared/styles/ConfirmButton.scss';
 
-.routes-management {
+.busSchedules-management {
   padding: 40px;
 
-  .container {
+  .busSchedules-container {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 1fr;
@@ -11,12 +11,13 @@
     place-items: center;
   }
 
-  .table__busschedules {
+  .busSchedules-tableBusschedules {
     width: 90%;
     grid-column: 1/3;
   }
 
-  .table_buses .table_schedules {
+  .busSchedules-tableBuses,
+  .busSchedules-tableSchedules {
     width: 80%;
   }
 
@@ -27,19 +28,18 @@
     color: #1a2a44;
   }
 
-  &__actions {
+  .busSchedules-actions {
     margin-bottom: 20px;
   }
 
-  &__button__confirm {
+  .busSchedules-buttonConfirm {
     width: 1150px;
     margin: 15px 0px;
     text-align: center;
     @include button-confirm;
-    
   }
 
-  &__table {
+  .busSchedules-table {
     width: 80%;
     height: 350px;
     border-collapse: collapse;
@@ -49,7 +49,6 @@
     overflow-x: auto;
     display: block;
 
-    // Устанавливаем минимальную ширину, чтобы таблица не сжималась слишком сильно
     table {
       width: 70%;
       overflow-y: hidden;
@@ -76,7 +75,7 @@
     }
   }
 
-  &__action {
+  .busSchedules-action {
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
@@ -89,7 +88,7 @@
       color: #fff;
     }
 
-    &--delete {
+    &.busSchedules-actionDelete {
       background: #f03023;
       color: #fff;
     }

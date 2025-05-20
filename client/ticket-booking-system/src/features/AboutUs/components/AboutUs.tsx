@@ -58,7 +58,7 @@ const AboutUs: React.FC = () => {
             </div>
           </div>
           <div className="about-us__cta">
-            <Link to="/home" className="about-us__cta-button">
+            <Link to="/" className="about-us__cta-button">
               Посмотреть маршруты
             </Link>
           </div>

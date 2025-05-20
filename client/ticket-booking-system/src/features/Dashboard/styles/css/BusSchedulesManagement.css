@@ -1,30 +1,31 @@
-.routes-management {
+.busSchedules-management {
   padding: 40px;
 }
-.routes-management .container {
+.busSchedules-management .busSchedules-container {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 1fr;
   grid-gap: 10px;
   place-items: center;
 }
-.routes-management .table__busschedules {
+.busSchedules-management .busSchedules-tableBusschedules {
   width: 90%;
   grid-column: 1/3;
 }
-.routes-management .table_buses .table_schedules {
+.busSchedules-management .busSchedules-tableBuses,
+.busSchedules-management .busSchedules-tableSchedules {
   width: 80%;
 }
-.routes-management h2 {
+.busSchedules-management h2 {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
   color: #1a2a44;
 }
-.routes-management__actions {
+.busSchedules-management .busSchedules-actions {
   margin-bottom: 20px;
 }
-.routes-management__button__confirm {
+.busSchedules-management .busSchedules-buttonConfirm {
   width: 1150px;
   margin: 15px 0px;
   text-align: center;
@@ -38,20 +39,20 @@
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
-.routes-management__button__confirm:hover {
+.busSchedules-management .busSchedules-buttonConfirm:hover {
   background: #0056b3;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
-.routes-management__button__confirm:active {
+.busSchedules-management .busSchedules-buttonConfirm:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }
-.routes-management__button__confirm a {
+.busSchedules-management .busSchedules-buttonConfirm a {
   color: #fff;
   text-decoration: none;
 }
-.routes-management__table {
+.busSchedules-management .busSchedules-table {
   width: 80%;
   height: 350px;
   border-collapse: collapse;
@@ -61,18 +62,18 @@
   overflow-x: auto;
   display: block;
 }
-.routes-management__table table {
+.busSchedules-management .busSchedules-table table {
   width: 70%;
   overflow-y: hidden;
   table-layout: auto;
 }
-.routes-management__table th,
-.routes-management__table td {
+.busSchedules-management .busSchedules-table th,
+.busSchedules-management .busSchedules-table td {
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
-.routes-management__table th {
+.busSchedules-management .busSchedules-table th {
   width: 100%;
   background: #f5f7fa;
   font-weight: 600;
@@ -80,10 +81,10 @@
   position: sticky;
   top: 0;
 }
-.routes-management__table td {
+.busSchedules-management .busSchedules-table td {
   color: #333;
 }
-.routes-management__action {
+.busSchedules-management .busSchedules-action {
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
@@ -91,14 +92,14 @@
   cursor: pointer;
   margin-right: 5px;
 }
-.routes-management__action:first-child {
+.busSchedules-management .busSchedules-action:first-child {
   background: #007bff;
   color: #fff;
 }
-.routes-management__action--delete {
+.busSchedules-management .busSchedules-action.busSchedules-actionDelete {
   background: #f03023;
   color: #fff;
 }
-.routes-management__action:hover {
+.busSchedules-management .busSchedules-action:hover {
   opacity: 0.9;
 }

@@ -4,9 +4,10 @@ import FormUpdateRoute from './FormRoute';
 import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
+import { RouteType } from '../../../shared/types/RouteType';
 
 const RoutesManagement: React.FC = () => {
-    const { routes, trigger, fetchRoutes, DeleteRoute, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
+    const { routes, trigger, fetchRoutes, DeleteRoute, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen, currentEntity } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     // eslint-disable-next-line 
     useEffect(() => {
@@ -31,7 +32,7 @@ const RoutesManagement: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {routes.map((route: any) => (
+                        {routes.map((route: RouteType) => (
                             <tr key={route.id}>
                                 <td>{route.id}</td>
                                 <td>{route.name}</td>
@@ -42,28 +43,30 @@ const RoutesManagement: React.FC = () => {
                                 <td>
                                     <button
                                         className="routes-management__action"
-                                        onClick={() => OpenModalForm(false)}
+                                        onClick={() => OpenModalForm(false, route)}
                                     >
                                         ✏️
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => openModal('Вы уверены, что хотите удалить путь?', () => DeleteRoute(route.id))}
+                                        onClick={() => openModal('Вы уверены, что хотите удалить путь?', () => DeleteRoute(route.id as number))}
                                     >
                                         🗑️
                                     </button>
                                 </td>
                             </tr>
+                            
                         ))}
                     </tbody>
                 </table>
                 <div className="routes-management__actions">
                     <button className='routes-management__button__confirm' onClick={() => OpenModalForm(true)}>Добавить маршрут</button>
                     <FormUpdateRoute
-                        isOpen={isModalFormOpen}
-                        onClose={CloseModalForm}
-                        isActive={isAddMode}
-                    />
+                                        isOpen={isModalFormOpen}
+                                        onClose={CloseModalForm}
+                                        isActive={isAddMode}
+                                        route={currentEntity}
+                                    />
                 </div>
             </div>
             <ConfirmModal

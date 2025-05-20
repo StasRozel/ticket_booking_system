@@ -58,7 +58,7 @@ const Header: React.FC = () => {
         </div>
         <nav className="header__nav">
           <ul>
-            <li><Link to="/home">Главная</Link></li>
+            <li><Link to="/">Главная</Link></li>
             <li><Link to="/profile">Профиль</Link></li>
             <li><Link to="/contacts">Контакты</Link></li>
             <li><Link to="/about">О нас</Link></li>
@@ -66,9 +66,7 @@ const Header: React.FC = () => {
         </nav>
         <div className="header__actions">
           <div className="header__action-wrapper">
-            <button className="header__action">
-              <Link to="/pending-bookings">Брони</Link>
-            </button>
+              <Link className="header__action" to="/pending-bookings">Брони</Link>
             {pendingBookingsCount > 0 && (
               <span className="header__notification">{pendingBookingsCount}</span>
             )}

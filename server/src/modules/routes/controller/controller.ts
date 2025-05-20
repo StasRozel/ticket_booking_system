@@ -16,6 +16,11 @@ export class RouteController {
     return await routeRepository.findOneById(id);
   }
 
+  @Get("/price/:id")
+  async getPriceById(@Param('id') id: number) {
+    return await routeRepository.findPriceById(id);
+  }
+
   @Post("/routes/create/")
   async createRoute(@Body() route: Route) {
     return await routeRepository.create(route);

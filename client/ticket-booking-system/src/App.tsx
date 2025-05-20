@@ -11,7 +11,7 @@ import { DashboardProvider } from './features/Dashboard/context/DashboardContext
 import Profile from './features/Profile/components/Profile';
 import AboutUs from './features/AboutUs/components/AboutUs';
 import Contacts from './features/Contacts/components/Contacts';
-import { ProfileProvider } from './features/Profile/ context/ProfileContext';
+import { ProfileProvider } from './features/Profile/context/ProfileContext';
 import { HomeProvider } from './features/Home/context/HomeContext';
 import PendingBookings from './features/Profile/components/PendingBookings';
 import { ModalProvider } from './shared/context/ModalContext';

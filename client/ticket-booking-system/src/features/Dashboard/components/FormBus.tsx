@@ -12,7 +12,7 @@ interface FormUpdateBusProps {
 const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive }) => {
   const [id, setId] = useState(0);
   const [busNumber, setBusNumber] = useState<string>('');
-  const [capacity, setCapacity] = useState<number>(0);
+  const [capacity, setCapacity] = useState<any>(null);
   const [type, setType] = useState<string>('');
   const [isAvailable, setIsAvailable] = useState<boolean>(false);
   const [isClosing, setIsClosing] = useState(false); // Состояние для анимации закрытия
@@ -134,9 +134,9 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
           </div>
           <div className="form-new-routes__field">
             <input
-              type="number"
+              type="string"
               value={capacity || ''} // Чтобы избежать "0" в инпуте
-              onChange={(e) => setCapacity(Number(e.target.value))}
+              onChange={(e) => setCapacity(capacity.split(','))} //TODO переделать
               placeholder="Вместимость (мест)"
               className="form-new-routes__input"
               required

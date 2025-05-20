@@ -68,7 +68,7 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const ticketObj = {
       booking_id: id,
       seat_number: 0,
-      is_child: true,
+      is_child: false,
       price: busSchedule.schedule?.route?.price ?? '0',
     };
     await api.post('/tickets/create/', ticketObj);

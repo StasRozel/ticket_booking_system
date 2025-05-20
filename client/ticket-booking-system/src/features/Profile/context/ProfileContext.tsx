@@ -40,6 +40,36 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const fetchUserProfile = async (userId: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get<UserType>(`/users/${userId}`);
+      console.log(response.data);
+      setUser(response.data);
+    } catch (err) {
+      console.error('Ошибка при загрузке данных профиля:', err);
+      setError('Не удалось загрузить данные профиля. Попробуйте снова.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateUserProfile = async (userId: number, data: Partial<UserType>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.patch(`/users/update/${userId}`, data);
+      setUser((prevUser) => (prevUser ? { ...prevUser, ...response.data } : null));
+      console.log('Профиль успешно обновлен!');
+    } catch (err) {
+      console.error('Ошибка при обновлении профиля:', err);
+      setError('Не удалось обновить профиль. Попробуйте снова.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleScroll = () => {
     if (window.scrollY > 50) {
       setIsScrolled(true);
@@ -48,14 +78,8 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const handleEdit = () => {
-    console.log('Редактировать профиль');
-    // Логика редактирования профиля
-  };
-
   const fetchBookings = async () => {
     try {
-      // Запрос на получение бронирований с использованием настроенного api
       const bookingResponse = await api.get(`/booking/${userId}`);
       const data: BookingType[] = bookingResponse.data;
 
@@ -66,7 +90,6 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setBookings(data);
       setLoading(false);
 
-      // Получение билетов для каждого бронирования
       const ticketPromises = data.map(async (booking) => {
         const ticketResponse = await api.get(`/tickets/${booking.id}`);
         const ticketData: TicketType[] = ticketResponse.data;
@@ -106,12 +129,10 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
         throw new Error('Ответ от сервера пустой');
       }
 
-      // Фильтруем только брони со статусом "Желтый"
       const pendingBookings = data.filter((booking) => booking.status.toLowerCase() === 'выбран');
       setBookings(pendingBookings);
       setLoading(false);
 
-      // Получение билетов для каждого бронирования
       const ticketPromises = pendingBookings.map(async (booking) => {
         const ticketResponse = await api.get(`/tickets/${booking.id}`);
         const ticketData: TicketType[] = ticketResponse.data;
@@ -140,9 +161,9 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const handleTicketTypeChange = async (ticketId: number, bookingId: number, isChild: boolean) => {
+  const handleTicketTypeChange = async (ticketId: number, routeId: number, bookingId: number, isChild: boolean) => {
     try {
-      await api.patch(`/tickets/update/${ticketId}`, { is_child: !isChild });
+      const ticketPrice = await api.get(`/price/${routeId}`);
       setTickets((prev) => ({
         ...prev,
         [bookingId]: prev[bookingId].map((ticket) =>
@@ -150,12 +171,11 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
             ? {
                 ...ticket,
                 is_child: !isChild,
-                price: !isChild ? '0.00' : ticket.price, // Если становится детским, цена 0, иначе восстанавливаем исходную
+                price: !isChild ? '0.00' : ticketPrice.data,
               }
             : ticket
         ),
       }));
-      setTrigger(next => ++next);
     } catch (err) {
       setError('Не удалось обновить тип билета Error: ' + err);
     }
@@ -172,28 +192,60 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
   };
 
-  const handleBooking = async (id: number) => {
-    await api.patch(`/booking/update/${id}`, { status: 'Забронирован' });
-    setTrigger(next => ++next);
-  }
+  const handleBooking = async (bookingId: number) => {
+    try {
+      // Получаем тикеты для bookingId
+      const ticketPromises = tickets[bookingId]?.map((ticket) =>
+        api.patch(`/tickets/update/${ticket.id}`, { is_child: ticket.is_child })
+      ) || [];
+  
+      // Запрос на обновление брони
+      const bookingPromise = api.patch(`/booking/update/${bookingId}`, { status: 'Забронирован' });
+  
+      // Выполняем все запросы параллельно
+      await Promise.all([...ticketPromises, bookingPromise]);
+  
+      // Обновляем триггер
+      setTrigger((next) => ++next);
+    } catch (err) {
+      console.error('Ошибка при обновлении тикетов или брони:', err);
+      setError('Не удалось обновить бронирование. Попробуйте снова.');
+    }
+  };
 
   const handleCanselTicket = async (data: TicketType) => {
     await api.patch(`/tickets/cansel/${data.id}`, data);
-    setTrigger(next => ++next);
-  }
+    setTrigger((next) => ++next);
+  };
 
   const handleCanselBooking = async (id: number) => {
     await api.patch(`/booking/cansel/${id}`, { status: 'Отменен' });
-    setTrigger(next => ++next);
-  }
+    setTrigger((next) => ++next);
+  };
+
   return (
-    <ProfileContext.Provider value={{
-      trigger, loading, error, isScrolled, user,
-      fetchUser, handleScroll, handleEdit, bookings,
-      tickets, fetchBookings, handleBooking,
-      handleCanselBooking, handleCanselTicket, fetchPendingBookings,
-      handleTicketTypeChange, formatDate
-    }}>
+    <ProfileContext.Provider
+      value={{
+        trigger,
+        loading,
+        error,
+        isScrolled,
+        user,
+        fetchUser,
+        handleScroll,
+        bookings,
+        tickets,
+        fetchBookings,
+        handleBooking,
+        handleCanselBooking,
+        handleCanselTicket,
+        fetchPendingBookings,
+        handleTicketTypeChange,
+        formatDate,
+        fetchUserProfile,
+        updateUserProfile,
+      }}
+    >
       {children}
     </ProfileContext.Provider>
   );
@@ -202,7 +254,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 export const useProfile = () => {
   const context = useContext(ProfileContext);
   if (!context) {
-    throw new Error('useDashboard must be used within an DashboardProvider');
+    throw new Error('useProfile must be used within an ProfileProvider');
   }
   return context;
 };

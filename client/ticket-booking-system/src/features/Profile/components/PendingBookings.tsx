@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/css/BookingList.css'; // Используем те же стили, что и для BookingList
 import Footer from '../../../shared/components/Footer';
 import Header from '../../../shared/components/Header';
-import { useProfile } from '../ context/ProfileContext';
+import { useProfile } from '../context/ProfileContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
 
@@ -19,7 +19,6 @@ const PendingBookings: React.FC= () => {
     fetchPendingBookings();
   }, [trigger]);
 
-  
 
   if (loading) {
     return (
@@ -101,7 +100,7 @@ const PendingBookings: React.FC= () => {
                             <span
                               className="ticket-type"
                               onClick={() =>
-                                handleTicketTypeChange(ticket.id as number, booking.id, ticket.is_child)
+                                handleTicketTypeChange(ticket.id as number, booking.busSchedule?.schedule?.route_id as number, booking.id, ticket.is_child)
                               }
                             >
                               {ticket.is_child ? 'Детский' : 'Взрослый'}
@@ -111,7 +110,7 @@ const PendingBookings: React.FC= () => {
                         ))}
                       </ul>
                     ) : (
-                      <p>Билеты не найдены.</p>
+                      <p>Билеты не найдены.</p> 
                     )}
                   </div>
                   <div className="booking-item__actions">

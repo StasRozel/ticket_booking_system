@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from '../styles/css/BusSchedulesManagement.css'; // Импорт модульных стилей как объекта
+import '../styles/css/BusSchedulesManagement.css'; // Импорт как обычный CSS
 import FormUpdateBusSchedule from './FormBusSchedule';
 import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
@@ -31,11 +31,11 @@ const BusSchedulesManagement: React.FC = () => {
   }, [trigger]);
 
   return (
-    <div className={styles.routesManagement}>
+    <div className="busSchedules-management">
       <h2>BusSchedulesManagement</h2>
-      <div className={styles.routesManagementActions}>
+      <div className="busSchedules-actions">
         <button
-          className={styles.routesManagementButtonConfirm}
+          className="busSchedules-buttonConfirm"
           onClick={() => OpenModalForm(true)}
         >
           Добавить расписание транспорта
@@ -46,8 +46,8 @@ const BusSchedulesManagement: React.FC = () => {
           isActive={isAddMode}
         />
       </div>
-      <div className={styles.container}>
-        <table className={`${styles.routesManagementTable} ${styles.tableBusschedules}`}>
+      <div className="busSchedules-container">
+        <table className="busSchedules-table busSchedules-tableBusschedules">
           <thead>
             <tr>
               <th>ID</th>
@@ -66,13 +66,13 @@ const BusSchedulesManagement: React.FC = () => {
                 <td>{formatDate(route.operating_days)}</td>
                 <td>
                   <button
-                    className={styles.routesManagementAction}
+                    className="busSchedules-action"
                     onClick={() => OpenModalForm(false)}
                   >
                     ✏️
                   </button>
                   <button
-                    className={`${styles.routesManagementAction} ${styles.routesManagementActionDelete}`}
+                    className="busSchedules-action busSchedules-actionDelete"
                     onClick={() =>
                       openModal(
                         'Вы точно хотите удалить движение транспорта по этому пути?',
@@ -87,7 +87,7 @@ const BusSchedulesManagement: React.FC = () => {
             ))}
           </tbody>
         </table>
-        <table className={`${styles.routesManagementTable} ${styles.tableBuses}`}>
+        <table className="busSchedules-table busSchedules-tableBuses">
           <thead>
             <tr>
               <th>ID</th>
@@ -109,7 +109,7 @@ const BusSchedulesManagement: React.FC = () => {
             ))}
           </tbody>
         </table>
-        <table className={`${styles.routesManagementTable} ${styles.tableSchedules}`}>
+        <table className="busSchedules-table busSchedules-tableSchedules">
           <thead>
             <tr>
               <th>ID</th>

@@ -15,6 +15,11 @@ export class UserController {
     return await userRepository.findOneById(id);
   }
 
+  @Patch("/update/:id")
+  async update(@Param('id') id: number, @Body() user: User) {
+    return await userRepository.update(id, user);
+  }
+
   @Patch("/blocked/:id")
   async updateUserById(@Param('id') id: number, @Body() user: User) {
     return await userRepository.update(id, user);

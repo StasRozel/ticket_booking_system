@@ -19,6 +19,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [users, setUsers] = useState<UserType[]>([]);
     const [isModalFormOpen, setIsModalFormOpen] = useState(false);
     const [isAddMode, setIsAddMode] = useState(true);
+    const [currentEntity, setCurrentEntity] = useState(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -160,9 +161,9 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
-    const OpenModalForm = (flag: boolean) => { setIsModalFormOpen(true); setIsAddMode(flag); }
+    const OpenModalForm = (flag: boolean, entity: any) => { setIsModalFormOpen(true); setIsAddMode(flag); setCurrentEntity(entity) }
 
-    const CloseModalForm = () => setIsModalFormOpen(false);
+    const CloseModalForm = () => {setIsModalFormOpen(false); };
 
     return (
         <DashboardContext.Provider value={{
@@ -171,6 +172,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             users, loading, error, fetchUsers, toggleUserBlock,
             buses, fetchBuses, NewBus, UpdateBus, DeleteBus,
             busSchedules, fetchBusSchedules, NewBusSchedule, UpdateBusSchedule, DeleteBusSchedule,
+            currentEntity,
             isModalFormOpen, isAddMode, OpenModalForm, CloseModalForm
         }}>
             {children}

@@ -2,21 +2,23 @@ import React, { useEffect, useState } from 'react';
 import AddEntityButton from './AddEntityButton';
 import '../styles/css/FormNewEntity.css'; // Переключаем на SCSS
 import { useDashboard } from '../context/DashboardContext';
+import { RouteType } from '../../../shared/types/RouteType';
 
 interface FormUpdateRouteProps {
     isOpen: boolean;
     onClose: () => void;
     isActive: boolean;
+    route?: RouteType;
 }
 
-const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isActive }) => {
-    const [id, setId] = useState(0);
-    const [name, setName] = useState('');
-    const [starting_point, setStartingPoint] = useState('');
-    const [ending_point, setEndingPoint] = useState('');
-    const [stops, setStops] = useState('');
-    const [distance, setDistance] = useState(0);
-    const [price, setPrice] = useState(0);
+const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isActive, route }) => {
+    const [id, setId] = useState(route?.id);
+    const [name, setName] = useState(route?.name as string);
+    const [starting_point, setStartingPoint] = useState(route?.starting_point as string);
+    const [ending_point, setEndingPoint] = useState(route?.ending_point as string);
+    const [stops, setStops] = useState(route?.stops as string);
+    const [distance, setDistance] = useState(route?.distance as number);
+    const [price, setPrice] = useState(route?.price as number);
     const [isClosing, setIsClosing] = useState(false); // Состояние для анимации закрытия
 
     const { NewRoute, UpdateRoute } = useDashboard();
@@ -67,7 +69,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
 
     const handleSubmitUpdate = async () => {
         try {
-            await UpdateRoute(id, {
+            await UpdateRoute(id as number, {
                 name,
                 starting_point,
                 ending_point,

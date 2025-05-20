@@ -34,7 +34,7 @@ const Login: React.FC = () => {
     try {
       let isAdmin = await login(email, password);
       if (isAdmin) navigate('/dashboard');
-      else navigate('/home');
+      else navigate('/');
     } catch (error) {
       console.error('Login error:', error);
       setErrors({ general: 'Ошибка при входе. Проверьте email и пароль' });

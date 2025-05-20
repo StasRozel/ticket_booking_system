@@ -4,6 +4,7 @@ import '../styles/css/UsersManagement.css';
 import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
+import { UserType } from '../../../shared/types/UserType';
 
 const api = axios.create({
   baseURL: 'http://localhost:3001/',
@@ -29,23 +30,25 @@ const UsersManagement: React.FC = () => {
               <th>ID</th>
               <th>Имя пользователя</th>
               <th>Email</th>
+              <th>Телефон</th>
               <th>Статус</th>
               <th>Действия</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user: any) => (
+            {users.map((user: UserType) => (
               <tr key={user.id}>
                 <td>{user.id}</td>
-                <td>{user.name}</td>
+                <td>{user.last_name} {user.first_name} {user.middle_name}</td>
                 <td>{user.email}</td>
+                <td>{user.phone_number == '' ? 'Не указан' : user.phone_number}</td>
                 <td>{user.is_blocked ? 'Заблокирован' : 'Активен'}</td>
                 <td>
                   <label className="user-management__checkbox-label">
                     <input
                       type="checkbox"
-                      checked={user.blocked}
-                      onChange={() => openModal(`Вы точно хотите заблокировать пользователя ${user.name}?`, () => toggleUserBlock(user.id, user.is_blocked))}
+                      checked={user.is_blocked}
+                      onChange={() => openModal(`Вы точно хотите заблокировать пользователя ${user.email}?`, () => toggleUserBlock(user.id as number, user.is_blocked))}
                       className="user-management__checkbox"
                     />
                     {user.is_blocked ? 'Разблокировать' : 'Заблокировать'}

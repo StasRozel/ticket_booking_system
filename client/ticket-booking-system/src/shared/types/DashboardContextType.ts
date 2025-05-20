@@ -9,7 +9,7 @@ export type DashboardContextType = {
     trigger: number;
     isAddMode: boolean;
     isModalFormOpen: boolean;
-    OpenModalForm: (flag: boolean) => void;
+    OpenModalForm: (flag: boolean, entity?: any) => void;
     CloseModalForm: () => void;
     NewRoute: (newRoute: RouteType) => Promise<void>;
     UpdateRoute: (id: number, updRoute: RouteType) => Promise<void>;
@@ -30,6 +30,7 @@ export type DashboardContextType = {
     NewBus: (newBus: BusType) => Promise<void>;
     UpdateBus: (id: number, updBusSchedule: BusType) => Promise<void>;
     DeleteBus: (id: number) => Promise<void>;
+    currentEntity: any;
     users: UserType[];
     loading: boolean;
     error: string | null;

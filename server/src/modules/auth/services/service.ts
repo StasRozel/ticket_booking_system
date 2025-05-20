@@ -5,7 +5,7 @@ import { userRepository } from '../repository/repository';
 require('dotenv');
 
 export const register = async (newUser: any) => {
-    const { name, role_id, email, password } = newUser;
+    const { first_name, last_name, middle_name, role_id, email, password } = newUser;
     const existingUser = await userRepository.findOneByEmail(email);
     if (existingUser) {
         throw new Error('User already exists');
@@ -13,7 +13,7 @@ export const register = async (newUser: any) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await userRepository.create({
-        name, 
+        first_name, last_name, middle_name,
         role_id,
         email,
         password: hashedPassword,

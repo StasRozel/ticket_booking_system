@@ -102,15 +102,17 @@
 }
 .header__notification {
   position: absolute;
-  top: -5px;
+  top: -17px;
   right: -5px;
   background: #ff4d4f;
   color: #fff;
   font-size: 12px;
   font-weight: 600;
+  font-family: "Inter", sans-serif;
   width: 20px;
   height: 20px;
   border-radius: 50%;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;

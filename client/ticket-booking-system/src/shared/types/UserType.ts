@@ -1,6 +1,10 @@
 export type UserType = {
   id?: number;
-  name: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
   email: string;
-  blocked: boolean;
+  phone_number: string;
+  count_trips: number;
+  is_blocked: boolean;
 }

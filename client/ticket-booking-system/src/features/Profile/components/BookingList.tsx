@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'; 
 import '../styles/css/BookingList.css';
-import { useProfile } from '../ context/ProfileContext';
+import { useProfile } from '../context/ProfileContext';
 import { useModal } from '../../../shared/context/ModalContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 

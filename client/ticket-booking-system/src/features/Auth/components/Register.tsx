@@ -5,7 +5,9 @@ import { registerSchema } from '../schemas/authSchemas';
 import '../styles/css/Register.css';
 
 const Register: React.FC = () => {
-  const [name, setName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [middle_name, setMiddleName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,7 +21,9 @@ const Register: React.FC = () => {
 
     // Валидация с помощью Zod
     const result = registerSchema.safeParse({
-      name,
+      first_name,
+      last_name,
+      middle_name,
       email,
       password,
       confirmPassword,
@@ -40,9 +44,9 @@ const Register: React.FC = () => {
     setErrors({});
 
     try {
-      await register({ name, role_id, email, password });
+      await register({ first_name, last_name, middle_name, role_id, email, password });
       if (role_id !== 2) navigate('/dashboard');
-      else navigate('/home');
+      else navigate('/');
     } catch (error) {
       console.error('Registration error:', error);
       setErrors({ general: 'Ошибка при регистрации. Попробуйте снова' });
@@ -58,9 +62,29 @@ const Register: React.FC = () => {
           <div className="register__field">
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={first_name}
+              onChange={(e) => setFirstName(e.target.value)}
               placeholder="Имя"
+              required
+            />
+            {errors.name && <div className="error">{errors.name}</div>}
+          </div>
+          <div className="register__field">
+            <input
+              type="text"
+              value={last_name}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Фамилия"
+              required
+            />
+            {errors.name && <div className="error">{errors.name}</div>}
+          </div>
+          <div className="register__field">
+            <input
+              type="text"
+              value={middle_name}
+              onChange={(e) => setMiddleName(e.target.value)}
+              placeholder="Отчество"
               required
             />
             {errors.name && <div className="error">{errors.name}</div>}

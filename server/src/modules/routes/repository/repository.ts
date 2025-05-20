@@ -19,6 +19,11 @@ export class RouteRepository implements IRepository<Route> {
     return await this.repository.findOneBy({ id });
   }
 
+  async findPriceById(id: number): Promise<number | null> {
+    return (await this.repository.findOneBy({ id })).price;
+  }
+
+
   async findAll(): Promise<Route[]> {
     return await this.repository.find();
   }
