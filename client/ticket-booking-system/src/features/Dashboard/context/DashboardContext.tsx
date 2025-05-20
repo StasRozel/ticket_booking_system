@@ -161,7 +161,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
-    const OpenModalForm = (flag: boolean, entity: any) => { setIsModalFormOpen(true); setIsAddMode(flag); setCurrentEntity(entity) }
+    const OpenModalForm = (flag: boolean) => { setIsModalFormOpen(true); setIsAddMode(flag); }
 
     const CloseModalForm = () => {setIsModalFormOpen(false); };
 

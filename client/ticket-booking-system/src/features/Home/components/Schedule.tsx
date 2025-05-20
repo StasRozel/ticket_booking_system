@@ -47,7 +47,7 @@ const Schedule: React.FC = () => {
   };
 
   // Определение колонок таблицы
-  const columns: ColumnDef<BusScheduleType>[] = [
+  const columns: ColumnDef<any>[] = [
     {
       header: 'Маршрут',
       accessorKey: 'schedule.route.name',
@@ -77,11 +77,6 @@ const Schedule: React.FC = () => {
       header: 'Кол-во мест',
       accessorKey: 'bus.capacity.length',
       cell: (info) => `${info.row.original.bus?.capacity.length}`,
-    },
-    {
-      header: 'Автобус',
-      accessorKey: 'bus.bus_number',
-      cell: (info) => `${info.row.original.bus?.bus_number || '-'} (${info.row.original.bus?.type || '-'})`,
     },
     {
       header: 'Стоимость',

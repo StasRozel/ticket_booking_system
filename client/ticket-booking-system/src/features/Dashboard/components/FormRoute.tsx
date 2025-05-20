@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AddEntityButton from './AddEntityButton';
-import '../styles/css/FormNewEntity.css'; // Переключаем на SCSS
+import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
 import { RouteType } from '../../../shared/types/RouteType';
 
@@ -8,24 +8,46 @@ interface FormUpdateRouteProps {
     isOpen: boolean;
     onClose: () => void;
     isActive: boolean;
-    route?: RouteType;
+    route?: RouteType | null;
 }
 
 const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isActive, route }) => {
-    const [id, setId] = useState(route?.id);
-    const [name, setName] = useState(route?.name as string);
-    const [starting_point, setStartingPoint] = useState(route?.starting_point as string);
-    const [ending_point, setEndingPoint] = useState(route?.ending_point as string);
-    const [stops, setStops] = useState(route?.stops as string);
-    const [distance, setDistance] = useState(route?.distance as number);
-    const [price, setPrice] = useState(route?.price as number);
-    const [isClosing, setIsClosing] = useState(false); // Состояние для анимации закрытия
+    const [id, setId] = useState<number | undefined>(undefined);
+    const [name, setName] = useState('');
+    const [starting_point, setStartingPoint] = useState('');
+    const [ending_point, setEndingPoint] = useState('');
+    const [stops, setStops] = useState('');
+    const [distance, setDistance] = useState<number>(0);
+    const [price, setPrice] = useState<number>(0);
+    const [isClosing, setIsClosing] = useState(false);
 
     const { NewRoute, UpdateRoute } = useDashboard();
 
+    // Синхронизация состояния формы с пропсом route
+    useEffect(() => {
+        if (route && !isActive) {
+            setId(route.id);
+            setName(route.name || '');
+            setStartingPoint(route.starting_point || '');
+            setEndingPoint(route.ending_point || '');
+            setStops(route.stops || '');
+            setDistance(route.distance || 0);
+            setPrice(route.price || 0);
+        } else {
+            // Сбрасываем состояние для режима добавления
+            setId(undefined);
+            setName('');
+            setStartingPoint('');
+            setEndingPoint('');
+            setStops('');
+            setDistance(0);
+            setPrice(0);
+        }
+    }, [isActive]);
+
     // Обработчик для начала закрытия с анимацией
     const handleClose = () => {
-        setIsClosing(true); // Запускаем анимацию закрытия
+        setIsClosing(true);
     };
 
     // Эффект для завершения закрытия после анимации
@@ -33,8 +55,8 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
         if (isClosing) {
             const timer = setTimeout(() => {
                 setIsClosing(false);
-                onClose(); // Вызываем onClose после завершения анимации
-            }, 300); // Длительность анимации (соответствует времени в SCSS)
+                onClose();
+            }, 300);
             return () => clearTimeout(timer);
         }
     }, [isClosing, onClose]);
@@ -61,7 +83,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                 price,
             });
             console.log('Маршрут успешно добавлен!');
-            onClose(); // Закрываем модальное окно после успеха
+            onClose();
         } catch (error) {
             console.error('Ошибка при добавлении маршрута:', error);
         }
@@ -69,7 +91,8 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
 
     const handleSubmitUpdate = async () => {
         try {
-            await UpdateRoute(id as number, {
+            if (id === undefined) throw new Error('ID маршрута не определён');
+            await UpdateRoute(id, {
                 name,
                 starting_point,
                 ending_point,
@@ -78,14 +101,13 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                 price,
             });
             console.log('Маршрут успешно обновлен!');
-            onClose(); // Закрываем модальное окно после успеха
+            onClose();
         } catch (error) {
             console.error('Ошибка при обновлении маршрута:', error);
         }
     };
 
     const dispatchHandles = (isActive: boolean) => {
-        console.log(isActive);
         if (isActive) handleSubmitAdd();
         else handleSubmitUpdate();
     };
@@ -102,11 +124,12 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                     <div className="form-new-routes__field">
                         <input
                             type="text"
-                            value={id}
-                            onChange={(e) => setId(Number(e.target.value))}
+                            value={id ?? ''}
+                            onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
                             placeholder="ID маршрута"
                             className={`form-new-routes__input ${isActive ? 'form-new-routes__none' : ''}`}
-                            required={!isActive} // Только для обновления
+                            required={!isActive}
+                            disabled={isActive} // Отключаем поле ID в режиме добавления
                         />
                     </div>
                     <div className="form-new-routes__field">

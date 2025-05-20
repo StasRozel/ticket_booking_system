@@ -11,7 +11,7 @@ export class BusRepository implements IRepository<Bus> {
   }
 
   async create(data: Partial<Bus>): Promise<Bus> {
-    data.capacity = [...this.range(1, Number(data.capacity))];
+    data.capacity = [...this.range(1, Number(data.capacity[0]))];
     const Bus = this.repository.create(data);
     return await this.repository.save(Bus);
   }
@@ -31,7 +31,7 @@ export class BusRepository implements IRepository<Bus> {
     if (!Bus) {
       return null;
     }
-
+    data.capacity = [...this.range(1, Number(data.capacity[0]))];
     await this.repository.update(id, data);
     return await this.findOneById(id);
   }

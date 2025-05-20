@@ -44,11 +44,18 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const filteredSchedules = busSchedules.filter((schedule) => {
     const route = schedule.schedule?.route;
-    const matchesFrom = !searchFrom || (route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase()) || route?.name?.toLowerCase().includes(searchFrom.toLowerCase()));
-    const matchesTo = !searchTo || (route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase()) || route?.name?.toLowerCase().includes(searchTo.toLowerCase()));
+    const matchesFrom = !searchFrom || 
+        (route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase()) || 
+         route?.name?.toLowerCase().includes(searchFrom.toLowerCase()));
+    const matchesTo = !searchTo || 
+        (route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase()) || 
+         route?.name?.toLowerCase().includes(searchTo.toLowerCase()));
     const matchesDate = !searchDate || formatDate(schedule.operating_days) === formatDate(searchDate);
-    return matchesFrom && matchesTo && matchesDate;
-  });
+    const matchesPassengers = !searchPassengers || 
+        (schedule.bus?.capacity?.length as number >= parseInt(searchPassengers));
+    
+    return matchesFrom && matchesTo && matchesDate && matchesPassengers;
+});
 
   const booking = async (busSchedule: BusScheduleType) => {
     if (!accessToken) {
