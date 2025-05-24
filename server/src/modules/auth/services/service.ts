@@ -49,7 +49,7 @@ export const login = async (email: string, password: string) => {
 };
 
 export const refreshAccessToken = async (refreshToken: string) => {
-    const user = await userRepository.findOne( { refreshToken } );
+    const user = await userRepository.findOne( { refresh_token: refreshToken } );
     if (!user) {
         throw new Error('Invalid refresh token');
     }

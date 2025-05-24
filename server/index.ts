@@ -28,8 +28,17 @@ app.use(cors());
 useExpressServer(app, {
   controllers: [RouteController, ScheduleController, AuthController, 
                 BusController, BusScheduleController, UserController, 
-               BookingController, TicketController],
+                BookingController, TicketController],
   authorizationChecker: async (action) => {
+    const openPaths = [
+      '/auth/refresh/',
+      '/auth/login/',
+      '/auth/register/'
+    ];
+    if (openPaths.some(path => action.request.path.startsWith(path))) {
+      return true;
+    }
+
     const token = action.request.headers.authorization?.split(' ')[1];
     if (!token) return false;
 

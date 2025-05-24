@@ -7,22 +7,20 @@ import { useModal } from '../../../shared/context/ModalContext';
 import { BusType } from '../../../shared/types/BusType'; // Предполагается, что тип BusType определён
 
 const BusesManagement: React.FC = () => {
-    const { buses, trigger, fetchBuses, DeleteBus, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
+    const { buses, trigger, fetchBuses, DeleteBus, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen, currentEntity } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
-    const [selectedBus, setSelectedBus] = useState<BusType | null>(null);
 
     useEffect(() => {
         fetchBuses();
     }, [trigger]);
 
     const handleEditBus = (bus: BusType) => {
-        setSelectedBus(bus);
-        OpenModalForm(false); // Открываем форму в режиме редактирования
+        OpenModalForm(false, bus); // Открываем форму в режиме редактирования
     };
 
     return (
         <div className="routes-management">
-            <h2>BusesManagement</h2>
+            <h2>Работа с транспортом</h2>
             <div className="container">
                 <table className="routes-management__table">
                     <thead>
@@ -40,7 +38,7 @@ const BusesManagement: React.FC = () => {
                             <tr key={bus.id}>
                                 <td>{bus.id}</td>
                                 <td>{bus.bus_number}</td>
-                                <td>{bus.capacity.join(', ')} мест</td>
+                                <td>{bus.capacity.length ? `${bus.capacity.join(', ') } мест    ` : 'мест нет'}</td>
                                 <td>{bus.type}</td>
                                 <td>{bus.available ? 'Доступен' : 'Недоступен'}</td>
                                 <td>
@@ -70,7 +68,7 @@ const BusesManagement: React.FC = () => {
                     isOpen={isModalFormOpen}
                     onClose={CloseModalForm}
                     isActive={isAddMode}
-                    bus={selectedBus}
+                    bus={currentEntity}
                 />
             </div>
             <ConfirmModal

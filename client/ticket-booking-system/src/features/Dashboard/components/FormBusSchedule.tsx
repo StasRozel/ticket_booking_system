@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import AddEntityButton from './AddEntityButton';
 import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
-import { BusScheduleType } from '../../../shared/types/BusScheduleType'; // Предполагается, что тип BusScheduleType определён
+import { BusScheduleType, BusScheduleResponse } from '../../../shared/types/BusScheduleType';
+import { z } from 'zod';
 
 interface FormUpdateBusScheduleProps {
     isOpen: boolean;
@@ -11,6 +12,15 @@ interface FormUpdateBusScheduleProps {
     busSchedule?: BusScheduleType | null;
 }
 
+const busScheduleSchema = z.object({
+    schedule_id: z.coerce.number().min(1, 'ID расписания обязателен'),
+    bus_id: z.coerce.number().min(1, 'ID автобуса обязателен'),
+    operating_days: z
+        .string()
+        .min(1, 'Дата обязательна')
+        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Дата должна быть в формате YYYY-MM-DD'),
+});
+
 const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, onClose, isActive, busSchedule }) => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [schedule_id, setScheduleId] = useState<number>(0);
@@ -18,8 +28,12 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
     const [operating_days, setOperatingDays] = useState<string>('');
     const [isClosing, setIsClosing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
     const { NewBusSchedule, UpdateBusSchedule } = useDashboard();
+
+    // Получить сегодняшнюю дату в формате YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
 
     // Синхронизация состояния формы с пропсом busSchedule
     useEffect(() => {
@@ -35,7 +49,7 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
             setBusId(0);
             setOperatingDays('');
         }
-    }, [isActive]);
+    }, [busSchedule, isActive]);
 
     // Обработчик для начала закрытия с анимацией
     const handleClose = () => {
@@ -64,13 +78,38 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
         return () => window.removeEventListener('keydown', handleEsc);
     }, [isOpen, isClosing]);
 
+    const validateForm = () => {
+        const result = busScheduleSchema.safeParse({
+            schedule_id,
+            bus_id,
+            operating_days,
+        });
+        if (!result.success) {
+            const errors: { [key: string]: string } = {};
+            result.error.errors.forEach((err) => {
+                if (err.path[0]) errors[err.path[0]] = err.message;
+            });
+            setValidationErrors(errors);
+            return false;
+        }
+        setValidationErrors({});
+        return true;
+    };
+
     const handleSubmitAdd = async () => {
+        if (!validateForm()) return;
         try {
-            await NewBusSchedule({
+            const response = await NewBusSchedule({
                 schedule_id,
                 bus_id,
                 operating_days,
-            });
+            }) as BusScheduleResponse;
+            
+            if (!response.success) {
+                setError(response.error || 'Произошла ошибка при добавлении расписания');
+                return;
+            }
+            
             console.log('Расписание автобуса успешно добавлено!');
             setError(null);
             handleClose();
@@ -81,13 +120,20 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
     };
 
     const handleSubmitUpdate = async () => {
+        if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID расписания автобуса не определён');
-            await UpdateBusSchedule(id, {
+            const response = await UpdateBusSchedule(id, {
                 schedule_id,
                 bus_id,
                 operating_days,
-            });
+            }) as BusScheduleResponse;
+
+            if (!response.success) {
+                setError(response.error || 'Произошла ошибка при обновлении расписания');
+                return;
+            }
+
             console.log('Расписание автобуса успешно обновлено!');
             setError(null);
             handleClose();
@@ -143,6 +189,7 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.schedule_id && <span className="form-new-routes__error">{validationErrors.schedule_id}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -153,6 +200,7 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.bus_id && <span className="form-new-routes__error">{validationErrors.bus_id}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -162,7 +210,9 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
                             placeholder="Дни работы (например, 2025-01-01)"
                             className="form-new-routes__input"
                             required
+                            min={today}
                         />
+                        {validationErrors.operating_days && <span className="form-new-routes__error">{validationErrors.operating_days}</span>}
                     </div>
                     {error && <p className="form-new-routes__error">{error}</p>}
                     <div className="form-new-routes__actions">

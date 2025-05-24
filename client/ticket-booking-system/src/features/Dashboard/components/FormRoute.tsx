@@ -3,6 +3,7 @@ import AddEntityButton from './AddEntityButton';
 import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
 import { RouteType } from '../../../shared/types/RouteType';
+import { z } from 'zod';
 
 interface FormUpdateRouteProps {
     isOpen: boolean;
@@ -10,6 +11,15 @@ interface FormUpdateRouteProps {
     isActive: boolean;
     route?: RouteType | null;
 }
+
+const routeSchema = z.object({
+    name: z.string().regex(/^[А-Яа-яЁёA-Za-z]+ - [А-Яа-яЁёA-Za-z]+$/, 'Название маршрута должно состоять из "начальная точка - конечная точка"').min(1, 'Название маршрута обязательно'),
+    starting_point: z.string().min(1, 'Начальная точка обязательна'),
+    ending_point: z.string().min(1, 'Конечная точка обязательна'),
+    stops: z.string().optional(),
+    distance: z.coerce.number().min(1, 'Расстояние должно быть больше 0'),
+    price: z.coerce.number().min(0, 'Цена не может быть отрицательной'),
+});
 
 const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isActive, route }) => {
     const [id, setId] = useState<number | undefined>(undefined);
@@ -20,6 +30,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
     const [distance, setDistance] = useState<number>(0);
     const [price, setPrice] = useState<number>(0);
     const [isClosing, setIsClosing] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
     const { NewRoute, UpdateRoute } = useDashboard();
 
@@ -43,7 +54,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
             setDistance(0);
             setPrice(0);
         }
-    }, [isActive]);
+    }, [route, isActive]);
 
     // Обработчик для начала закрытия с анимацией
     const handleClose = () => {
@@ -72,7 +83,29 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
         return () => window.removeEventListener('keydown', handleEsc);
     }, [isOpen, isClosing]);
 
+    const validateForm = () => {
+        const result = routeSchema.safeParse({
+            name,
+            starting_point,
+            ending_point,
+            stops,
+            distance,
+            price,
+        });
+        if (!result.success) {
+            const errors: { [key: string]: string } = {};
+            result.error.errors.forEach((err) => {
+                if (err.path[0]) errors[err.path[0]] = err.message;
+            });
+            setValidationErrors(errors);
+            return false;
+        }
+        setValidationErrors({});
+        return true;
+    };
+
     const handleSubmitAdd = async () => {
+        if (!validateForm()) return;
         try {
             await NewRoute({
                 name,
@@ -90,6 +123,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
     };
 
     const handleSubmitUpdate = async () => {
+        if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID маршрута не определён');
             await UpdateRoute(id, {
@@ -141,6 +175,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.name && <span className="form-new-routes__error">{validationErrors.name}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -151,6 +186,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.starting_point && <span className="form-new-routes__error">{validationErrors.starting_point}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -161,6 +197,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.ending_point && <span className="form-new-routes__error">{validationErrors.ending_point}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -180,6 +217,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.distance && <span className="form-new-routes__error">{validationErrors.distance}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -190,6 +228,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.price && <span className="form-new-routes__error">{validationErrors.price}</span>}
                     </div>
                     <div className="form-new-routes__actions">
                         <AddEntityButton

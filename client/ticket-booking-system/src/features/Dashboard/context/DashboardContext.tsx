@@ -1,12 +1,13 @@
 import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 import { socket } from '../../..';
-import { BusScheduleType } from '../../../shared/types/BusScheduleType';
+import { BusScheduleType, BusScheduleResponse } from '../../../shared/types/BusScheduleType';
 import { BusType } from '../../../shared/types/BusType';
 import { DashboardContextType } from '../../../shared/types/DashboardContextType';
 import { RouteType } from '../../../shared/types/RouteType';
 import { ScheduleType } from '../../../shared/types/ScheduleType';
 import { UserType } from '../../../shared/types/UserType';
+import { API_URL } from '../../../config/api.config';
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
@@ -111,16 +112,44 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
-    const NewBusSchedule = async (newBusSchedule: BusScheduleType): Promise<void> => {
-        //await api.post('/bus-schedules/create/', newSchedule);
-        socket.emit('newBusSchedule', newBusSchedule);
-        setTrigger(next => ++next);
+    const NewBusSchedule = async (data: Partial<BusScheduleType>): Promise<BusScheduleResponse> => {
+        try {
+            const response = await fetch(`${API_URL}/busschedules`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            if (result.success) {
+                setTrigger(prev => prev + 1);
+            }
+            return result;
+        } catch (error) {
+            console.error('Error creating bus schedule:', error);
+            return { success: false, error: 'Failed to create bus schedule' };
+        }
     };
 
-    const UpdateBusSchedule = async (id: number, updSchedule: BusScheduleType): Promise<void> => {
-        //await api.patch(`/bus-schedules/update/${id}`, updSchedule);
-        socket.emit('updateBusSchedule', id, updSchedule);
-        setTrigger(next => ++next);
+    const UpdateBusSchedule = async (id: number, data: Partial<BusScheduleType>): Promise<BusScheduleResponse> => {
+        try {
+            const response = await fetch(`${API_URL}/busschedules/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            if (result.success) {
+                setTrigger(prev => prev + 1);
+            }
+            return result;
+        } catch (error) {
+            console.error('Error updating bus schedule:', error);
+            return { success: false, error: 'Не удалось обновить расписание' };
+        }
     };
 
     const DeleteBusSchedule = async (id: number) => {
@@ -146,22 +175,32 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const toggleUserBlock = async (userId: number, blocked: boolean) => {
         try {
-            socket.emit('setBlock', { userId, is_blocked: !blocked });
-
-            setTrigger(next => ++next);
-            console.log(`Пользователь ${userId} ${blocked ? 'разблокирован' : 'заблокирован'}`);
-            setUsers((prevUsers) =>
-                prevUsers.map((user) =>
-                    user.id === userId ? { ...user, blocked: !blocked } : user
-                )
-            );
+          setLoading(true);
+          // Отправляем запрос на блокировку/разблокировку
+          socket.emit('setBlock', { userId, is_blocked: !blocked }, (response: { success: boolean; error?: string }) => {
+            if (response.success) {
+              // После успешного изменения статуса запрашиваем обновленный список пользователей
+              fetchUsers();
+              console.log(`Пользователь ${userId} ${blocked ? 'разблокирован' : 'заблокирован'}`);
+            } else {
+              console.error('Ошибка сервера:', response.error);
+              setError('Не удалось обновить статус пользователя. Попробуйте снова.');
+              setLoading(false);
+            }
+          });
         } catch (err) {
-            console.error('Ошибка при обновлении статуса пользователя:', err);
-            setError('Не удалось обновить статус пользователя. Попробуйте снова.');
+          console.error('Ошибка при обновлении статуса пользователя:', err);
+          setError('Не удалось обновить статус пользователя. Попробуйте снова.');
+          setLoading(false);
         }
-    };
+      };
 
-    const OpenModalForm = (flag: boolean) => { setIsModalFormOpen(true); setIsAddMode(flag); }
+    const OpenModalForm = (flag: boolean, entity: any) => { 
+        console.log(entity);
+        setIsModalFormOpen(true); 
+        setIsAddMode(flag); 
+        setCurrentEntity(entity); 
+    }
 
     const CloseModalForm = () => {setIsModalFormOpen(false); };
 

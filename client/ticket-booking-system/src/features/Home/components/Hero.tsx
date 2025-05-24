@@ -17,6 +17,9 @@ const Hero: React.FC = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // Получить сегодняшнюю дату в формате YYYY-MM-DD
+  const today = new Date().toISOString().split('T')[0];
+
   // Функция валидации при изменении полей
   const validateField = (name: string, value: string) => {
     const partialData = {
@@ -102,6 +105,7 @@ const Hero: React.FC = () => {
                 type="date"
                 value={searchDate}
                 onChange={handleDateChange}
+                min={today}
               />
               {errors.searchDate && <div className="error">{errors.searchDate}</div>}
             </div>

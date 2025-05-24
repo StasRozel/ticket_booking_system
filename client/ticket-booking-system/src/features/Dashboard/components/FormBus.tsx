@@ -3,6 +3,7 @@ import AddEntityButton from './AddEntityButton';
 import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
 import { BusType } from '../../../shared/types/BusType'; // Предполагается, что тип BusType определён
+import { z } from 'zod';
 
 interface FormUpdateBusProps {
     isOpen: boolean;
@@ -10,6 +11,14 @@ interface FormUpdateBusProps {
     isActive: boolean;
     bus?: BusType | null;
 }
+
+// Схема валидации
+const busSchema = z.object({
+    busNumber: z.string().min(1, 'Номер автобуса обязателен'),
+    capacity: z.number().min(1, 'Вместимость должна быть больше 0'),
+    type: z.string().min(1, 'Тип автобуса обязателен'),
+    isAvailable: z.boolean(),
+});
 
 const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive, bus }) => {
     const [id, setId] = useState<number | undefined>(undefined);
@@ -19,6 +28,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
     const [isAvailable, setIsAvailable] = useState<boolean>(false);
     const [isClosing, setIsClosing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
     const { NewBus, UpdateBus } = useDashboard();
 
@@ -38,7 +48,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
             setType('');
             setIsAvailable(false);
         }
-    }, [isActive]);
+    }, [bus, isActive]);
 
     // Обработчик для начала закрытия с анимацией
     const handleClose = () => {
@@ -67,7 +77,27 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
         return () => window.removeEventListener('keydown', handleEsc);
     }, [isOpen, isClosing]);
 
+    const validateForm = () => {
+        const result = busSchema.safeParse({
+            busNumber,
+            capacity,
+            type,
+            isAvailable,
+        });
+        if (!result.success) {
+            const errors: { [key: string]: string } = {};
+            result.error.errors.forEach((err) => {
+                if (err.path[0]) errors[err.path[0]] = err.message;
+            });
+            setValidationErrors(errors);
+            return false;
+        }
+        setValidationErrors({});
+        return true;
+    };
+
     const handleSubmitAdd = async () => {
+        if (!validateForm()) return;
         try {
             await NewBus({
                 bus_number: busNumber,
@@ -85,6 +115,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
     };
 
     const handleSubmitUpdate = async () => {
+        if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID автобуса не определён');
             await UpdateBus(id, {
@@ -148,6 +179,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.busNumber && <span className="form-new-routes__error">{validationErrors.busNumber}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -158,6 +190,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.capacity && <span className="form-new-routes__error">{validationErrors.capacity}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <input
@@ -168,6 +201,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
                             className="form-new-routes__input"
                             required
                         />
+                        {validationErrors.type && <span className="form-new-routes__error">{validationErrors.type}</span>}
                     </div>
                     <div className="form-new-routes__field">
                         <label className="form-new-routes__checkbox-label">

@@ -11,12 +11,13 @@ export class BusRepository implements IRepository<Bus> {
   }
 
   async create(data: Partial<Bus>): Promise<Bus> {
-    data.capacity = [...this.range(1, Number(data.capacity[0]))];
+    // Create an array of sequential numbers from 1 to capacity
+    const totalCapacity = Number(data.capacity[0]);
+    data.capacity = Array.from({ length: totalCapacity }, (_, i) => i + 1);
+    
     const Bus = this.repository.create(data);
     return await this.repository.save(Bus);
   }
-
-  private *range(s: number, e: number) { while (s <= e) yield s++ }
 
   async findOneById(id: number): Promise<Bus | null> {
     return await this.repository.findOneBy({ id });
@@ -31,7 +32,13 @@ export class BusRepository implements IRepository<Bus> {
     if (!Bus) {
       return null;
     }
-    data.capacity = [...this.range(1, Number(data.capacity[0]))];
+    
+    // Only initialize capacity if this is a new capacity value and not an update to existing seats
+    if (data.capacity && data.capacity.length === 1) {
+      const totalCapacity = Number(data.capacity[0]);
+      data.capacity = Array.from({ length: totalCapacity }, (_, i) => i + 1);
+    }
+    
     await this.repository.update(id, data);
     return await this.findOneById(id);
   }

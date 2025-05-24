@@ -60,8 +60,8 @@ const Contacts: React.FC = () => {
             <h1>Свяжитесь с нами</h1>
             <p>Мы всегда готовы помочь! Если у вас есть вопросы или предложения, заполните форму ниже или воспользуйтесь контактными данными.</p>
           </div>
-
           <div className="contacts__content">
+          {/* 
             <form className="contacts__form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="name">Ваше имя</label>
@@ -102,7 +102,7 @@ const Contacts: React.FC = () => {
                 {errors.message && <div className="error">{errors.message}</div>}
               </div>
               <button type="submit" className="contacts__submit">Отправить</button>
-            </form>
+            </form> */}
 
             <div className="contacts__info">
               <h2>Наши контакты</h2>

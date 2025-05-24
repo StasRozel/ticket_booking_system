@@ -2,6 +2,21 @@ import React, { useState, useEffect } from 'react';
 import '../../../shared/styles/css/FormNewEntity.css'; // Обычный CSS
 import { useProfile } from '../context/ProfileContext';
 import AddEntityButton from '../../Dashboard/components/AddEntityButton';
+import { z } from 'zod';
+
+const profileSchema = z.object({
+  first_name: z.string().min(1, 'Имя обязательно').max(50, 'Имя слишком длинное'),
+  last_name: z.string().min(1, 'Фамилия обязательна').max(50, 'Фамилия слишком длинная'),
+  middle_name: z.string().max(50, 'Отчество слишком длинное').optional(),
+  phone_number: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^\+?\d{10,15}$/.test(val),
+      { message: 'Неверный формат номера телефона (например, +375291234567)' }
+    ),
+  email: z.string().email('Неверный формат email').min(1, 'Email обязателен'),
+});
 
 interface FormUpdateUserProfileProps {
   isOpen: boolean;
@@ -16,6 +31,7 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
   const [middleName, setMiddleName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
   const [isClosing, setIsClosing] = useState(false);
 
   // Загрузка данных профиля при открытии модального окна
@@ -63,8 +79,9 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, isClosing]);
 
-  const handleSubmit = async () => {
-
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!validateForm()) return;
     await updateUserProfile(userId, {
       first_name: firstName,
       last_name: lastName,
@@ -79,6 +96,26 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
 
   if (!isOpen) return null;
 
+  const validateForm = () => {
+    const result = profileSchema.safeParse({
+      first_name: firstName,
+      last_name: lastName,
+      middle_name: middleName,
+      phone_number: phoneNumber,
+      email,
+    });
+    if (!result.success) {
+      const errors: { [key: string]: string } = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) errors[err.path[0]] = err.message;
+      });
+      setValidationErrors(errors);
+      return false;
+    }
+    setValidationErrors({});
+    return true;
+  };
+
   return (
     <div
       className={`modal-overlay ${isClosing ? 'modal-overlay--fade-out' : 'modal-overlay--fade-in'}`}
@@ -89,9 +126,7 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
         onClick={(e) => e.stopPropagation()}
       >
         <form className="form-new-routes" onSubmit={handleSubmit}>
-          <button type="button" className="modal-close" onClick={handleClose}>
-            ×
-          </button>
+        {validationErrors.general && <p className="form-new-routes__error">{validationErrors.general}</p>}
           <div className="form-new-routes__field">
             <input
               type="text"
@@ -101,6 +136,7 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
               className="form-new-routes__input"
               required
             />
+            {validationErrors.first_name && <span className="form-new-routes__error">{validationErrors.first_name}</span>}
           </div>
           <div className="form-new-routes__field">
             <input
@@ -111,6 +147,7 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
               className="form-new-routes__input"
               required
             />
+            {validationErrors.last_name && <span className="form-new-routes__error">{validationErrors.last_name}</span>}
           </div>
           <div className="form-new-routes__field">
             <input
@@ -120,16 +157,17 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
               placeholder="Отчество"
               className="form-new-routes__input"
             />
+            {validationErrors.middle_name && <span className="form-new-routes__error">{validationErrors.middle_name}</span>}
           </div>
           <div className="form-new-routes__field">
             <input
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Номер телефона"
+              placeholder="Номер телефона (например, +375291234567)"
               className="form-new-routes__input"
-              required
             />
+            {validationErrors.phone_number && <span className="form-new-routes__error">{validationErrors.phone_number}</span>}
           </div>
           <div className="form-new-routes__field">
             <input
@@ -140,11 +178,12 @@ const FormUpdateUserProfile: React.FC<FormUpdateUserProfileProps> = ({ isOpen, o
               className="form-new-routes__input"
               required
             />
+            {validationErrors.email && <span className="form-new-routes__error">{validationErrors.email}</span>}
           </div>
           {loading && <p className="form-new-routes__error">Загрузка...</p>}
           {error && <p className="form-new-routes__error">{error}</p>}
           <div className="form-new-routes__actions">
-            <AddEntityButton nameButton="Обновить профиль" onClick={handleSubmit} />
+            <AddEntityButton nameButton="Обновить профиль" onClick={() => handleSubmit()} />
           </div>
         </form>
       </div>

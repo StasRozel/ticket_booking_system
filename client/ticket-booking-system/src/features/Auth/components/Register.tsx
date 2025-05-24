@@ -67,7 +67,7 @@ const Register: React.FC = () => {
               placeholder="Имя"
               required
             />
-            {errors.name && <div className="error">{errors.name}</div>}
+            {errors.first_name && <div className="error">{errors.first_name}</div>}
           </div>
           <div className="register__field">
             <input
@@ -77,7 +77,7 @@ const Register: React.FC = () => {
               placeholder="Фамилия"
               required
             />
-            {errors.name && <div className="error">{errors.name}</div>}
+            {errors.last_name && <div className="error">{errors.last_name}</div>}
           </div>
           <div className="register__field">
             <input
@@ -87,7 +87,7 @@ const Register: React.FC = () => {
               placeholder="Отчество"
               required
             />
-            {errors.name && <div className="error">{errors.name}</div>}
+            {errors.middle_name && <div className="error">{errors.middle_name}</div>}
           </div>
           <div className="register__field">
             <input
@@ -133,4 +133,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;    
+export default Register;  

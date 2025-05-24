@@ -6,11 +6,12 @@ io.on('connection', (socket) => {
     console.log('User connect:', socket.id);
 
     // Обработка получения сообщения
-    socket.on('setBlock', async ({userId, is_blocked}) => {
+    socket.on('setBlock', async ({userId, is_blocked}, callback) => {
         // Рассылка сообщения всем подключенным клиентам
         console.log('setBlock', userId);
         await userRepository.update(userId, {is_blocked});
         if (is_blocked) io.emit('blocked', userId);
+        callback({ success: true });
     });
 
     socket.on('newBusSchedule', async( newBusSchedule ) => {

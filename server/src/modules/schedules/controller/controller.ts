@@ -1,7 +1,8 @@
 import 'reflect-metadata';
-import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-controllers';
+import { Controller, Param, Body, Get, Post, Put, Delete, Patch, HttpError } from 'routing-controllers';
 import { scheduleRepository } from '../repository/repository';
 import { Schedule } from '../entities/Schedule';
+import { scheduleService } from '../service/service';
 
 @Controller()
 export class ScheduleController {
@@ -17,12 +18,20 @@ export class ScheduleController {
 
   @Post("/schedules/create/")
   async createSchedule(@Body() schedule: Schedule) {
-    return await scheduleRepository.create(schedule);
+    const result = await scheduleService.createSchedule(schedule);
+    if (!result.success) {
+      throw new HttpError(400, result.error);
+    }
+    return result.data;
   }
 
   @Patch("/schedules/update/:id")
   async updateScheduleById(@Param('id') id: number, @Body() schedule: Schedule) {
-    return await scheduleRepository.update(id, schedule);
+    const result = await scheduleService.updateSchedule(id, schedule);
+    if (!result.success) {
+      throw new HttpError(400, result.error);
+    }
+    return result.data;
   }
 
   @Delete("/schedules/delete/:id")

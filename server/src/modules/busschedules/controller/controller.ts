@@ -1,7 +1,8 @@
 import 'reflect-metadata';
-import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-controllers';
+import { Controller, Param, Body, Get, Post, Put, Delete, Patch, HttpError } from 'routing-controllers';
 import { busScheduleRepository } from '../repository/repository';
 import { BusSchedule } from '../entities/BusSchedule';
+import { busScheduleService } from '../service/service';
 
 @Controller("/bus-schedules")
 export class BusScheduleController {
@@ -16,13 +17,21 @@ export class BusScheduleController {
   }
 
   @Post("/create/")
-  async createBus(@Body() route: BusSchedule) {
-    return await busScheduleRepository.create(route);
+  async createBus(@Body() busSchedule: BusSchedule) {
+    const result = await busScheduleService.createBusSchedule(busSchedule);
+    if (!result.success) {
+      throw new HttpError(400, result.error);
+    }
+    return result.data;
   }
 
   @Patch("/update/:id")
-  async updateBusById(@Param('id') id: number, @Body() route: BusSchedule) {
-    return await busScheduleRepository.update(id, route);
+  async updateBusById(@Param('id') id: number, @Body() busSchedule: BusSchedule) {
+    const result = await busScheduleService.updateBusSchedule(id, busSchedule);
+    if (!result.success) {
+      throw new HttpError(400, result.error);
+    }
+    return result.data;
   }
 
   @Delete("/delete/:id")

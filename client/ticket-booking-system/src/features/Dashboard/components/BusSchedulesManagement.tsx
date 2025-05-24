@@ -40,7 +40,7 @@ const BusSchedulesManagement: React.FC = () => {
 
     return (
         <div className="busSchedules-management">
-            <h2>BusSchedulesManagement</h2>
+            <h2>Работа с расписанием транспорта</h2>
             <div className="busSchedules-actions">
                 <button
                     className="busSchedules-buttonConfirm"

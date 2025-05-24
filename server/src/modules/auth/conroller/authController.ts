@@ -35,12 +35,12 @@ export class AuthController {
 
     @Post('/auth/refresh/')
     async refresh(
-        @Body() body: { refreshToken: string },
+        @Body() body: { refresh_token: string },
         @Res() res: Response
     ) {
         try {
-            const { refreshToken } = body;
-            const { accessToken } = await refreshAccessToken(refreshToken);
+            const { refresh_token } = body;
+            const { accessToken } = await refreshAccessToken(refresh_token);
             return res.status(200).json({ accessToken });
         } catch (error) {
             return res.status(401).json({ message: (error as Error).message });

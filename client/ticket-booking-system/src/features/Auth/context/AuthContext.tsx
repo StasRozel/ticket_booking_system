@@ -15,8 +15,6 @@ interface AuthContextType {
     getRoleId: () => Promise<void>;
 }
 
-
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -34,6 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (id === userId) {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
+            localStorage.removeItem("userId");
             window.location.reload();
         }   
     }); 
@@ -78,7 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!refreshToken) {
             throw new Error('No refresh token available');
         }
-        const response = await axios.post('http://localhost:3001/auth/refresh', { refreshToken });
+        const refresh_token = refreshToken;
+        const response = await axios.post('http://localhost:3001/auth/refresh', { refresh_token });
         const newAccessToken = response.data.accessToken;
         setAccessToken(newAccessToken);
         localStorage.setItem('accessToken', newAccessToken);

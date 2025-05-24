@@ -13,7 +13,7 @@ const api = axios.create({
 const UsersManagement: React.FC = () => {
   const { users, loading, error, trigger, fetchUsers, toggleUserBlock } = useDashboard();
   const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     useEffect(() => {   
       fetchUsers();
     }, [trigger]);
@@ -48,7 +48,7 @@ const UsersManagement: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={user.is_blocked}
-                      onChange={() => openModal(`Вы точно хотите заблокировать пользователя ${user.email}?`, () => toggleUserBlock(user.id as number, user.is_blocked))}
+                      onChange={() => openModal(`Вы точно хотите ${user.is_blocked ? 'разблокировать' : 'заблокировать' } пользователя ${user.email}?`, () => toggleUserBlock(user.id as number, user.is_blocked))}
                       className="user-management__checkbox"
                     />
                     {user.is_blocked ? 'Разблокировать' : 'Заблокировать'}
