@@ -1,5 +1,5 @@
 import { Repository, DataSource } from "typeorm";
-import { AppDataSource } from "../../../config/db.spec";
+import { AppDataSource } from "../../../config/db.config";
 import { IRepository } from "../../../shared/interfaces/IRepository";
 import { Schedule } from "../entities/Schedule";
 

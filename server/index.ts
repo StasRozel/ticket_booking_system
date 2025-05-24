@@ -1,6 +1,6 @@
 import express from 'express';
 import { useExpressServer } from 'routing-controllers';
-import { AppDataSource } from './src/config/db.spec';
+import { AppDataSource } from './src/config/db.config';
 import bodyParser from 'body-parser';
 import cors from 'cors'
 import http from 'http';

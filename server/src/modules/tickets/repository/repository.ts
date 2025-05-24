@@ -1,12 +1,12 @@
 import { Repository, DataSource } from "typeorm";
-import { AppDataSource } from "../../../config/db.spec";
+import { AppDataSource } from "../../../config/db.config";
 import { IRepository } from "../../../shared/interfaces/IRepository";
 import { Ticket } from "../entities/tickets";
 import { busRepository } from "../../buses/repository/repository";
 import { bookingRepository } from "../../bookings/repository/repository";
 import { busScheduleRepository } from "../../busschedules/repository/repository";
 
-class TicketRepository implements IRepository<Ticket> {
+export class TicketRepository implements IRepository<Ticket> {
   private repository: Repository<Ticket>;
 
   constructor(dataSource: DataSource) {

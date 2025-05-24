@@ -1,6 +1,6 @@
 import { Repository, DataSource } from "typeorm";
 import { Bus } from "../entities/Bus";
-import { AppDataSource } from "../../../config/db.spec";
+import { AppDataSource } from "../../../config/db.config";
 import { IRepository } from "../../../shared/interfaces/IRepository";
 
 export class BusRepository implements IRepository<Bus> {

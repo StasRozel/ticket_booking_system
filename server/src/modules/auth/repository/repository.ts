@@ -1,7 +1,7 @@
 import { Repository, DataSource } from "typeorm";
 import { User } from "../entities/user";
 import { IRepository } from "../../../shared/interfaces/IRepository";
-import { AppDataSource } from "../../../config/db.spec";
+import { AppDataSource } from "../../../config/db.config";
 
 export class UserRepository implements IRepository<User> {
   private repository: Repository<User>;
