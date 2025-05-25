@@ -27,11 +27,21 @@ export class BusScheduleController {
 
   @Patch("/update/:id")
   async updateBusById(@Param('id') id: number, @Body() busSchedule: BusSchedule) {
-    const result = await busScheduleService.updateBusSchedule(id, busSchedule);
-    if (!result.success) {
-      throw new HttpError(400, result.error);
+    try {
+      const result = await busScheduleService.updateBusSchedule(id, busSchedule);
+      if (!result.success) {
+        throw new HttpError(400, result.error || 'Не удалось обновить расписание');
+      }
+      return {
+        success: true,
+        data: result.data
+      };
+    } catch (error) {
+      if (error instanceof HttpError) {
+        throw error;
+      }
+      throw new HttpError(500, 'Внутренняя ошибка сервера при обновлении расписания');
     }
-    return result.data;
   }
 
   @Delete("/delete/:id")

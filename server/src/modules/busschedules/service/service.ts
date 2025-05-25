@@ -52,19 +52,38 @@ export class BusScheduleService {
   }
 
   async updateBusSchedule(id: number, data: Partial<BusSchedule>): Promise<{ success: boolean; data?: BusSchedule; error?: string }> {
-    const validation = await this.validateBusScheduleData(data);
-    if (!validation.isValid) {
-      return { success: false, error: validation.error };
-    }
-
     try {
+      // First check if the bus schedule exists
+      const existingSchedule = await busScheduleRepository.findOneById(id);
+      if (!existingSchedule) {
+        return { success: false, error: `Расписание автобуса с ID ${id} не найдено` };
+      }
+
+      // Validate the update data
+      const validation = await this.validateBusScheduleData(data);
+      if (!validation.isValid) {
+        return { success: false, error: validation.error };
+      }
+
+      // Update the schedule
       const busSchedule = await busScheduleRepository.update(id, data);
       if (!busSchedule) {
-        return { success: false, error: 'Расписание автобуса не найдено' };
+        return { success: false, error: 'Не удалось обновить расписание автобуса' };
       }
-      return { success: true, data: busSchedule };
+
+      // Get the updated record to return
+      const updatedSchedule = await busScheduleRepository.findOneById(id);
+      if (!updatedSchedule) {
+        return { success: false, error: 'Обновленное расписание не найдено' };
+      }
+
+      return { success: true, data: updatedSchedule };
     } catch (error) {
-      return { success: false, error: 'Ошибка при обновлении расписания автобуса' };
+      console.error('Error in updateBusSchedule:', error);
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Ошибка при обновлении расписания автобуса' 
+      };
     }
   }
 }

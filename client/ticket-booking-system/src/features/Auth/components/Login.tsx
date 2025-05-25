@@ -32,9 +32,13 @@ const Login: React.FC = () => {
     setErrors({});
 
     try {
-      let isAdmin = await login(email, password);
-      if (isAdmin) navigate('/dashboard');
-      else navigate('/');
+      let [isAdmin, isBlocked] = await login(email, password);
+      if (isBlocked) navigate('/403');
+      else {
+        if (isAdmin) navigate('/dashboard');
+        else navigate('/');
+      }
+      
     } catch (error) {
       console.error('Login error:', error);
       setErrors({ general: 'Ошибка при входе. Проверьте email и пароль' });

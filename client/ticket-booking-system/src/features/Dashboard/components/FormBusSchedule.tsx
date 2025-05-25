@@ -99,16 +99,11 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
     const handleSubmitAdd = async () => {
         if (!validateForm()) return;
         try {
-            const response = await NewBusSchedule({
+            await NewBusSchedule({
                 schedule_id,
                 bus_id,
                 operating_days,
-            }) as BusScheduleResponse;
-            
-            if (!response.success) {
-                setError(response.error || 'Произошла ошибка при добавлении расписания');
-                return;
-            }
+            });
             
             console.log('Расписание автобуса успешно добавлено!');
             setError(null);
@@ -123,16 +118,12 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
         if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID расписания автобуса не определён');
-            const response = await UpdateBusSchedule(id, {
+            await UpdateBusSchedule(id, {
                 schedule_id,
                 bus_id,
                 operating_days,
-            }) as BusScheduleResponse;
+            });
 
-            if (!response.success) {
-                setError(response.error || 'Произошла ошибка при обновлении расписания');
-                return;
-            }
 
             console.log('Расписание автобуса успешно обновлено!');
             setError(null);

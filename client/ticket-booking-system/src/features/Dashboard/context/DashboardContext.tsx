@@ -112,48 +112,35 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
-    const NewBusSchedule = async (data: Partial<BusScheduleType>): Promise<BusScheduleResponse> => {
+    const NewBusSchedule = async (newBusSchedule: BusScheduleType): Promise<void> => {
         try {
-            const response = await fetch(`${API_URL}/busschedules`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-            const result = await response.json();
-            if (result.success) {
-                setTrigger(prev => prev + 1);
+            const response = await api.post('/bus-schedules/create/', newBusSchedule);
+            if (response.data.success) {
+                setTrigger(next => ++next);
             }
-            return result;
         } catch (error) {
             console.error('Error creating bus schedule:', error);
-            return { success: false, error: 'Failed to create bus schedule' };
+            throw new Error('Failed to create bus schedule');
         }
     };
 
-    const UpdateBusSchedule = async (id: number, data: Partial<BusScheduleType>): Promise<BusScheduleResponse> => {
+    const UpdateBusSchedule = async (id: number, updBusSchedule: BusScheduleType): Promise<void> => {
         try {
-            const response = await fetch(`${API_URL}/busschedules/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-            const result = await response.json();
-            if (result.success) {
-                setTrigger(prev => prev + 1);
+            const response = await api.patch(`/bus-schedules/update/${id}`, updBusSchedule);
+            if (response.data) {
+                setTrigger(next => ++next);
+            } else {
+                throw new Error('Сервер не вернул обновленные данные');
             }
-            return result;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error updating bus schedule:', error);
-            return { success: false, error: 'Не удалось обновить расписание' };
+            const errorMessage = error.response?.data?.message || error.message || 'Не удалось обновить расписание';
+            throw new Error(errorMessage);
         }
     };
 
     const DeleteBusSchedule = async (id: number) => {
-        //await api.delete(`/bus-schedules/delete/${id}`);
+        await api.delete(`/bus-schedules/delete/${id}`);
         socket.emit('deleteBusSchedule', id);
         setTrigger(next => ++next);
         console.log(`Deleting route ${trigger}`);
@@ -175,25 +162,25 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const toggleUserBlock = async (userId: number, blocked: boolean) => {
         try {
-          setLoading(true);
-          // Отправляем запрос на блокировку/разблокировку
-          socket.emit('setBlock', { userId, is_blocked: !blocked }, (response: { success: boolean; error?: string }) => {
-            if (response.success) {
-              // После успешного изменения статуса запрашиваем обновленный список пользователей
-              fetchUsers();
-              console.log(`Пользователь ${userId} ${blocked ? 'разблокирован' : 'заблокирован'}`);
-            } else {
-              console.error('Ошибка сервера:', response.error);
-              setError('Не удалось обновить статус пользователя. Попробуйте снова.');
-              setLoading(false);
-            }
-          });
+            setLoading(true);
+            // Отправляем запрос на блокировку/разблокировку
+            socket.emit('setBlock', { userId, is_blocked: !blocked }, (response: { success: boolean; error?: string }) => {
+                if (response.success) {
+                    // После успешного изменения статуса запрашиваем обновленный список пользователей
+                    fetchUsers();
+                    console.log(`Пользователь ${userId} ${blocked ? 'разблокирован' : 'заблокирован'}`);
+                } else {
+                    console.error('Ошибка сервера:', response.error);
+                    setError('Не удалось обновить статус пользователя. Попробуйте снова.');
+                    setLoading(false);
+                }
+            });
         } catch (err) {
-          console.error('Ошибка при обновлении статуса пользователя:', err);
-          setError('Не удалось обновить статус пользователя. Попробуйте снова.');
-          setLoading(false);
+            console.error('Ошибка при обновлении статуса пользователя:', err);
+            setError('Не удалось обновить статус пользователя. Попробуйте снова.');
+            setLoading(false);
         }
-      };
+    };
 
     const OpenModalForm = (flag: boolean, entity: any) => { 
         console.log(entity);
@@ -221,8 +208,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
 export const useDashboard = () => {
     const context = useContext(DashboardContext);
-    if (!context) {
-        throw new Error('useDashboard must be used within an DashboardProvider');
+    if (context === undefined) {
+        throw new Error('useDashboard must be used within a DashboardProvider');
     }
     return context;
 };

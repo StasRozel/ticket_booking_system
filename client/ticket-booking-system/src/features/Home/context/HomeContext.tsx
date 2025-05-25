@@ -64,7 +64,7 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const bookingObj = {
-      bus_schedule_id: busSchedule.id ?? 0, // Если id undefined, используем 0
+      bus_schedule_id: busSchedule.id,
       user_id: localStorage.getItem('userId') || '',
       booking_date: currentDate.toDateString(),
       status: 'Выбран',

@@ -105,7 +105,7 @@ const BusSchedulesManagement: React.FC = () => {
                             <tr key={bus.id}>
                                 <td>{bus.id}</td>
                                 <td>{bus.bus_number}</td>
-                                <td>{bus.capacity.join(', ')}</td>
+                                <td>{bus.capacity.length > 0 ? bus.capacity.join(', ') : 'нет мест'}</td>
                                 <td>{bus.type}</td>
                                 <td>{bus.available ? 'Доступен' : 'Недоступен'}</td>
                             </tr>

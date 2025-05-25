@@ -21,9 +21,10 @@ export class TicketRepository implements IRepository<Ticket> {
     if (!bus || !bus.capacity || bus.capacity.length === 0) {
       throw new Error('No available seats');
     }
-
+    console.log('1, ', bus.capacity);
     // Get the current capacity array and sort it
     const sortedCapacity = [...bus.capacity].sort((a, b) => a - b);
+    console.log('2, ', sortedCapacity);
 
     // Assign the first available seat
     data.seat_number = sortedCapacity[0];
@@ -34,11 +35,18 @@ export class TicketRepository implements IRepository<Ticket> {
     // Remove the assigned seat from capacity
     const updatedCapacity = sortedCapacity.slice(1);
     
-    // Update bus with new capacity
-    await busRepository.update(bus.id, { 
-      capacity: updatedCapacity
-    });
-    
+    // Update bus with new capacity, but only if it's not empty array
+    // This prevents the capacity from being reinitialized when empty
+    if (updatedCapacity.length === 0) {
+      await busRepository.update(bus.id, { 
+        capacity: []
+      });
+    } else {
+      await busRepository.update(bus.id, { 
+        capacity: updatedCapacity
+      });
+    }
+    console.log('3, ', bus.capacity);
     return await this.repository.save(Ticket);
   }
 
@@ -66,9 +74,9 @@ export class TicketRepository implements IRepository<Ticket> {
   }
 
   async cansel(id: number, data: Partial<Ticket>) {
-      const booking = await bookingRepository.findOneById(data.booking_id);
-      const busSchedule = await busScheduleRepository.findOneById(booking.bus_schedule_id);
-      const bus = await busRepository.findOneById(busSchedule.bus_id);
+    const booking = await bookingRepository.findOneById(data.booking_id);
+    const busSchedule = await busScheduleRepository.findOneById(booking.bus_schedule_id);
+    const bus = await busRepository.findOneById(busSchedule.bus_id);
     
     // Get current capacity
     const currentCapacity = [...bus.capacity];
@@ -91,14 +99,14 @@ export class TicketRepository implements IRepository<Ticket> {
       capacity: updatedCapacity
     });
     
-      await this.repository.delete(id);
-      return await this.findOneById(id);
-    }
+    await this.repository.delete(id);
+    return await this.findOneById(id);
+  }
 
   async delete(id: number): Promise<boolean> {
     const result = await this.repository.delete(id);
     return result.affected !== 0;
   }
 }
-/*Смотри какая ещё есть проблема,пользователь в расписании транспорта может писать id траснспорта и расписаиня, нужно сделать так чтобы валидировалось если был написан не существуюющий id это обработалось и не пошло дальше в бд а пользователю вывелось уведомление */
+
 export const ticketRepository = new TicketRepository(AppDataSource);

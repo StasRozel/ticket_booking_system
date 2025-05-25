@@ -22,8 +22,8 @@ export type DashboardContextType = {
     DeleteSchedule: (id: number) => Promise<void>;
     busSchedules: BusScheduleType[];
     fetchBusSchedules: () => Promise<void>;
-    NewBusSchedule: (newBusSchedule: BusScheduleType) => Promise<BusScheduleResponse>;
-    UpdateBusSchedule: (id: number, updBusSchedule: BusScheduleType) => Promise<BusScheduleResponse>;
+    NewBusSchedule: (newBusSchedule: BusScheduleType) => Promise<void>;
+    UpdateBusSchedule: (id: number, updBusSchedule: BusScheduleType) => Promise<void>;
     DeleteBusSchedule: (id: number) => Promise<void>;
     buses: BusType[];
     fetchBuses: () => Promise<void>;
