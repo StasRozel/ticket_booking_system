@@ -5,10 +5,6 @@ import { ModalContextType } from '../types/ModalContextType';
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-const api = axios.create({
-  baseURL: 'http://localhost:3001',
-});
-
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [modalMessage, setModalMessage] = useState<string>('');
     const [modalAction, setModalAction] = useState<(() => void) | null>(null);

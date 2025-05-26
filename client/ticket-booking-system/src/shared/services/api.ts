@@ -1,17 +1,18 @@
 import axios from 'axios';
+import { API_URL } from '../../config/api.config';
 
-const api = axios.create({
-    baseURL: 'http://localhost:3001/auth',
+export const api = axios.create({
+    baseURL: API_URL,
 });
 
 export const register = async (newUser: any) => {
     const {first_name, last_name, middle_name, role_id, email, password} = newUser;
-    const response = await api.post('/register', {first_name, last_name, middle_name, role_id, email, password });
+    const response = await api.post('/auth/register', {first_name, last_name, middle_name, role_id, email, password });
     return response.data;
 };
 
 export const login = async (email: string, password: string) => {
-    const response = await api.post('/login', { email, password });
+    const response = await api.post('/auth/login', { email, password });
     console.log('login', response.data);
     return response.data;
 };

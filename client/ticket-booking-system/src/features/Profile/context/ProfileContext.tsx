@@ -4,12 +4,9 @@ import { TicketType } from '../../../shared/types/TicketType';
 import { ProfileContextType } from '../../../shared/types/ProfileContextType';
 import { UserType } from '../../../shared/types/UserType';
 import { BookingType } from '../../../shared/types/BookingType';
+import api from '../../../shared/services/api';
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
-
-const api = axios.create({
-  baseURL: 'http://localhost:3001',
-});
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserType | null>(null);

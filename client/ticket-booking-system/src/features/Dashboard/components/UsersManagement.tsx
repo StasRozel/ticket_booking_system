@@ -6,10 +6,6 @@ import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
 import { UserType } from '../../../shared/types/UserType';
 
-const api = axios.create({
-  baseURL: 'http://localhost:3001/',
-});
-
 const UsersManagement: React.FC = () => {
   const { users, loading, error, trigger, fetchUsers, toggleUserBlock } = useDashboard();
   const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();

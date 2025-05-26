@@ -8,6 +8,7 @@ import { RouteType } from '../../../shared/types/RouteType';
 import { ScheduleType } from '../../../shared/types/ScheduleType';
 import { UserType } from '../../../shared/types/UserType';
 import { API_URL } from '../../../config/api.config';
+import api from '../../../shared/services/api';
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
@@ -23,10 +24,6 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [currentEntity, setCurrentEntity] = useState(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    const api = axios.create({
-        baseURL: 'http://localhost:3001/',
-    });
 
     const NewRoute = async (newRoute: RouteType): Promise<void> => {
         await api.post('/routes/create/', newRoute);

@@ -7,12 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { formatDate } from '../../../shared/services/formatDateTime';
 import { useAuth } from '../../Auth/context/AuthContext';
 import { useNotification } from '../../../shared/context/NotificationContext';
+import api from '../../../shared/services/api';
 
 const HomeContext = createContext<HomeContextType | undefined>(undefined);
-
-const api = axios.create({
-  baseURL: 'http://localhost:3001',
-});
 
 export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [busSchedules, setSchedules] = useState<BusScheduleType[]>([]);

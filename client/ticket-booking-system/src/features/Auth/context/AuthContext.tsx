@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { login as apiLogin, register as apiRegister } from '../services/api';
+import api, { login as apiLogin, register as apiRegister } from '../../../shared/services/api';
 import axios from 'axios';
 import { socket } from '../../..';
 import { Navigate } from 'react-router-dom';
@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const logout = async () => {
         if (refreshToken) {
-            await axios.post('http://localhost:3001/auth/logout', { refreshToken });
+            await api.post('/auth/logout', { refreshToken });
         }
         setAccessToken(null);
         setRefreshToken(null);
@@ -81,19 +81,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             throw new Error('No refresh token available');
         }
         const refresh_token = refreshToken;
-        const response = await axios.post('http://localhost:3001/auth/refresh', { refresh_token });
+        const response = await api.post('/auth/refresh', { refresh_token });
         const newAccessToken = response.data.accessToken;
         setAccessToken(newAccessToken);
         localStorage.setItem('accessToken', newAccessToken);
     };
 
     const getRoleId = async (): Promise<void> =>  {
-        const response = await axios.get(`http://localhost:3001/users/${id}`);
+        const response = await api.get(`/users/${id}`);
         setRoleId(response.data.role_id);
     }
 
     const getIsBlocked = async (): Promise<void> => {
-        const response = await axios.get(`http://localhost:3001/users/${id}`);
+        const response = await api.get(`/users/${id}`);
         setIsBlocked(response.data.is_blocked);
     }
 

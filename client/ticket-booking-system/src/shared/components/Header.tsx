@@ -7,6 +7,7 @@ import Logo from '../img/logo.png';
 import axios from 'axios';
 import { useModal } from '../context/ModalContext';
 import ConfirmModal from './ConfirmModal';
+import api from '../services/api';
 
 const Header: React.FC = () => {
   const { id, logout } = useAuth();
@@ -19,7 +20,7 @@ const Header: React.FC = () => {
       try {
         const userId = localStorage.getItem('userId'); // Предполагаем, что userId доступен (можно взять из контекста авторизации)
         if (userId) {
-          const bookingResponse = await axios.get(`http://localhost:3001/booking/${userId}`);
+          const bookingResponse = await api.get(`/booking/${userId}`);
           const data = bookingResponse.data;
 
           if (data) {
