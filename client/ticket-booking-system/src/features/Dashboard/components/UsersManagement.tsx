@@ -40,11 +40,11 @@ const UsersManagement: React.FC = () => {
                 <td>{user.phone_number == '' ? 'Не указан' : user.phone_number}</td>
                 <td>{user.is_blocked ? 'Заблокирован' : 'Активен'}</td>
                 <td>
-                  <label className="user-management__checkbox-label">
+                  <label  className={user.role_id == 1 ? 'user-management__checkbox-label is_admin' : 'user-management__checkbox-label'}>
                     <input
                       type="checkbox"
                       checked={user.is_blocked}
-                      onChange={() => openModal(`Вы точно хотите ${user.is_blocked ? 'разблокировать' : 'заблокировать' } пользователя ${user.email}?`, () => toggleUserBlock(user.id as number, user.is_blocked))}
+                      onChange={() => openModal(`Вы точн  о хотите ${user.is_blocked ? 'разблокировать' : 'заблокировать' } пользователя ${user.email}?`, () => toggleUserBlock(user.id as number, user.is_blocked))}
                       className="user-management__checkbox"
                     />
                     {user.is_blocked ? 'Разблокировать' : 'Заблокировать'}

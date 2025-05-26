@@ -51,3 +51,7 @@
   height: 16px;
   cursor: pointer;
 }
+
+.is_admin {
+  display: none;
+}

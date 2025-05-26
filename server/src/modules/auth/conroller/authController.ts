@@ -6,7 +6,7 @@ import { login, register, refreshAccessToken, logout } from '../services/service
 
 @Controller()
 export class AuthController {
-    @Post('/auth/register/')
+    @Post('/api/auth/register/')
     async register(
         @Body() newUser: any,
         @Res() res: Response
@@ -19,7 +19,7 @@ export class AuthController {
         }
     }
 
-    @Post('/auth/login/')
+    @Post('/api/auth/login/')
     async login(
         @Body() user: { email: string; password: string },
         @Res() res: Response
@@ -33,7 +33,7 @@ export class AuthController {
         }
     }
 
-    @Post('/auth/refresh/')
+    @Post('/api/auth/refresh/')
     async refresh(
         @Body() body: { refresh_token: string },
         @Res() res: Response
@@ -47,7 +47,7 @@ export class AuthController {
         }
     }
 
-    @Post('/auth/logout/')
+    @Post('/api/auth/logout/')
     async logout(
         @Body() body: { refreshToken: string },
         @Res() res: Response

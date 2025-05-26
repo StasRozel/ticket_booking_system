@@ -120,7 +120,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
             if (id === undefined) throw new Error('ID автобуса не определён');
             await UpdateBus(id, {
                 bus_number: busNumber,
-                capacity: [capacity],
+                capacity: [capacity, -1],
                 type,
                 available: isAvailable,
             });

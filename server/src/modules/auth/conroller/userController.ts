@@ -3,7 +3,7 @@ import { Controller, Param, Body, Get, Patch } from 'routing-controllers';
 import { userRepository } from '../repository/repository';
 import { User } from '../entities/user';
 
-@Controller("/users")
+@Controller("/api/users")
 export class UserController {
   @Get("/")
   async getAll() {

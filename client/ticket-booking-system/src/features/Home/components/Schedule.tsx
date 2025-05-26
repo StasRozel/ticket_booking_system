@@ -144,7 +144,7 @@ const Schedule: React.FC = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr key={row.id}>
                       {row.getVisibleCells().map((cell) => (
-                        row.original.bus?.capacity.length > 0 ? <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td> : '' 
+                        row.original.bus?.capacity.length > 0 || row.original.bus?.available ? <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td> : '' 
                       ))}
                     </tr>
                   ))}

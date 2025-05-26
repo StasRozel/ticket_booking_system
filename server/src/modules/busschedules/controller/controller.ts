@@ -4,7 +4,7 @@ import { busScheduleRepository } from '../repository/repository';
 import { BusSchedule } from '../entities/BusSchedule';
 import { busScheduleService } from '../service/service';
 
-@Controller("/bus-schedules")
+@Controller("/api/bus-schedules")
 export class BusScheduleController {
   @Get("/")
   async getAll() {

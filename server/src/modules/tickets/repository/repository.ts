@@ -22,7 +22,6 @@ export class TicketRepository implements IRepository<Ticket> {
       throw new Error('No available seats');
     }
     console.log('1, ', bus.capacity);
-    // Get the current capacity array and sort it
     const sortedCapacity = [...bus.capacity].sort((a, b) => a - b);
     console.log('2, ', sortedCapacity);
 

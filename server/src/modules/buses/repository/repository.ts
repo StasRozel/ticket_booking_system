@@ -34,8 +34,9 @@ export class BusRepository implements IRepository<Bus> {
     }
     
     // Only initialize capacity if this is a new capacity value and not an update to existing seats
-    if (data.capacity && data.capacity.length === 1 && !Bus.capacity) {
+    if (data.capacity[1] == -1) {
       const totalCapacity = Number(data.capacity[0]);
+      console.log(data.capacity);
       data.capacity = Array.from({ length: totalCapacity }, (_, i) => i + 1);
     }
     

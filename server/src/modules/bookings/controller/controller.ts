@@ -3,7 +3,7 @@ import { Controller, Param, Body, Get, Post, Put, Delete, Patch } from 'routing-
 import { bookingRepository } from '../repository/repository';
 import { Booking } from '../entities/booking';
 
-@Controller("/booking")
+@Controller("/api/booking")
 export class BookingController {
   @Get("/")
   async getAll() {

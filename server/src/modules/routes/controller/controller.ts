@@ -6,32 +6,32 @@ import { scheduleRepository } from '../../schedules/repository/repository';
 
 @Controller()
 export class RouteController {
-  @Get("/routes/")
+  @Get("/api/routes/")
   async getAll() {
     return await routeRepository.findAll();
   }
 
-  @Get("/routes/:id")
+  @Get("/api/routes/:id")
   async getRouteById(@Param('id') id: number) {
     return await routeRepository.findOneById(id);
   }
 
-  @Get("/price/:id")
+  @Get("/api/price/:id")
   async getPriceById(@Param('id') id: number) {
     return await routeRepository.findPriceById(id);
   }
 
-  @Post("/routes/create/")
+  @Post("/api/routes/create/")
   async createRoute(@Body() route: Route) {
     return await routeRepository.create(route);
   }
 
-  @Patch("/routes/update/:id")
+  @Patch("/api/routes/update/:id")
   async updateRouteById(@Param('id') id: number, @Body() route: Route) {
     return await routeRepository.update(id, route);
   }
 
-  @Delete("/routes/delete/:id")
+  @Delete("/api/routes/delete/:id")
   async deleteRouteById(@Param('id') id: number) {
     return await routeRepository.delete(id);
   }

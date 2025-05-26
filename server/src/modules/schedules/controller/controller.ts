@@ -6,17 +6,17 @@ import { scheduleService } from '../service/service';
 
 @Controller()
 export class ScheduleController {
-  @Get("/schedules/")
+  @Get("/api/schedules/")
   async getAll() {
     return await scheduleRepository.findAll();
   }
 
-  @Get("/schedules/:id")
+  @Get("/api/schedules/:id")
   async getScheduleById(@Param('id') id: number) {
     return await scheduleRepository.findOneById(id);
   }
 
-  @Post("/schedules/create/")
+  @Post("/api/schedules/create/")
   async createSchedule(@Body() schedule: Schedule) {
     const result = await scheduleService.createSchedule(schedule);
     if (!result.success) {
@@ -25,7 +25,7 @@ export class ScheduleController {
     return result.data;
   }
 
-  @Patch("/schedules/update/:id")
+  @Patch("/api/schedules/update/:id")
   async updateScheduleById(@Param('id') id: number, @Body() schedule: Schedule) {
     const result = await scheduleService.updateSchedule(id, schedule);
     if (!result.success) {
@@ -34,7 +34,7 @@ export class ScheduleController {
     return result.data;
   }
 
-  @Delete("/schedules/delete/:id")
+  @Delete("/api/schedules/delete/:id")
   async deleteScheduleById(@Param('id') id: number) {
     return await scheduleRepository.delete(id);
   }
