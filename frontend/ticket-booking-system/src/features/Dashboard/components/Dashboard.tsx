@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import Sidebar from './Sidebar';
 import '../styles/css/Dashboard.css';
 import RoutesManagement from './RoutesManagment';
 import SchedulesManagement from './SchedulesManagment';

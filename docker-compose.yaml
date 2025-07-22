@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: tickets_booking_system-backend
+    image: tickets_booking_system-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile  # убрал лишний путь
+    depends_on:
+      db:
+        condition: service_healthy  # исправил опечатку
+    environment:
+      HTTP_PORT: ${HTTP_PORT}
+      SOCK_PORT: ${SOCK_PORT}
+      HOST: ${HOST}
+      DB_PASSWRD: ${DB_PASSWRD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "3001:3001"  # добавил тире
+    volumes:
+      - ./backend:/app  # исправил точку
+      - /app/node_modules
+    command: npm run start
+    networks:
+      - ticket_booking_network
+
+  frontend:
+    build:
+      context: ./frontend/ticket-booking-system
+      dockerfile: Dockerfile  # добавил расширение для ясности
+    container_name: tickets_booking_system-frontend
+    restart: unless-stopped
+    environment:
+      REACT_APP_API_URL: http://localhost:3001/api  # изменил порт на 3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend  # добавил тире
+    volumes:
+      - ./frontend/ticket-booking-system:/app
+      - /app/node_modules
+    command: npm start
+    networks:
+      - ticket_booking_network
+
+  db:
+    image: postgres:16.0
+    container_name: tickets_booking_system-db
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWRD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"  # добавил порты для доступа к БД
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - ticket_booking_network
+
+volumes:
+  db-data:
+
+networks:
+  ticket_booking_network:
+    driver: bridge

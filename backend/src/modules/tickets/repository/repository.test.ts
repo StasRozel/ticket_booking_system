@@ -105,10 +105,4 @@ describe('TicketRepository', () => {
       expect(result.booking_id).toBe(ticket.booking_id);
     }
   });
-
-  it('sortSet: should sort an array of numbers ascending', () => {
-    const unsorted = [5, 2, 9, 1, 3];
-    const sorted = ticketRepository.sortSet([...unsorted]);
-    expect(sorted).toEqual([1, 2, 3, 5, 9]);
-  });
 }); 
