@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { io, Socket } from 'socket.io-client';
 
-export const socket: Socket = io('http://localhost:4029');
+export const socket: Socket = io(process.env.REACT_APP_SOCKET_URL);
 
 socket.on('connect', () => {
   console.log('Успешно подключено к серверу:', socket.id);

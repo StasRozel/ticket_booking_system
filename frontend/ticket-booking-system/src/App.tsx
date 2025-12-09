@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './features/Auth/components/Login';
@@ -19,6 +18,7 @@ import AuthProtectedRoute from './features/Auth/components/AuthProtectedRoute';
 import AdminProtectedRoute from './features/Auth/components/AdminProtectedRoute';
 import ErrorPage from './features/Error/components/ErrorPage';
 import { NotificationProvider } from './shared/context/NotificationContext';
+import { Radio } from './features/Radio/components/Radio';
 
 const AppContent: React.FC = () => {
     const { refreshAccessToken, logout } = useAuth();
@@ -38,12 +38,14 @@ const AppContent: React.FC = () => {
                 <Route path="/401" element={<ErrorPage statusCode={401} />} />
                 <Route path="/403" element={<ErrorPage statusCode={403} />} />
                 <Route path="*" element={<ErrorPage statusCode={404} />} />
+                <Route path='/radio' element={<Radio />}></Route>
                 <Route element={<AuthProtectedRoute />}>
                     <Route element={<AdminProtectedRoute />}>
                         <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
                     </Route>
                     <Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
                     <Route path="/pending-bookings" element={<ProfileProvider> <PendingBookings /></ProfileProvider>} />
+
                 </Route>
             </Routes>
         </Router>

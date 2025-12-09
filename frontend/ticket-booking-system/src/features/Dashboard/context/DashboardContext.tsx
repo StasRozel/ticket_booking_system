@@ -1,13 +1,11 @@
 import React, { createContext, useState, useContext } from 'react';
-import axios from 'axios';
 import { socket } from '../../..';
-import { BusScheduleType, BusScheduleResponse } from '../../../shared/types/BusScheduleType';
+import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { BusType } from '../../../shared/types/BusType';
 import { DashboardContextType } from '../../../shared/types/DashboardContextType';
 import { RouteType } from '../../../shared/types/RouteType';
 import { ScheduleType } from '../../../shared/types/ScheduleType';
 import { UserType } from '../../../shared/types/UserType';
-import { API_URL } from '../../../config/api.config';
 import api from '../../../shared/services/api';
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);

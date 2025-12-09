@@ -7,14 +7,27 @@ export const api = axios.create({
 
 export const register = async (newUser: any) => {
     const {first_name, last_name, middle_name, role_id, email, password} = newUser;
-    const response = await api.post('/auth/register', {first_name, last_name, middle_name, role_id, email, password });
-    return response.data;
+    try {
+        console.log('[api] register request:', { email });
+        const response = await api.post('/auth/register', {first_name, last_name, middle_name, role_id, email, password });
+        console.log('[api] register response:', response.status, response.data);
+        return response.data;
+    } catch (error: any) {
+        console.error('[api] register error:', error?.response?.status, error?.response?.data || error.message);
+        throw error;
+    }
 };
 
 export const login = async (email: string, password: string) => {
-    const response = await api.post('/auth/login', { email, password });
-    console.log('login', response.data);
-    return response.data;
+    try {
+        console.log('[api] login request:', { email });
+        const response = await api.post('/auth/login', { email, password });
+        console.log('[api] login response:', response.status, response.data);
+        return response.data;
+    } catch (error: any) {
+        console.error('[api] login error:', error?.response?.status, error?.response?.data || error.message);
+        throw error;
+    }
 };
 
 export const setupAxiosInterceptors = (refreshAccessToken: () => Promise<void>, logout: () => Promise<void>) => {

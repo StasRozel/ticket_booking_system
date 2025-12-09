@@ -24,7 +24,7 @@ const AboutUs: React.FC = () => {
 
   return (
     <>
-    <Header />
+      <Header />
 
       {/* Секция "О нас" */}
       <section className="about-us">

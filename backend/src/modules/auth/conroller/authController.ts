@@ -11,10 +11,13 @@ export class AuthController {
         @Body() newUser: any,
         @Res() res: Response
     ) {
+        console.log('\x1b[33m', '[AuthController] register payload:', { email: newUser?.email });
         try {
             const { user_id, accessToken, refreshToken } = await register(newUser);
+            console.log('\x1b[32m', '[AuthController] register success for user:', user_id);
             return res.status(201).json({ user_id, accessToken, refreshToken });
         } catch (error) {
+            console.error('\x1b[31m', '[AuthController] register error:', (error as Error).message);
             return res.status(400).json({ message: (error as Error).message });
         }
     }
@@ -24,11 +27,14 @@ export class AuthController {
         @Body() user: { email: string; password: string },
         @Res() res: Response
     ) {
+        console.log('\x1b[33m', '[AuthController] login payload:', { email: user?.email });
         try {
           const { email, password } = user;
             const { user_id, accessToken, refreshToken, isAdmin, isBlocked } = await login(email, password);
+            console.log('\x1b[32m', '[AuthController] login success for user:', user_id);
             return res.status(200).json({ user_id, accessToken, refreshToken, isAdmin, isBlocked });
         } catch (error) {
+            console.error('\x1b[31m', '[AuthController] login error:', (error as Error).message);
             return res.status(401).json({ message: (error as Error).message });
         }
     }

@@ -3,13 +3,12 @@ version: '3.8'
 services:
   backend:
     container_name: tickets_booking_system-backend
-    image: tickets_booking_system-backend
     build:
       context: ./backend
-      dockerfile: Dockerfile  # убрал лишний путь
+      dockerfile: Dockerfile
     depends_on:
       db:
-        condition: service_healthy  # исправил опечатку
+        condition: service_healthy
     environment:
       HTTP_PORT: ${HTTP_PORT}
       SOCK_PORT: ${SOCK_PORT}
@@ -20,29 +19,37 @@ services:
       DB_PORT: ${DB_PORT}
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "3001:3001"  # добавил тире
+      - "3001:3001"
+      - "3443:3443"
+      - "4029:4029"
     volumes:
-      - ./backend:/app  # исправил точку
+      - ./backend:/app
       - /app/node_modules
-    command: npm run start
+    command: sh -c "npm run migration; npm run start"
     networks:
       - ticket_booking_network
 
   frontend:
     build:
       context: ./frontend/ticket-booking-system
-      dockerfile: Dockerfile  # добавил расширение для ясности
+      dockerfile: Dockerfile
     container_name: tickets_booking_system-frontend
     restart: unless-stopped
     environment:
-      REACT_APP_API_URL: http://localhost:3001/api  # изменил порт на 3001
+      REACT_APP_SOCKET_URL: wss://192.168.1.10:3443
+      REACT_APP_API_URL: https://192.168.1.10:3443/api
+      HTTPS: "true"
+      SSL_CRT_FILE: "/app/certs/cert.pem"
+      SSL_KEY_FILE: "/app/certs/key.pem"
     ports:
       - "3000:3000"
     depends_on:
-      - backend  # добавил тире
+      - backend
     volumes:
       - ./frontend/ticket-booking-system:/app
       - /app/node_modules
+      - ./backend/cert.pem:/app/certs/cert.pem:ro   # <- монтируем cert
+      - ./backend/key.pem:/app/certs/key.pem:ro
     command: npm start
     networks:
       - ticket_booking_network
@@ -54,13 +61,16 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWRD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_NAME}
+      # Важно! Устанавливаем пользователя по умолчанию
+      PGUSER: ${DB_USERNAME}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     ports:
-      - "5432:5432"  # добавил порты для доступа к БД
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
