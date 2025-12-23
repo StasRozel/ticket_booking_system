@@ -1,3 +1,14 @@
+.radio-page {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+.radio-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 .radio-container {
     max-width: 800px;
     margin: 0 auto;
@@ -9,6 +20,22 @@
     text-align: center;
     color: #333;
     margin-bottom: 30px;
+}
+
+.radio-back-btn {
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background 0.3s ease;
+}
+
+.radio-back-btn:hover {
+  background: #0056b3;
 }
 
 /* Status Panel */
@@ -60,7 +87,7 @@
 .talk-button {
     width: 100%;
     padding: 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: rgb(102, 126, 234);
     border: none;
     border-radius: 12px;
     color: white;

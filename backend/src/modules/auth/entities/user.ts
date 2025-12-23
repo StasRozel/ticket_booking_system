@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Role } from './role';
+import { Booking } from '../../bookings/entities/booking';
 
 @Entity('users')
 export class User {
@@ -75,7 +76,17 @@ export class User {
     })
     refresh_token: string;
 
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true
+    })
+    telegram_id: string;
+
     @ManyToOne(() => Role, role => role.users)
     @JoinColumn({ name: 'role_id' })
     role: Role;
+
+    @OneToMany(() => Booking, booking => booking.user)
+    bookings: Booking[];
 }

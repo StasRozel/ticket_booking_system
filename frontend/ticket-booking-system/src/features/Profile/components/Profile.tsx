@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/css/Profile.css';
+import TelegramConnectModal from './TelegramConnectModal';
 import Header from '../../../shared/components/Header';
 import Footer from '../../../shared/components/Footer';
 import BookingList from './BookingList';
 import { useProfile } from '../context/ProfileContext';
 import FormUpdateUserProfile from './FormUpdateUserProfile';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile: React.FC = () => {
   const { user, loading, error, fetchUser, handleScroll } = useProfile();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+  const [telegramStatus, setTelegramStatus] = useState<string | null>(null);
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -17,7 +22,6 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     fetchUser();
   }, []);
-
   return (
     <>
       <Header />
@@ -30,6 +34,20 @@ const UserProfile: React.FC = () => {
               <div className="user-profile__actions">
                 <button className="user-profile__edit-button" onClick={() => setIsModalOpen(true)}>
                   Редактировать
+                </button>
+                {user.role_id === 3 && (
+                  <button
+                    className="user-profile__driver-button"
+                    onClick={() => navigate('/driver-dashboard')}
+                  >
+                    Перейти в панель водителя
+                  </button>
+                )}
+                <button
+                  className="user-profile__telegram-button"
+                  onClick={() => setIsTelegramModalOpen(true)}
+                >
+                  Подключить Telegram
                 </button>
                 <FormUpdateUserProfile
                 isOpen={isModalOpen}
@@ -66,7 +84,7 @@ const UserProfile: React.FC = () => {
                   <strong>Email:</strong> {user.email}
                 </p>
                 <p className="user-profile__detail">
-                  <strong>Телефон:</strong> {user.phone_number == '' ? 'Не указан': user.phone_number}
+                  <strong>Телефон:</strong> {user.phone_number === '' ? 'Не указан': user.phone_number}
                 </p>
                 <p className="user-profile__detail">
                   <strong>Количество поездок:</strong> {user.count_trips}
@@ -76,6 +94,13 @@ const UserProfile: React.FC = () => {
           )}
         </div>
         <BookingList/>
+        {user && (
+          <TelegramConnectModal
+            user={user as any}
+            isOpen={isTelegramModalOpen}
+            onClose={() => { setIsTelegramModalOpen(false); setTelegramStatus(null); }}
+          />
+        )}
       </section>
       <Footer />
     </>

@@ -9,6 +9,7 @@ export class CreateTableBusSchedules1741467137246 implements MigrationInterface 
                 schedule_id INTEGER NOT NULL,
                 bus_id INTEGER NOT NULL,
                 operating_days DATE,
+                visited_stops JSON DEFAULT '[]',
                 FOREIGN KEY (schedule_id) REFERENCES Schedules(id) ON DELETE CASCADE,
                 FOREIGN KEY (bus_id) REFERENCES Buses(id)
             );`

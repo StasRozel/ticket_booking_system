@@ -30,6 +30,13 @@ export class BookingRepository implements IRepository<Booking> {
     return await this.repository.find();
   }
 
+  async findAllByBusScheduleId(bus_schedule_id: number): Promise<Booking[]> {
+    return await this.repository.find({
+      where: { bus_schedule_id },
+      relations: ["user", "tickets"]
+    });
+  }
+
   async findAllByUserId(user_id: number): Promise<Booking[]> {
     const booking = await this.repository
       .createQueryBuilder("booking")
@@ -74,6 +81,10 @@ export class BookingRepository implements IRepository<Booking> {
   async delete(id: number): Promise<boolean> {
     const result = await this.repository.delete(id);
     return result.affected !== 0;
+  }
+
+  async updateStatusByUserId(user_id: number, status: string): Promise<void> {
+    await this.repository.update({ user_id }, { status });
   }
 }
 

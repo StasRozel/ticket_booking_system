@@ -1,0 +1,119 @@
+.driver-complaints {
+  padding: 40px;
+}
+.driver-complaints h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1a2a44;
+}
+.driver-complaints__empty {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+.driver-complaints__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.driver-complaints__table th,
+.driver-complaints__table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.driver-complaints__table th {
+  background: #f5f7fa;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+.driver-complaints__table td {
+  color: #555;
+  font-size: 14px;
+}
+.driver-complaints__table tbody tr {
+  transition: background 0.2s;
+}
+.driver-complaints__table tbody tr:hover {
+  background: #f9f9f9;
+}
+.driver-complaints__contact {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+.driver-complaints__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.driver-complaints__btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.driver-complaints__btn--view {
+  background: #007bff;
+  color: white;
+}
+.driver-complaints__btn--view:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+}
+.driver-complaints__btn--view:active {
+  transform: translateY(0);
+}
+.driver-complaints__btn--delete {
+  background: #dc3545;
+  color: white;
+}
+.driver-complaints__btn--delete:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+}
+.driver-complaints__btn--delete:active {
+  transform: translateY(0);
+}
+.driver-complaints__expanded {
+  background: #f8f9fa !important;
+}
+.driver-complaints__expanded:hover {
+  background: #f8f9fa !important;
+}
+.driver-complaints__expanded td {
+  padding: 20px 15px;
+}
+.driver-complaints__text strong {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.driver-complaints__text p {
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+  padding: 15px;
+  background: white;
+  border-radius: 5px;
+  border-left: 3px solid #007bff;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

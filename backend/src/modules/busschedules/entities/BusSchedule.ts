@@ -26,6 +26,13 @@ export class BusSchedule {
     })
     operating_days: string;
 
+    @Column({
+        type: "json",
+        nullable: true,
+        default: []
+    })
+    visited_stops: number[];
+
     @ManyToOne(() => Schedule, schedule => schedule.busSchedules)
     @JoinColumn({ name: "schedule_id" })
     schedule: Schedule;

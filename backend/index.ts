@@ -14,26 +14,16 @@ import { BusScheduleController } from "./src/modules/busschedules/controller/con
 import { UserController } from "./src/modules/auth/conroller/userController";
 import { BookingController } from "./src/modules/bookings/controller/controller";
 import { TicketController } from "./src/modules/tickets/controller/controller";
+import { DriverController } from "./src/modules/drivers/controller";
+import { NotificationsController } from "./src/modules/notifications/controller";
+import { DriverComplaintsController } from "./src/modules/complaints/controller/controller";
+import "./src/modules/notifications/telegramService";
+import { UrgentCallController } from "./src/modules/urgentcalls/controller/controller";
 import { Server } from "socket.io";
 import path from "path";
 import fs from "fs";
-// Load environment variables as early as possible
 import dotenv from "dotenv";
 dotenv.config();
-
-// Backwards-compat: if project used single JWT_SECRET, map it to ACCESS/REFRESH
-// if (!process.env.ACCESS_TOKEN_SECRET && process.env.JWT_SECRET) {
-//   process.env.ACCESS_TOKEN_SECRET = process.env.JWT_SECRET;
-// }
-// if (!process.env.REFRESH_TOKEN_SECRET && process.env.JWT_SECRET) {
-//   process.env.REFRESH_TOKEN_SECRET = process.env.JWT_SECRET;
-// }
-
-// // Validate required secrets early and give a helpful error
-// if (!process.env.ACCESS_TOKEN_SECRET || !process.env.REFRESH_TOKEN_SECRET) {
-//   console.error('\x1b[31m', 'FATAL: Missing JWT secrets. Set ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET environment variables.');
-//   // Do not exit automatically in development here, but it's helpful to know.
-//}
 
 const app = express();
 const serverHttp = http.createServer(app);
@@ -63,6 +53,10 @@ useExpressServer(app, {
     UserController,
     BookingController,
     TicketController,
+    DriverController,
+    NotificationsController,
+    UrgentCallController,
+    DriverComplaintsController
   ],
   authorizationChecker: async (action) => {
     const openPaths = ["/auth/refresh/", "/auth/login/", "/auth/register/"];
@@ -110,3 +104,5 @@ if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
 }
 
 import "./src/shared/socketHandlers";
+
+

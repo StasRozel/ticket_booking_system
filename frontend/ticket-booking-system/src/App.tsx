@@ -15,42 +15,47 @@ import { HomeProvider } from './features/Home/context/HomeContext';
 import PendingBookings from './features/Profile/components/PendingBookings';
 import { ModalProvider } from './shared/context/ModalContext';
 import AuthProtectedRoute from './features/Auth/components/AuthProtectedRoute';
-import AdminProtectedRoute from './features/Auth/components/AdminProtectedRoute';
 import ErrorPage from './features/Error/components/ErrorPage';
 import { NotificationProvider } from './shared/context/NotificationContext';
 import { Radio } from './features/Radio/components/Radio';
+import DriverDashboard from './features/DriverPage/components/DriverDashboard';
+import DriverProvider from './features/DriverPage/context/DriverContext';
+import RoleProtectedRoute from './features/Auth/components/RoleProtectedRoute';
 
-const AppContent: React.FC = () => {
-    const { refreshAccessToken, logout } = useAuth();
+    const AppContent: React.FC = () => {
+        const { refreshAccessToken, logout } = useAuth();
 
-    useEffect(() => {
-        setupAxiosInterceptors(refreshAccessToken, logout);
-    }, [refreshAccessToken, logout]);
-    //protected route для ролей
-    return (
-        <Router>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/" element={<HomeProvider><Home /></HomeProvider>} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/contacts" element={<Contacts />} />
-                <Route path="/401" element={<ErrorPage statusCode={401} />} />
-                <Route path="/403" element={<ErrorPage statusCode={403} />} />
-                <Route path="*" element={<ErrorPage statusCode={404} />} />
-                <Route path='/radio' element={<Radio />}></Route>
-                <Route element={<AuthProtectedRoute />}>
-                    <Route element={<AdminProtectedRoute />}>
-                        <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
+        useEffect(() => {
+            setupAxiosInterceptors(refreshAccessToken, logout);
+        }, [refreshAccessToken, logout]);
+        return (
+            <Router>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/" element={<HomeProvider><Home /></HomeProvider>} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/contacts" element={<Contacts />} />
+                    <Route path="/401" element={<ErrorPage statusCode={401} />} />
+                    <Route path="/403" element={<ErrorPage statusCode={403} />} />
+                    <Route path="*" element={<ErrorPage statusCode={404} />} />
+                    <Route path='/radio' element={<Radio />}></Route>
+                    <Route element={<AuthProtectedRoute />}>
+                        <Route element={<RoleProtectedRoute expectedRoleId={[1, 4]} />}>
+                            <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
+                        </Route>
+                        <Route element={<RoleProtectedRoute expectedRoleId={[3]} />}>
+                            
+                            <Route path='/driver-dashboard' element={<DriverProvider><DriverDashboard /></DriverProvider>}></Route>
+                        </Route>
+                        <Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
+                        <Route path="/pending-bookings" element={<ProfileProvider> <PendingBookings /></ProfileProvider>} />
+
                     </Route>
-                    <Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
-                    <Route path="/pending-bookings" element={<ProfileProvider> <PendingBookings /></ProfileProvider>} />
-
-                </Route>
-            </Routes>
-        </Router>
-    );
-};
+                </Routes>
+            </Router>
+        );
+    };
 
 const App: React.FC = () => {
     return (

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const AdminProtectedRoute: React.FC = () => {
-     
+const RoleProtectedRoute: React.FC<{ expectedRoleId: number[] }> = ({ expectedRoleId }) => {
+
     const { roleId, getRoleId, isBlocked, getIsBlocked } = useAuth();
     const [checked, setChecked] = useState(false);
 
@@ -17,10 +17,12 @@ const AdminProtectedRoute: React.FC = () => {
     }, []);
 
     if (!checked) return null;
-    
-    if (roleId == 2) {
-        return <Navigate to="/403" replace />;
-    }
+
+    expectedRoleId.forEach((role) => {
+        if (roleId !== role) {
+            return <Navigate to="/403" replace />;
+        }
+    })
     
     if (isBlocked) {
         return <Navigate to="/blocked" replace />;
@@ -29,4 +31,4 @@ const AdminProtectedRoute: React.FC = () => {
     return <Outlet />;
 };
 
-export default AdminProtectedRoute;
+export default RoleProtectedRoute;

@@ -40,6 +40,30 @@
   background: #007bff;
   color: #fff;
 }
+.sidebar__home {
+  padding: 12px 40px;
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.sidebar__home:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.sidebar__home:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+.sidebar__home a {
+  color: #fff;
+  text-decoration: none;
+}
 .sidebar__logout {
   background: #ff4d4f;
   border: none;

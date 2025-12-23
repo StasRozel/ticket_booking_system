@@ -24,4 +24,9 @@ export class UserController {
   async updateUserById(@Param('id') id: number, @Body() user: User) {
     return await userRepository.update(id, user);
   }
+
+  @Get('/:id/tickets')
+  async getUserWithTickets(@Param('id') id: number) {
+    return await userRepository.findOneWithTickets(id);
+  }
 }

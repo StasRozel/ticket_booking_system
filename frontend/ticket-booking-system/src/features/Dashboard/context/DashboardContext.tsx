@@ -16,6 +16,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [trigger, setTrigger] = useState(0);
     const [schedules, setSchedules] = useState([]);
     const [busSchedules, setBusSchedules] = useState([]);
+    const [urgentCalls, setUrgentCalls] = useState([]);
+    const [driverComplaints, setDriverComplaints] = useState([]);
     const [users, setUsers] = useState<UserType[]>([]);
     const [isModalFormOpen, setIsModalFormOpen] = useState(false);
     const [isAddMode, setIsAddMode] = useState(true);
@@ -141,6 +143,45 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         console.log(`Deleting route ${trigger}`);
     };
 
+    const fetchUrgentCalls = async () => {
+        try {
+            const response = await api.get('/urgentcalls/');
+            setUrgentCalls(response.data);
+        } catch (error) {
+            console.error('Error fetching urgent calls:', error);
+        }
+    };
+
+    const fetchDriverComplaints = async () => {
+        try {
+            const response = await api.get('/drivers-complaints/');
+            setDriverComplaints(response.data);
+        } catch (error) {
+            console.error('Error fetching driver complaints:', error);
+        }
+    };
+
+    const deleteDriverComplaint = async (id: number) => {
+        try {
+            await api.delete(`/drivers-complaints/delete/${id}`);
+            setTrigger(next => ++next);
+        } catch (error) {
+            console.error('Error deleting driver complaint:', error);
+            throw error;
+        }
+    };
+
+    const replaceBusScheduleDriverAndBus = async (busScheduleId: number, driverId: number, urgentCallId: number) => {
+        try {
+            const response = await api.patch(`/bus-schedules/replace/${busScheduleId}`, { driver_id: driverId, urgent_call_id: urgentCallId });
+            if (response.data) setTrigger(next => ++next);
+            return response.data;
+        } catch (error) {
+            console.error('Error replacing driver/bus for bus schedule:', error);
+            throw error;
+        }
+    };
+
     const fetchUsers = async () => {
         setLoading(true);
         setError(null);
@@ -193,6 +234,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             users, loading, error, fetchUsers, toggleUserBlock,
             buses, fetchBuses, NewBus, UpdateBus, DeleteBus,
             busSchedules, fetchBusSchedules, NewBusSchedule, UpdateBusSchedule, DeleteBusSchedule,
+            urgentCalls, fetchUrgentCalls, replaceBusScheduleDriverAndBus,
+            driverComplaints, fetchDriverComplaints, deleteDriverComplaint,
             currentEntity,
             isModalFormOpen, isAddMode, OpenModalForm, CloseModalForm
         }}>

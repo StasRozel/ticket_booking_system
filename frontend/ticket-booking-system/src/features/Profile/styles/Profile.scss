@@ -234,3 +234,94 @@
     }
   }
 }
+
+/* Telegram modal (добавить в конец Profile.scss) */
+.telegram-modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  &__content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 420px;
+    max-width: 90%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  &__open-bot {
+    background: #0088cc;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  &__check-button {
+    background: #198754;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__close-button {
+    background: transparent;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #e6e6e6;
+    cursor: pointer;
+  }
+
+  p {
+    margin: 10px 0 0;
+    color: #333;
+  }
+
+  .status {
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .status--checking { color: #0d6efd; }   /* синий */
+  .status--connected { color: #198754; }  /* зелёный */
+  .status--timeout { color: #e74c3c; }    /* красный */
+
+  @media (max-width: 480px) {
+    &__content {
+      width: 94%;
+      padding: 16px;
+    }
+
+    &__actions {
+      flex-direction: column;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    &__open-bot,
+    &__check-button,
+    &__close-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

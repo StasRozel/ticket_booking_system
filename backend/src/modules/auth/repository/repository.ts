@@ -49,6 +49,15 @@ export class UserRepository implements IRepository<User> {
     const result = await this.repository.delete(id);
     return result.affected !== 0;
   }
+  
+  async findOneWithTickets(id: number): Promise<User | null> {
+    return await this.repository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.bookings', 'booking')
+      .leftJoinAndSelect('booking.tickets', 'ticket')
+      .where('user.id = :id', { id })
+      .getOne();
+  }
 }
 
 export const userRepository = new UserRepository(AppDataSource);

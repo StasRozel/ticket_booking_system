@@ -26,6 +26,12 @@ export class BusScheduleRepository implements IRepository<BusSchedule> {
     return busSchedules;
   }
 
+  async findOneByBusId(bus_id: number): Promise<BusSchedule[] | null> {
+    const busSchedules = await this.repository.findBy({ bus_id });
+
+    return busSchedules;
+  }
+
   async findAll(): Promise<BusSchedule[]> {
     const busSchedules = await this.repository
       .createQueryBuilder("busSchedule")
@@ -44,6 +50,31 @@ export class BusScheduleRepository implements IRepository<BusSchedule> {
     }
 
     await this.repository.update(id, data);
+    return await this.findOneById(id);
+  }
+
+  async replaceDriverAndBus(id: number, bus_id?: number): Promise<BusSchedule | null> {
+    const busSchedule = await this.findOneById(id);
+    if (!busSchedule) return null;
+
+    const updateData: Partial<BusSchedule> = { bus_id };
+    //if (typeof bus_id !== 'undefined') updateData.bus_id = bus_id;
+
+    //if (Object.keys(updateData).length === 0) return busSchedule;
+
+    await this.repository.update(id, updateData);
+    return await this.findOneById(id);
+  }
+
+  async addVisitedStop(id: number, stopId: number): Promise<BusSchedule | null> {
+    const busSchedule = await this.findOneById(id);
+    if (!busSchedule) return null;
+
+    const visited = busSchedule.visited_stops || [];
+    if (!visited.includes(stopId)) {
+      visited.push(stopId);
+      await this.repository.update(id, { visited_stops: visited });
+    }
     return await this.findOneById(id);
   }
 

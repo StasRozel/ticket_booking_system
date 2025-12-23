@@ -36,4 +36,10 @@ export type DashboardContextType = {
     error: string | null;
     fetchUsers: () => Promise<void>;
     toggleUserBlock: (userId: number, blocked: boolean) => Promise<void>;
+    fetchUrgentCalls: () => Promise<void>;
+    replaceBusScheduleDriverAndBus: (id: number, driver_id: number, bus_id: number) => Promise<void>;
+    urgentCalls: BusScheduleResponse[];
+    fetchDriverComplaints: () => Promise<void>;
+    driverComplaints: any[];
+    deleteDriverComplaint: (id: number) => Promise<void>;
 }

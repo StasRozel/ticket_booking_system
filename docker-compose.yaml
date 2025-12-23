@@ -17,7 +17,9 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_NAME: ${DB_NAME}
       DB_PORT: ${DB_PORT}
-      JWT_SECRET: ${JWT_SECRET}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
     ports:
       - "3001:3001"
       - "3443:3443"
@@ -36,8 +38,9 @@ services:
     container_name: tickets_booking_system-frontend
     restart: unless-stopped
     environment:
-      REACT_APP_SOCKET_URL: wss://192.168.1.10:3443
-      REACT_APP_API_URL: https://192.168.1.10:3443/api
+      REACT_APP_TELEGRAM_BOT_USERNAME: ${REACT_APP_TELEGRAM_BOT_USERNAME}
+      REACT_APP_SOCKET_URL: wss://localhost:3443
+      REACT_APP_API_URL: https://localhost:3443/api
       HTTPS: "true"
       SSL_CRT_FILE: "/app/certs/cert.pem"
       SSL_KEY_FILE: "/app/certs/key.pem"

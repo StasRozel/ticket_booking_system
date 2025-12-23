@@ -1,4 +1,5 @@
 @import '../../../shared/styles/CanselButton.scss';
+@import '../../../shared/styles/ConfirmButton.scss';
 
 .sidebar {
     width: auto;
@@ -48,6 +49,10 @@
           }
         }
       }
+    }
+
+    &__home {
+      @include button-confirm;
     }
   
     &__logout {

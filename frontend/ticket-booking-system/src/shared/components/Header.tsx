@@ -4,18 +4,20 @@ import '../styles/css/Header.css';
 import { useAuth } from '../../features/Auth/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../img/logo.png';
-import axios from 'axios';
 import { useModal } from '../context/ModalContext';
 import ConfirmModal from './ConfirmModal';
 import api from '../services/api';
 
 const Header: React.FC = () => {
-  const { id, logout } = useAuth();
+  const { id, logout, roleId, getRoleId } = useAuth();
   const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
   const navigate = useNavigate();
   const [pendingBookingsCount, setPendingBookingsCount] = useState<number>(0);
 
   useEffect(() => {
+    if (id) {
+      getRoleId();
+    }
     const fetchPendingBookings = async () => {
       try {
         const userId = localStorage.getItem('userId'); // Предполагаем, что userId доступен (можно взять из контекста авторизации)
@@ -66,6 +68,11 @@ const Header: React.FC = () => {
           </ul>
         </nav>
         <div className="header__actions">
+          {(roleId === 1 || roleId === 4) && (
+            <div className="header__action-wrapper">
+              <Link className="header__action" to="/dashboard">Панель</Link>
+            </div>
+          )}
           <div className="header__action-wrapper">
               <Link className="header__action" to="/pending-bookings">Брони</Link>
             {pendingBookingsCount > 0 && (
