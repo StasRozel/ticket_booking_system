@@ -1,6 +1,25 @@
 version: '3.8'
 
 services:
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: tickets_booking_system-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./backend/key.pem:/etc/nginx/ssl/key.pem:ro
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - ticket_booking_network
+
   backend:
     container_name: tickets_booking_system-backend
     build:
@@ -20,6 +39,7 @@ services:
       ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    # Оставляем порты открытыми для прямого доступа (режим разработки)
     ports:
       - "3001:3001"
       - "3443:3443"
@@ -39,11 +59,13 @@ services:
     restart: unless-stopped
     environment:
       REACT_APP_TELEGRAM_BOT_USERNAME: ${REACT_APP_TELEGRAM_BOT_USERNAME}
-      REACT_APP_SOCKET_URL: wss://localhost:3443
-      REACT_APP_API_URL: https://localhost:3443/api
-      HTTPS: "true"
-      SSL_CRT_FILE: "/app/certs/cert.pem"
-      SSL_KEY_FILE: "/app/certs/key.pem"
+      # Можно выбрать: через nginx или напрямую
+      # REACT_APP_SOCKET_URL: wss://ticket-booking/socket.io  # через nginx
+      # REACT_APP_API_URL: https://ticket-booking/api         # через nginx
+      # # Или:
+      REACT_APP_SOCKET_URL: wss://localhost:3443     # напрямую
+      REACT_APP_API_URL: https://localhost:3443/api  # напрямую
+      HTTPS: "false"
     ports:
       - "3000:3000"
     depends_on:
@@ -51,8 +73,6 @@ services:
     volumes:
       - ./frontend/ticket-booking-system:/app
       - /app/node_modules
-      - ./backend/cert.pem:/app/certs/cert.pem:ro   # <- монтируем cert
-      - ./backend/key.pem:/app/certs/key.pem:ro
     command: npm start
     networks:
       - ticket_booking_network
@@ -64,7 +84,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWRD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_NAME}
-      # Важно! Устанавливаем пользователя по умолчанию
       PGUSER: ${DB_USERNAME}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
@@ -81,6 +100,7 @@ services:
 
 volumes:
   db-data:
+  nginx_logs:
 
 networks:
   ticket_booking_network:
