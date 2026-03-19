@@ -10,6 +10,7 @@ backend-new/node_modules
 /coverage
 
 build/
+dist/
 
 cert.pem
 key.pem
