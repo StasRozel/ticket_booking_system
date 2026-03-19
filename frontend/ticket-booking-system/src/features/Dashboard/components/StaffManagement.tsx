@@ -26,7 +26,7 @@ const StaffManagement: React.FC = () => {
 
     const handleDeleteStaff = async (userId: number) => {
         try {
-            await api.delete(`/users/delete/${userId}`);
+            await api.delete(`/users/${userId}`);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting staff:', error);

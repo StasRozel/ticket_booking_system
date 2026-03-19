@@ -1,33 +1,25 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "checkJs": false,
-        "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "lib": [
-            "es6",
-            "ES2021.String"
-        ],
-        "moduleResolution": "node",
-        "noImplicitAny": false,
-        "outDir": "dist",
-        "removeComments": true,
-        "sourceMap": true,
-        "module": "commonjs",
-        "target": "es6",
-        "rootDirs": [
-            "src"
-        ],
-        "typeRoots": [
-            "./node_modules/@types"
-        ]
-    },
-    "compileOnSave": true,
-    "exclude": [
-        "node_modules",
-        "build"
-    ]
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }

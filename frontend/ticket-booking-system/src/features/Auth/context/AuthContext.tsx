@@ -1,8 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 import api, { login as apiLogin, register as apiRegister } from '../../../shared/services/api';
-import axios from 'axios';
 import { socket } from '../../..';
-import { Navigate } from 'react-router-dom';
 
 interface AuthContextType {
     id: number;
@@ -66,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const logout = async () => {
         if (refreshToken) {
-            await api.post('/auth/logout', { refreshToken });
+            await api.post('/users/auth/logout', { refreshToken });
         }
         setAccessToken(null);
         setRefreshToken(null);
@@ -81,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             throw new Error('No refresh token available');
         }
         const refresh_token = refreshToken;
-        const response = await api.post('/auth/refresh', { refresh_token });
+        const response = await api.post('/users/auth/refresh', { refresh_token });
         const newAccessToken = response.data.accessToken;
         setAccessToken(newAccessToken);
         localStorage.setItem('accessToken', newAccessToken);

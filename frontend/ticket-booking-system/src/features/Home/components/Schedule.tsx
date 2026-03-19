@@ -4,7 +4,6 @@ import '../styles/css/Schedule.css';
 import { socket } from '../../..';
 import { useHome } from '../context/HomeContext';
 import { formatTime, formatDate } from '../../../shared/services/formatDateTime';
-import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import Notification from '../../../shared/components/Notification'
 import {
   useReactTable,
@@ -28,20 +27,23 @@ const Schedule: React.FC = () => {
   const [trigger, setTrigger] = useState<number>(0);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-
-  socket.on('update', () => {
-    setTrigger((next) => ++next);
-  });
+  useEffect(() => {
+    const handleUpdate = () => setTrigger((next) => next + 1);
+    socket.on('update', handleUpdate);
+    return () => {
+      socket.off('update', handleUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     fetchBusSchedule();
-  }, [trigger]);
+  }, [trigger, fetchBusSchedule]);
 
   // Функция для парсинга даты в формате дд.мм.гггг
   const parseDate = (dateStr: string): Date => {
-    if (!dateStr || !/^\d{2}\.\d{2}\.\d{4}$/.test(dateStr)) {
-      return new Date(0); // Возвращаем минимальную дату в случае ошибки
-    }
+    if (!dateStr || !/^\d{2}\.\d{2}\.\d{4}$/.test(dateStr)) 
+      return new Date(0);
+    
     const [day, month, year] = dateStr.split('.').map(Number);
     return new Date(year, month - 1, day);
   };

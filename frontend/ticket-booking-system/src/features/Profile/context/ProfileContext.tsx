@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext } from 'react';
-import axios from 'axios';
 import { TicketType } from '../../../shared/types/TicketType';
 import { ProfileContextType } from '../../../shared/types/ProfileContextType';
 import { UserType } from '../../../shared/types/UserType';
@@ -56,7 +55,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setLoading(true);
     setError(null);
     try {
-      const response = await api.patch(`/users/update/${userId}`, data);
+      const response = await api.patch(`/users/${userId}`, data);
       setUser((prevUser) => (prevUser ? { ...prevUser, ...response.data } : null));
       console.log('Профиль успешно обновлен!');
     } catch (err) {
@@ -77,8 +76,9 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const fetchBookings = async () => {
     try {
-      const bookingResponse = await api.get(`/booking/${userId}`);
-      const data: BookingType[] = bookingResponse.data;
+      const bookingResponse = await api.get(`/users/${userId}/tickets`);
+      console.log(bookingResponse);
+      const data: BookingType[] = bookingResponse.data?.bookings ?? bookingResponse.data;
 
       if (!data) {
         throw new Error('Ответ от сервера пустой');
@@ -88,24 +88,41 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setLoading(false);
 
       const ticketPromises = data.map(async (booking) => {
-        const ticketResponse = await api.get(`/tickets/${booking.id}`);
+        const ticketResponse = await api.get(`/tickets/booking/${booking.id}`);
         const ticketData: TicketType[] = ticketResponse.data;
 
         if (!ticketData) {
           throw new Error(`Ответ для билетов бронирования ${booking.id} пустой`);
         }
 
-        return { bookingId: booking.id, tickets: ticketData };
+        return { booking_id: booking.id, tickets: ticketData };
       });
 
       const ticketResults = await Promise.all(ticketPromises);
+
       const ticketsMap = ticketResults.reduce(
-        (acc, { bookingId, tickets }) => ({
+        (acc, { booking_id, tickets }) => ({
           ...acc,
-          [bookingId]: tickets,
+          [booking_id]: tickets,
         }),
-        {}
+        {} as { [bookingId: number]: TicketType[] }
       );
+
+      // Автоматически отменяем бронирования без билетов
+      const cancelPromises = data
+        .filter((booking) => booking.status !== 'Отменен' && ticketsMap[booking.id]?.length === 0)
+        .map((booking) => api.patch(`/bookings/${booking.id}`, { status: 'Отменен' }));
+      if (cancelPromises.length > 0) {
+        await Promise.all(cancelPromises);
+        // Обновляем статус локально
+        data.forEach((booking) => {
+          if (booking.status !== 'Отменен' && ticketsMap[booking.id]?.length === 0) {
+            booking.status = 'Отменен';
+          }
+        });
+        setBookings([...data]);
+      }
+
       setTickets(ticketsMap);
     } catch (err) {
       setError(
@@ -119,8 +136,8 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const fetchPendingBookings = async () => {
     try {
-      const bookingResponse = await api.get(`/booking/${userId}`);
-      const data: BookingType[] = bookingResponse.data;
+      const bookingResponse = await api.get(`/users/${userId}/tickets`);
+      const data: BookingType[] = bookingResponse.data?.bookings ?? bookingResponse.data;
 
       if (!data) {
         throw new Error('Ответ от сервера пустой');
@@ -131,21 +148,24 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setLoading(false);
 
       const ticketPromises = pendingBookings.map(async (booking) => {
-        const ticketResponse = await api.get(`/tickets/${booking.id}`);
+        const ticketResponse = await api.get(`/tickets/booking/${booking.id}`);
         const ticketData: TicketType[] = ticketResponse.data;
 
         if (!ticketData) {
           throw new Error(`Ответ для билетов бронирования ${booking.id} пустой`);
         }
 
-        return { bookingId: booking.id, tickets: ticketData };
+        return { booking_id: booking.id, tickets: ticketData };
       });
 
       const ticketResults = await Promise.all(ticketPromises);
+
+      console.log(ticketResults);
+
       const ticketsMap = ticketResults.reduce(
-        (acc, { bookingId, tickets }) => ({
+        (acc, { booking_id, tickets }) => ({
           ...acc,
-          [bookingId]: tickets,
+          [booking_id]: tickets,
         }),
         {}
       );
@@ -166,10 +186,10 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
         [bookingId]: prev[bookingId].map((ticket) =>
           ticket.id === ticketId
             ? {
-                ...ticket,
-                is_child: !isChild,
-                price: !isChild ? '0.00' : ticketPrice.data,
-              }
+              ...ticket,
+              is_child: !isChild,
+              price: !isChild ? '0.00' : ticketPrice.data,
+            }
             : ticket
         ),
       }));
@@ -193,15 +213,15 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       // Получаем тикеты для bookingId
       const ticketPromises = tickets[bookingId]?.map((ticket) =>
-        api.patch(`/tickets/update/${ticket.id}`, { is_child: ticket.is_child })
+        api.patch(`/tickets/${ticket.id}`, { is_child: ticket.is_child })
       ) || [];
-  
+
       // Запрос на обновление брони
-      const bookingPromise = api.patch(`/booking/update/${bookingId}`, { status: 'Забронирован' });
-  
+      const bookingPromise = api.patch(`/bookings/${bookingId}`, { status: 'Забронирован' });
+
       // Выполняем все запросы параллельно
       await Promise.all([...ticketPromises, bookingPromise]);
-  
+
       // Обновляем триггер
       setTrigger((next) => ++next);
     } catch (err) {
@@ -216,7 +236,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const handleCanselBooking = async (id: number) => {
-    await api.patch(`/booking/cansel/${id}`, { status: 'Отменен' });
+    await api.patch(`/bookings/${id}`, { status: 'Отменен' });
     setTrigger((next) => ++next);
   };
 

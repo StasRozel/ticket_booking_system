@@ -26,12 +26,12 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [error, setError] = useState<string | null>(null);
 
     const NewRoute = async (newRoute: RouteType): Promise<void> => {
-        await api.post('/routes/create/', newRoute);
+        await api.post('/routes', newRoute);
         setTrigger(next => ++next);
     };
 
     const UpdateRoute = async (id: number, updRoute: RouteType): Promise<void> => {
-        await api.patch(`/routes/update/${id}`, updRoute);
+        await api.patch(`/routes/${id}`, updRoute);
         setTrigger(next => ++next);
     };
 
@@ -45,7 +45,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     const DeleteRoute = async (id: number) => {
-        await api.delete(`/routes/delete/${id}`);
+        await api.delete(`/routes/${id}`);
         setTrigger(next => ++next);
         console.log(`Deleting route ${trigger}`);
     };
@@ -60,17 +60,17 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     const NewSchedule = async (newSchedule: any): Promise<void> => {
-        await api.post('/schedules/create/', newSchedule);
+        await api.post('/schedules', newSchedule);
         setTrigger(next => ++next);
     };
 
     const UpdateSchedule = async (id: number, updSchedule: ScheduleType): Promise<void> => {
-        await api.patch(`/schedules/update/${id}`, updSchedule);
+        await api.patch(`/schedules/${id}`, updSchedule);
         setTrigger(next => ++next);
     };
 
     const DeleteSchedule = async (id: number) => {
-        await api.delete(`/schedules/delete/${id}`);
+        await api.delete(`/schedules/${id}`);
         setTrigger(next => ++next);
         console.log(`Deleting route ${trigger}`);
     };
@@ -85,17 +85,17 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     const NewBus = async (newSchedule: any): Promise<void> => {
-        await api.post('/buses/create/', newSchedule);
+        await api.post('/buses', newSchedule);
         setTrigger(next => ++next);
     };
 
     const UpdateBus = async (id: number, updSchedule: BusType): Promise<void> => {
-        await api.patch(`/buses/update/${id}`, updSchedule);
+        await api.patch(`/buses/${id}`, updSchedule);
         setTrigger(next => ++next);
     };
 
     const DeleteBus = async (id: number) => {
-        await api.delete(`/buses/delete/${id}`);
+        await api.delete(`/buses/${id}`);
         setTrigger(next => ++next);
         console.log(`Deleting route ${trigger}`);
     };
@@ -111,8 +111,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const NewBusSchedule = async (newBusSchedule: BusScheduleType): Promise<void> => {
         try {
-            const response = await api.post('/bus-schedules/create/', newBusSchedule);
-            if (response.data.success) {
+            const response = await api.post('/bus-schedules', newBusSchedule);
+            if (response.data) {
                 setTrigger(next => ++next);
             }
         } catch (error) {
@@ -123,7 +123,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const UpdateBusSchedule = async (id: number, updBusSchedule: BusScheduleType): Promise<void> => {
         try {
-            const response = await api.patch(`/bus-schedules/update/${id}`, updBusSchedule);
+            const response = await api.patch(`/bus-schedules/${id}`, updBusSchedule);
             if (response.data) {
                 setTrigger(next => ++next);
             } else {
@@ -137,7 +137,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     const DeleteBusSchedule = async (id: number) => {
-        await api.delete(`/bus-schedules/delete/${id}`);
+        await api.delete(`/bus-schedules/${id}`);
         socket.emit('deleteBusSchedule', id);
         setTrigger(next => ++next);
         console.log(`Deleting route ${trigger}`);
@@ -154,7 +154,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const fetchDriverComplaints = async () => {
         try {
-            const response = await api.get('/drivers-complaints/');
+            const response = await api.get('/complaints');
             setDriverComplaints(response.data);
         } catch (error) {
             console.error('Error fetching driver complaints:', error);
@@ -163,7 +163,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const deleteDriverComplaint = async (id: number) => {
         try {
-            await api.delete(`/drivers-complaints/delete/${id}`);
+            await api.delete(`/complaints/${id}`);
             setTrigger(next => ++next);
         } catch (error) {
             console.error('Error deleting driver complaint:', error);
@@ -173,7 +173,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const replaceBusScheduleDriverAndBus = async (busScheduleId: number, driverId: number, urgentCallId: number) => {
         try {
-            const response = await api.patch(`/bus-schedules/replace/${busScheduleId}`, { driver_id: driverId, urgent_call_id: urgentCallId });
+            // Backend does not expose a dedicated replace endpoint; update bus-schedule directly
+            const response = await api.patch(`/bus-schedules/${busScheduleId}`, { driver_id: driverId, urgent_call_id: urgentCallId });
             if (response.data) setTrigger(next => ++next);
             return response.data;
         } catch (error) {

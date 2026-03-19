@@ -109,9 +109,9 @@ const PendingBookings: React.FC= () => {
                           </li>
                         ))}
                       </ul>
-                    ) : (
-                      <p>Билеты не найдены.</p> 
-                    )}
+                    ) : 
+                      <p>Нет билетов</p>
+                    }
                   </div>
                   <div className="booking-item__actions">
                     <button

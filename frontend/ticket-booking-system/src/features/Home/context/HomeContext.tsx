@@ -1,6 +1,4 @@
-// src/context/HomeContext.tsx
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { HomeContextType } from '../../../shared/types/HomeContextType';
 import { useNavigate } from 'react-router-dom';
@@ -15,17 +13,17 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [busSchedules, setSchedules] = useState<BusScheduleType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchFrom, setSearchFrom] = useState<string>(''); // Откуда
-  const [searchTo, setSearchTo] = useState<string>(''); // Куда
-  const [searchDate, setSearchDate] = useState<string>(''); // Дата
-  const [searchPassengers, setSearchPassengers] = useState<string>(''); // Пассажиры
+  const [searchFrom, setSearchFrom] = useState<string>('');
+  const [searchTo, setSearchTo] = useState<string>('');
+  const [searchDate, setSearchDate] = useState<string>('');
+  const [searchPassengers, setSearchPassengers] = useState<string>('');
 
   const navigate = useNavigate();
   const { accessToken } = useAuth();
   const { setOptionNotification } = useNotification();
   const currentDate = new Date();
 
-  const fetchBusSchedule = async () => {
+  const fetchBusSchedule = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -37,16 +35,14 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const filteredSchedules = busSchedules.filter((schedule) => {
     const route = schedule.schedule?.route;
     const matchesFrom = !searchFrom || 
-        (route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase()) || 
-         route?.name?.toLowerCase().includes(searchFrom.toLowerCase()));
+        route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase());
     const matchesTo = !searchTo || 
-        (route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase()) || 
-         route?.name?.toLowerCase().includes(searchTo.toLowerCase()));
+        route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase());
     const matchesDate = !searchDate || formatDate(schedule.operating_days) === formatDate(searchDate);
     const matchesPassengers = !searchPassengers || 
         (schedule.bus?.capacity?.length as number >= parseInt(searchPassengers));
@@ -61,13 +57,16 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const bookingObj = {
+      user_id: Number(localStorage.getItem('userId')) || 0,
       bus_schedule_id: busSchedule.id,
-      user_id: localStorage.getItem('userId') || '',
-      booking_date: currentDate.toDateString(),
+      booking_date: currentDate.toISOString(),
       status: 'Выбран',
-      total_price: busSchedule.schedule?.route?.price ?? '0',
+      total_price: Number(busSchedule.schedule?.route?.price) || 0,
     };
-    const response = await api.post('/booking/create/', bookingObj);
+
+    console.log(bookingObj);
+
+    const response = await api.post('/bookings', bookingObj);
     const { id } = response.data;
     const ticketObj = {
       booking_id: id,
@@ -75,13 +74,13 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
       is_child: false,
       price: busSchedule.schedule?.route?.price ?? '0',
     };
-    await api.post('/tickets/create/', ticketObj);
+    await api.post('/tickets', ticketObj);
     navigate('/pending-bookings');
   };
 
   useEffect(() => {
     fetchBusSchedule();
-  }, []);
+  }, [fetchBusSchedule]);
 
   return (
     <HomeContext.Provider

@@ -67,14 +67,12 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const userId = localStorage.getItem('userId');
 
-
-
   const fetchDriverData = async () => {
     setLoading(true);
     try {
       const { first_name, last_name, middle_name } = await api.get(`/users/${userId}`).then(res => res.data);
       const busId = await api.get(`/drivers/user/${userId}`).then(res => res.data.bus_id);
-      const busScheduleId = await api.get(`/bus-schedules/bus/${busId}`).then(res => res.data[1].id); // берем второй по времени рейс
+      const busScheduleId = await api.get(`/bus-schedules/bus/${busId}`).then(res => res.data[1].id);
       const resp = await api.get(`/bus-schedules/${busScheduleId}`);
       const scheduleData = resp.data;
 
@@ -84,17 +82,14 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         throw new Error("Route data not found in schedule");
       }
 
-      // В БД поле stops может приходить как JSON-string или CSV "Орша, Могилёв"
       let stops: any[] = [];
       if (routeData.stops) {
         if (typeof routeData.stops === 'string') {
           const s = routeData.stops.trim();
-          // Попробуем распарсить JSON; если не JSON — разобьём по запятой
           try {
             const parsed = JSON.parse(s);
             if (Array.isArray(parsed)) stops = parsed;
           } catch (_e) {
-            // Разделим по запятым и создадим объекты остановок
             stops = s.split(',').map((name: string, idx: number) => ({ id: idx + 1, name: name.trim(), order: idx + 1 }));
           }
         } else if (Array.isArray(routeData.stops)) {
@@ -104,7 +99,6 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
       if (!stops.length) stops = [];
 
-      // Применяем сохраненный прогресс (visited_stops)
       const visitedStops = scheduleData.visited_stops || [];
       if (Array.isArray(visitedStops) && visitedStops.length > 0) {
         stops = stops.map((s: any) => ({
@@ -126,8 +120,10 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
       let passengers: Passenger[] = [];
       try {
-        const bookingsResp = await api.get(`/booking/schedule/${scheduleData.id}`);
-        const bookings = bookingsResp.data;
+        const bookingsResp = await api.get(`/bookings/schedule/${scheduleData.id}`);
+        const bookings = (bookingsResp.data || []).filter((b: any) => b.bus_schedule_id === scheduleData.id);
+
+        console.log(bookings);
 
         if (Array.isArray(bookings)) {
           passengers = bookings.map((b: any) => ({
@@ -147,7 +143,6 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         console.error('[driver] failed to load bookings', err);
       }
 
-      // Build driver object: fullName kept, phone empty, passengers empty for now
       const driverFromServer: DriverData = {
         id: scheduleData.id,
         fullName: `${last_name} ${first_name} ${middle_name || ''}`.trim(),
@@ -157,7 +152,6 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       };
 
       setDriver(driverFromServer);
-      console.log('[driver] data loaded from server', driverFromServer);
     } catch (e: any) {
       console.warn('[driver] failed to load data from server', e?.message || e);
       // fallback — оставить mock
@@ -193,6 +187,8 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       if (!busScheduleId) throw new Error('bus_schedule_id not available');
       if (!driverId) throw new Error('driver_id not available');
 
+      console.log(coords);
+
       console.log('[driver] sendUrgentCall payload:', { bus_schedule_id: busScheduleId, driver_id: driverId, latitude: coords?.latitude, longitude: coords?.longitude });
 
       const payload: any = {
@@ -203,7 +199,7 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         accepted: false,
       };
 
-      const res = await api.post('/urgentcalls/create/', payload);
+      const res = await api.post('/urgentcalls', payload);
       console.log('[driver] sendUrgentCall response:', res.data);
       return res.data;
     } catch (err) {
@@ -214,7 +210,13 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const markPassengerPresent = async (passengerId: number) => {
     try {
-      await api.patch(`/booking/user/${passengerId}/status`, { status: 'В дороге' });
+      // Find the passenger's booking for the current schedule then update that booking status
+      const userResp = await api.get(`/users/${passengerId}/tickets`);
+      const userBookings = userResp.data?.bookings || userResp.data || [];
+      const bookingForSchedule = userBookings.find((b: any) => b.bus_schedule_id === driver?.currentRoute?.id || b.bus_schedule_id === driver?.id);
+      if (!bookingForSchedule) throw new Error('Booking for passenger not found for this schedule');
+
+      await api.patch(`/bookings/${bookingForSchedule.id}`, { status: 'В дороге' });
       setDriver(prev => {
         if (!prev) return null;
         return {
@@ -318,7 +320,7 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         complaintText: complaintText
       };
 
-      await api.post('/drivers-complaints/create/', payload);
+      await api.post('/complaints', payload);
       console.log('[driver] complaint submitted successfully');
     } catch (err: any) {
       console.error('[driver] submitComplaint failed', err?.response?.data || err?.message || err);

@@ -21,6 +21,7 @@ import { Radio } from './features/Radio/components/Radio';
 import DriverDashboard from './features/DriverPage/components/DriverDashboard';
 import DriverProvider from './features/DriverPage/context/DriverContext';
 import RoleProtectedRoute from './features/Auth/components/RoleProtectedRoute';
+import { RadioProvider } from './features/Radio/context/RadioContext';
 
     const AppContent: React.FC = () => {
         const { refreshAccessToken, logout } = useAuth();
@@ -39,7 +40,7 @@ import RoleProtectedRoute from './features/Auth/components/RoleProtectedRoute';
                     <Route path="/401" element={<ErrorPage statusCode={401} />} />
                     <Route path="/403" element={<ErrorPage statusCode={403} />} />
                     <Route path="*" element={<ErrorPage statusCode={404} />} />
-                    <Route path='/radio' element={<Radio />}></Route>
+                    <Route path='/radio' element={<RadioProvider><Radio /></RadioProvider>}></Route>
                     <Route element={<AuthProtectedRoute />}>
                         <Route element={<RoleProtectedRoute expectedRoleId={[1, 4]} />}>
                             <Route path="/dashboard/*" element={<DashboardProvider><Dashboard /></DashboardProvider>} />

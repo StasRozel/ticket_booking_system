@@ -20,18 +20,14 @@ const Header: React.FC = () => {
     }
     const fetchPendingBookings = async () => {
       try {
-        const userId = localStorage.getItem('userId'); // Предполагаем, что userId доступен (можно взять из контекста авторизации)
-        if (userId) {
-          const bookingResponse = await api.get(`/booking/${userId}`);
-          const data = bookingResponse.data;
-
-          if (data) {
-            const pendingCount = data.filter((booking: { status: string }) =>
-              booking.status.toLowerCase() === 'выбран'
-            ).length;
-            setPendingBookingsCount(pendingCount);
-          }
-        }
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+        const bookingResponse = await api.get(`/users/${userId}/tickets`);
+        const data = bookingResponse.data?.bookings ?? bookingResponse.data ?? [];
+        const pendingCount = Array.isArray(data)
+          ? data.filter((booking: any) => booking.status?.toLowerCase() === 'выбран').length
+          : 0;
+        setPendingBookingsCount(pendingCount);
       } catch (err) {
         console.error('Ошибка при загрузке бронирований:', err);
       }

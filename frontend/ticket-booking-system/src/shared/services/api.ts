@@ -11,7 +11,7 @@ export const register = async (newUser: any) => {
         console.log('[api] register request:', { email });
         const payload: any = { first_name, last_name, middle_name, role_id, email, password };
         if (bus_id) payload.bus_id = bus_id;
-        const response = await api.post('/auth/register', payload);
+        const response = await api.post('/users/auth/register', payload);
         console.log('[api] register response:', response.status, response.data);
         return response.data;
     } catch (error: any) {
@@ -23,7 +23,7 @@ export const register = async (newUser: any) => {
     export const login = async (email: string, password: string) => {
         try {
         console.log('[api] login request:', { email });
-        const response = await api.post('/auth/login', { email, password });
+        const response = await api.post('/users/auth/login', { email, password });
         console.log('[api] login response:', response.status, response.data);
         return response.data;
     } catch (error: any) {

@@ -1,5 +1,5 @@
 node_modules/
-
+backend-new/node_modules
 .env
 
 .vscode

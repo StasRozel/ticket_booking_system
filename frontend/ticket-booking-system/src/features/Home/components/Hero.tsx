@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/css/Hero.css';
 import { useHome } from '../context/HomeContext';
 import { searchSchema } from '../schemas/searchSchema';
@@ -67,14 +67,6 @@ const Hero: React.FC = () => {
     setSearchPassengers(value);
     validateField('searchPassengers', value);
   };
-
-  // Валидация всех полей при загрузке компонента (если данные уже есть в контексте)
-  // useEffect(() => {
-  //   validateField('searchFrom', searchFrom);
-  //   validateField('searchTo', searchTo);
-  //   validateField('searchDate', searchDate);
-  //   validateField('searchPassengers', searchPassengers);
-  // }, [searchFrom, searchTo, searchDate, searchPassengers]);
 
   return (
     <section className="hero">

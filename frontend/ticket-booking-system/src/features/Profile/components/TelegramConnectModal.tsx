@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { UserType } from '../../../shared/types/UserType';
+import api from '../../../shared/services/api';
 
 type Props = {
   user: UserType;
@@ -25,9 +26,8 @@ const TelegramConnectModal: React.FC<Props> = ({ user, isOpen, onClose }) => {
 
     const poll = async () => {
       try {
-        const res = await fetch(`/api/users/${user.id}`);
-        if (!res.ok) throw new Error('Failed');
-        const data = await res.json();
+        const res = await api.get(`/users/${user.id}`);
+        const data = res.data;
         if (data.telegram_id) {
           setStatus('connected');
           return;

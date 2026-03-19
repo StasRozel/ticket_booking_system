@@ -56,12 +56,12 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
         const payload: any = { first_name, last_name, middle_name, role_id, email, password };
         if (role_id === 3 && busId) payload.bus_id = Number(busId);
         
-        const res = await api.post('/auth/register/', payload);
+        const res = await api.post('/users/auth/register/', payload);
         const user_id = res.data.user_id;
         
         // Если водитель, создаем запись в таблице Drivers
         if (role_id === 3 && busId) {
-          await api.post('/drivers/create/', { user_id, bus_id: Number(busId) });
+          await api.post('/drivers', { user_id, bus_id: Number(busId) });
         }
       } else {
         // Редактирование существующего сотрудника
@@ -69,16 +69,18 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
         if (password) payload.password = password; // Обновляем пароль только если введен
         if (role_id === 3 && busId) payload.bus_id = Number(busId);
         
-        await api.patch(`/users/update/${staff.id}`, payload);
-        
+        await api.patch(`/users/${staff.id}`, payload);
+
         // Обновляем запись водителя если нужно
         if (role_id === 3 && busId) {
-          // Проверяем, есть ли запись водителя
-          try {
-            await api.patch(`/drivers/update/user/${staff.id}`, { bus_id: Number(busId) });
-          } catch {
+          // Попробуем найти существующую запись в drivers по user_id
+          const driversList = await api.get('/drivers').then(r => r.data || []);
+          const existing = driversList.find((d: any) => d.user_id === staff.id);
+          if (existing) {
+            await api.patch(`/drivers/${existing.id}`, { bus_id: Number(busId) });
+          } else {
             // Если записи нет, создаем
-            await api.post('/drivers/create/', { user_id: staff.id, bus_id: Number(busId) });
+            await api.post('/drivers', { user_id: staff.id, bus_id: Number(busId) });
           }
         }
       }
