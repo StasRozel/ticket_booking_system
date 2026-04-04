@@ -11,13 +11,32 @@ const StaffManagement: React.FC = () => {
     const { users, trigger, fetchUsers, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     const [selectedStaff, setSelectedStaff] = useState<UserType | null>(null);
+    const [driversInfo, setDriversInfo] = useState<{ [userId: number]: { busId: number | ''; driverId: number | null } }>({});
 
     // Фильтруем только менеджеров и водителей (role_id 2 и 3)
-    const staffUsers = users.filter((user: UserType) => user.role_id === 2 || user.role_id === 3);
+    const staffUsers = users.filter((user: UserType) => user.role_id === 4 || user.role_id === 3);
 
     useEffect(() => {
         fetchUsers();
     }, [trigger]);
+
+    useEffect(() => {
+        const fetchDriversInfo = async () => {
+            const drivers = staffUsers.filter(u => u.role_id === 3);
+            const entries = await Promise.all(
+                drivers.map(async (u) => {
+                    try {
+                        const r = await api.get(`/drivers/user/${u.id}`);
+                        return [u.id, { busId: r.data?.bus_id ?? '', driverId: r.data?.id ?? null }] as const;
+                    } catch {
+                        return [u.id, { busId: '' as const, driverId: null }] as const;
+                    }
+                })
+            );
+            setDriversInfo(Object.fromEntries(entries));
+        };
+        fetchDriversInfo();
+    }, [users]);
 
     const handleEditStaff = (user: UserType) => {
         setSelectedStaff(user);
@@ -54,6 +73,7 @@ const StaffManagement: React.FC = () => {
                             <th>Фамилия</th>
                             <th>Отчество</th>
                             <th>Email</th>
+                            <th>Автобус id</th>
                             <th>Роль</th>
                             <th>Действия</th>
                         </tr>
@@ -66,6 +86,7 @@ const StaffManagement: React.FC = () => {
                                 <td>{user.last_name}</td>
                                 <td>{user.middle_name || '-'}</td>
                                 <td>{user.email}</td>
+                                <td>{user.role_id === 3 ? (driversInfo[user.id!]?.busId || '...') : '-'}</td>
                                 <td>{getRoleName(user.role_id)}</td>
                                 <td>
                                     <button
@@ -96,6 +117,8 @@ const StaffManagement: React.FC = () => {
                 onClose={CloseModalForm}
                 isActive={isAddMode}
                 staff={selectedStaff}
+                initialBusId={selectedStaff ? (driversInfo[selectedStaff.id!]?.busId ?? '') : ''}
+                driverId={selectedStaff ? (driversInfo[selectedStaff.id!]?.driverId ?? null) : null}
                 onSuccess={fetchUsers}
             />
             <ConfirmModal

@@ -37,11 +37,11 @@ const UrgentCallsManagement: React.FC = () => {
 							</div>
 							<div className="urgent-calls__info-item">
 								<label>ID расписания</label>
-								<span>{call.bus_schedule_id}</span>
+								<span>{call.busScheduleId}</span>
 							</div>
 							<div className="urgent-calls__info-item">
 								<label>ID водителя</label>
-								<span>{call.driver_id}</span>
+								<span>{call.driverId}</span>
 							</div>
 							<div className="urgent-calls__info-item">
 								<label>Геолокация</label>
@@ -57,11 +57,11 @@ const UrgentCallsManagement: React.FC = () => {
 
 						<div className="urgent-calls__actions">
 							{!call.accepted && (
-								<button onClick={() => setSelectedSchedule(call.bus_schedule_id)}>
-									Изменить водителя
-								</button>
-							)}
-							{selectedSchedule === call.bus_schedule_id && (
+							<button onClick={() => setSelectedSchedule(call.id)}>
+								Изменить водителя
+							</button>
+						)}
+						{selectedSchedule === call.id && (
 								<div className="urgent-calls__replace-form">
 									<input 
 										type="number"

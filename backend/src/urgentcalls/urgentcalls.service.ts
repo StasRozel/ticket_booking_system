@@ -20,24 +20,24 @@ export class UrgentcallsService {
     createUrgentcallDto: CreateUrgentcallDto,
   ): Promise<ResponseType> {
     try {
-      if (!createUrgentcallDto.bus_schedule_id) {
-        return { success: false, message: 'bus_schedule_id is required' };
+      if (!createUrgentcallDto.busScheduleId) {
+        return { success: false, message: 'busScheduleId is required' };
       }
-      if (!createUrgentcallDto.driver_id) {
-        return { success: false, message: 'driver_id is required' };
+      if (!createUrgentcallDto.driverId) {
+        return { success: false, message: 'driverId is required' };
       }
 
       const busSchedule = await this.busScheduleRepository.findOneBy({
-        id: createUrgentcallDto.bus_schedule_id,
+        id: createUrgentcallDto.busScheduleId,
       });
       if (!busSchedule)
         return {
           success: false,
-          error: `BusSchedule ${createUrgentcallDto.bus_schedule_id} not found`,
+          error: `BusSchedule ${createUrgentcallDto.busScheduleId} not found`,
         };
-
-      // Create using repository with normalized property names matching entity fields
+      console.log(createUrgentcallDto);
       const created = this.urgentCallRepository.create(createUrgentcallDto);
+      await this.urgentCallRepository.save(created);
       return { success: true, data: created };
     } catch (error) {
       console.error('Error creating urgent call:', error);

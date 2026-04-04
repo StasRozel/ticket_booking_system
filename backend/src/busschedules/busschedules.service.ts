@@ -61,6 +61,8 @@ export class BusschedulesService {
   }
 
   async update(id: number, updateBusscheduleDto: UpdateBusscheduleDto) {
+    if (!id || isNaN(id)) return { success: false, error: 'Invalid id' };
+
     const busSchedule = await this.busScheduleRepository.findOneBy({ id });
 
     if (!busSchedule) return null;

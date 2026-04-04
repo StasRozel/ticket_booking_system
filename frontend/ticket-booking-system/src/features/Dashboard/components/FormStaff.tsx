@@ -7,10 +7,12 @@ interface FormStaffProps {
   onClose: () => void;
   isActive: boolean; // true - добавление, false - редактирование
   staff: any | null;
+  initialBusId?: number | '';
+  driverId?: number | null;
   onSuccess: () => void;
 }
 
-const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff, onSuccess }) => {
+const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff, initialBusId, driverId, onSuccess }) => {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [middle_name, setMiddleName] = useState('');
@@ -28,7 +30,7 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
       setMiddleName(staff.middle_name || '');
       setEmail(staff.email || '');
       setRoleId(staff.role_id || 3);
-      setBusId(staff.bus_id || '');
+      setBusId(initialBusId ?? '');
       setPassword(''); // Пароль не заполняем при редактировании
     } else if (isOpen && isActive) {
       // Режим добавления - очищаем форму
@@ -43,6 +45,8 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
     setErrors({});
   }, [isOpen, isActive, staff]);
 
+  const payload: any = { first_name, last_name, middle_name, role_id, email };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!first_name || !last_name || !email || (isActive && !password)) {
@@ -50,41 +54,35 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
       return;
     }
 
+
     try {
       if (isActive) {
-        // Создание нового сотрудника
-        const payload: any = { first_name, last_name, middle_name, role_id, email, password };
         if (role_id === 3 && busId) payload.bus_id = Number(busId);
-        
-        const res = await api.post('/users/auth/register/', payload);
+
+        const res = await api.post('/users/auth/register/', payload); //TODO если так создать то получу новый refresh токен
         const user_id = res.data.user_id;
-        
-        // Если водитель, создаем запись в таблице Drivers
+
         if (role_id === 3 && busId) {
           await api.post('/drivers', { user_id, bus_id: Number(busId) });
         }
       } else {
-        // Редактирование существующего сотрудника
-        const payload: any = { first_name, last_name, middle_name, role_id, email };
-        if (password) payload.password = password; // Обновляем пароль только если введен
-        if (role_id === 3 && busId) payload.bus_id = Number(busId);
-        
-        await api.patch(`/users/${staff.id}`, payload);
 
-        // Обновляем запись водителя если нужно
+        if (role_id === 3 && busId) payload.bus_id = Number(busId);
+
         if (role_id === 3 && busId) {
-          // Попробуем найти существующую запись в drivers по user_id
-          const driversList = await api.get('/drivers').then(r => r.data || []);
-          const existing = driversList.find((d: any) => d.user_id === staff.id);
-          if (existing) {
-            await api.patch(`/drivers/${existing.id}`, { bus_id: Number(busId) });
+          if (driverId) {
+            await api.patch(`/drivers/${driverId}`, { bus_id: Number(busId) });
           } else {
-            // Если записи нет, создаем
             await api.post('/drivers', { user_id: staff.id, bus_id: Number(busId) });
           }
         }
+
+
+        await api.patch(`/users/${staff.id}`, payload);
+
+
       }
-      
+
       onSuccess();
       onClose();
     } catch (err: any) {
@@ -120,10 +118,10 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
           </div>
           <div className="form__field">
             <label>Пароль {isActive && '*'}</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={e => setPassword(e.target.value)} 
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
               required={isActive}
               placeholder={!isActive ? 'Оставьте пустым, чтобы не менять' : ''}
             />
@@ -138,10 +136,10 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
           {role_id === 3 && (
             <div className="form__field">
               <label>ID автобуса</label>
-              <input 
-                type="number" 
-                value={busId as any} 
-                onChange={e => setBusId(e.target.value ? Number(e.target.value) : '')} 
+              <input
+                type="number"
+                value={busId as any}
+                onChange={e => setBusId(e.target.value ? Number(e.target.value) : '')}
               />
             </div>
           )}

@@ -94,6 +94,12 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('whoami')
   handleWhoami(@ConnectedSocket() socket: Socket) {
     socket.emit('init', { type: 'init', clientId: socket.data?.clientId });
+    const clientIds = Array.from(this.clients.keys());
+    socket.emit('clients', {
+      type: 'clients',
+      clients: clientIds,
+      count: clientIds.length,
+    });
   }
 
   @SubscribeMessage('offer')

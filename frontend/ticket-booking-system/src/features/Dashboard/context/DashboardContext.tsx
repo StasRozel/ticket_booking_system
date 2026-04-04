@@ -152,6 +152,15 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
+    const updateUrgentCalls = async (id: number) => {
+        try {
+            await api.patch(`/urgentcalls/${id}`, {accepted: true});
+
+        } catch (error) {
+            
+        }
+    }
+
     const fetchDriverComplaints = async () => {
         try {
             const response = await api.get('/complaints');
@@ -176,6 +185,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             // Backend does not expose a dedicated replace endpoint; update bus-schedule directly
             const response = await api.patch(`/bus-schedules/${busScheduleId}`, { driver_id: driverId, urgent_call_id: urgentCallId });
             if (response.data) setTrigger(next => ++next);
+
+            updateUrgentCalls(urgentCallId);
             return response.data;
         } catch (error) {
             console.error('Error replacing driver/bus for bus schedule:', error);

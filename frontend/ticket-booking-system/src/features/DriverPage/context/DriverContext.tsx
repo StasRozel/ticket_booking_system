@@ -72,7 +72,8 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const { first_name, last_name, middle_name } = await api.get(`/users/${userId}`).then(res => res.data);
       const busId = await api.get(`/drivers/user/${userId}`).then(res => res.data.bus_id);
-      const busScheduleId = await api.get(`/bus-schedules/bus/${busId}`).then(res => res.data[1].id);
+      const busSchedulesData = await api.get(`/bus-schedules/bus/${busId}`).then(res => res.data);
+      const busScheduleId = busSchedulesData?.[0]?.id;
       const resp = await api.get(`/bus-schedules/${busScheduleId}`);
       const scheduleData = resp.data;
 
@@ -192,8 +193,8 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.log('[driver] sendUrgentCall payload:', { bus_schedule_id: busScheduleId, driver_id: driverId, latitude: coords?.latitude, longitude: coords?.longitude });
 
       const payload: any = {
-        bus_schedule_id: busScheduleId,
-        driver_id: driverId,
+        busScheduleId,
+        driverId,
         latitude: coords?.latitude ?? null,
         longitude: coords?.longitude ?? null,
         accepted: false,

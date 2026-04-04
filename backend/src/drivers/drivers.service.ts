@@ -4,12 +4,15 @@ import { UpdateDriverDto } from './dto/update-driver.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Driver } from './entities/driver.entity';
+import { BusSchedule } from '../busschedules/entities/busschedule.entity';
 
 @Injectable()
 export class DriversService {
   constructor(
     @InjectRepository(Driver)
     private driverRepository: Repository<Driver>,
+    @InjectRepository(BusSchedule)
+    private busScheduleRepository: Repository<BusSchedule>,
   ) {}
   async create(createDriverDto: CreateDriverDto) {
     const driver = this.driverRepository.create(createDriverDto);
@@ -33,7 +36,15 @@ export class DriversService {
 
     if (!driver) return null;
 
+    const oldBusId = driver.bus_id;
     await this.driverRepository.update(id, updateDriverDto);
+
+    if (updateDriverDto.bus_id && updateDriverDto.bus_id !== oldBusId) {
+      await this.busScheduleRepository.update(
+        { bus_id: oldBusId },
+        { bus_id: updateDriverDto.bus_id },
+      );
+    }
 
     return await this.driverRepository.findOneBy({ id });
   }

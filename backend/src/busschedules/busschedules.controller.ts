@@ -40,7 +40,11 @@ export class BusschedulesController {
     @Param('id') id: string,
     @Body() updateBusscheduleDto: UpdateBusscheduleDto,
   ) {
-    return this.busschedulesService.update(+id, updateBusscheduleDto);
+    const numericId = +id;
+    if (isNaN(numericId)) {
+      return { success: false, error: 'Invalid id' };
+    }
+    return this.busschedulesService.update(numericId, updateBusscheduleDto);
   }
 
   @Patch('/:id/visit-stop')
