@@ -2,10 +2,10 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { HomeContextType } from '../../../shared/types/HomeContextType';
 import { useNavigate } from 'react-router-dom';
-import { formatDate } from '../../../shared/services/formatDateTime';
+import { formatDate } from '../../../shared/utils/formatDateTime';
 import { useAuth } from '../../Auth/context/AuthContext';
 import { useNotification } from '../../../shared/context/NotificationContext';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
 
 const HomeContext = createContext<HomeContextType | undefined>(undefined);
 

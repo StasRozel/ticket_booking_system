@@ -5,7 +5,7 @@ import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
 import { UserType } from '../../../shared/types/UserType';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
 
 const StaffManagement: React.FC = () => {
     const { users, trigger, fetchUsers, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();

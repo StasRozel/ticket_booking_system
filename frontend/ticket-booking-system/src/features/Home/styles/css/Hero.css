@@ -71,7 +71,7 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .hero__search input:focus {
-  border-color: #007bff;
+  border-color: #5C88C4;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
   outline: none;
 }
@@ -88,7 +88,7 @@
 }
 .hero__search-btn {
   padding: 12px 40px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -98,7 +98,7 @@
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
 .hero__search-btn:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }

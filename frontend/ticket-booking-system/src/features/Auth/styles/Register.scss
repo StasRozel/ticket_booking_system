@@ -40,7 +40,7 @@
         transition: border-color 0.3s;
   
         &:focus {
-          border-color: #007bff;
+          border-color: #5C88C4;
         }
   
         &::placeholder {
@@ -51,7 +51,7 @@
   
     &__button {
       padding: 12px;
-      background: #007bff;
+      background: #5C88C4;
       border: none;
       border-radius: 5px;
       color: #fff;
@@ -59,9 +59,9 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.3s;
-  
+
       &:hover {
-        background: #0056b3;
+        background: #456fa8;
       }
     }
   
@@ -71,7 +71,7 @@
       color: #666;
   
       a {
-        color: #007bff;
+        color: #5C88C4;
         text-decoration: none;
         &:hover {
           text-decoration: underline;

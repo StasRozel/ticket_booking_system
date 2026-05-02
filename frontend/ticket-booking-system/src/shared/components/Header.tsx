@@ -1,12 +1,11 @@
-// src/components/Header.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/css/Header.css';
 import { useAuth } from '../../features/Auth/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../img/logo.png';
 import { useModal } from '../context/ModalContext';
 import ConfirmModal from './ConfirmModal';
-import api from '../services/api';
+import api from '../utils/api';
 
 const Header: React.FC = () => {
   const { id, logout, roleId, getRoleId } = useAuth();
@@ -14,11 +13,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const [pendingBookingsCount, setPendingBookingsCount] = useState<number>(0);
 
-  useEffect(() => {
-    if (id) {
-      getRoleId();
-    }
-    const fetchPendingBookings = async () => {
+  const fetchPendingBookings = useCallback(async () => {
       try {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -31,10 +26,15 @@ const Header: React.FC = () => {
       } catch (err) {
         console.error('Ошибка при загрузке бронирований:', err);
       }
-    };
+    }, []);
+
+  useEffect(() => {
+    if (id) {
+      getRoleId();
+    }
 
     fetchPendingBookings();
-  }, []);
+  }, [id, getRoleId, fetchPendingBookings]);
 
   const handleLogout = () => {
     if (id) logout();

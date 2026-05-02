@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/css/Schedule.css';
 import { socket } from '../../..';
 import { useHome } from '../context/HomeContext';
-import { formatTime, formatDate } from '../../../shared/services/formatDateTime';
+import { formatTime, formatDate } from '../../../shared/utils/formatDateTime';
 import Notification from '../../../shared/components/Notification'
 import {
   useReactTable,

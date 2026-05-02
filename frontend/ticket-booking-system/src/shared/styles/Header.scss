@@ -1,6 +1,8 @@
+@use './colors' as *;
+
 // src/styles/css/Header.css (переименовано в SCSS для удобства)
 .header {
-  background: #fff;
+  background: $neutral-100;
   padding: 20px 0;
   position: sticky;
   width: 100%;
@@ -57,14 +59,14 @@
           position: absolute;
           width: 0;
           height: 2px;
-          background: #007bff;
+          background: $primary;
           bottom: -5px;
           left: 0;
           transition: width 0.3s ease;
         }
 
         &:hover {
-          color: #007bff;
+          color: $primary;
 
           &::after {
             width: 100%;
@@ -72,7 +74,7 @@
         }
 
         &.active {
-          color: #007bff;
+          color: $primary;
           &::after {
             width: 100%;
           }
@@ -93,28 +95,28 @@
 
   &__action {
     padding: 12px 40px;
-    background: #007bff;
+    background: $primary;
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: $neutral-100;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 
     &:hover {
-      background: #0056b3;
+      background: $primary-dark;
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
     }
 
     &:active {
       transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+      box-shadow: 0 2px 8px rgba(76, 140, 228, 0.2);
     }
 
     a {
-      color: #fff;
+      color: $neutral-100;
       text-decoration: none;
     }
   }

@@ -28,7 +28,7 @@
 }
 .error-page__button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #5C88C4;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -37,5 +37,5 @@
   transition: background-color 0.3s;
 }
 .error-page__button:hover {
-  background-color: #0056b3;
+  background-color: #456fa8;
 }

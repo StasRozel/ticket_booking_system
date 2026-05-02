@@ -54,7 +54,10 @@
   transition: border-color 0.3s;
 }
 .form-new-routes__input:focus {
-  border-color: #007bff;
+  border-color: #5C88C4;
+}
+.form-new-routes__input::-moz-placeholder {
+  color: #999;
 }
 .form-new-routes__input::placeholder {
   color: #999;

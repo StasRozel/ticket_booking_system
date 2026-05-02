@@ -1,0 +1,21 @@
+// Central color variables (from user screenshot)
+$brand-yellow: #FFFDB5;
+$brand-aqua: #6FDCE3;
+$brand-blue: #5C88C4;
+$brand-purple: #5C2FC2;
+
+// Derived/utility
+$brand-blue-dark: #456fa8;
+$danger: #ff4d4f; // keep existing red for warnings/actions
+$neutral-100: #ffffff;
+$neutral-200: #f5f7fa;
+$neutral-border: #ebedf0;
+$bg-soft: rgba($brand-aqua, 0.06);
+$text-dark: #1a2a44;
+
+// Aliases for easier migration
+$primary: $brand-blue;
+$primary-dark: $brand-blue-dark;
+$accent: $brand-aqua;
+$highlight: $brand-yellow;
+$accent-2: $brand-purple;

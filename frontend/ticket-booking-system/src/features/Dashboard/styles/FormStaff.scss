@@ -80,8 +80,8 @@
       background: #fff;
 
       &:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        border-color: #5C88C4;
+        box-shadow: 0 0 0 3px rgba(92, 136, 196, 0.1);
       }
 
       &::placeholder {
@@ -102,7 +102,7 @@
 
   &__button {
     padding: 12px 24px;
-    background: #007bff;
+    background: #5C88C4;
     color: white;
     border: none;
     border-radius: 5px;
@@ -113,7 +113,7 @@
     margin-top: 10px;
 
     &:hover {
-      background: #0056b3;
+      background: #456fa8;
     }
 
     &:active {

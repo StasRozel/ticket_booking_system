@@ -1,16 +1,15 @@
+@charset "UTF-8";
 .user-profile {
   padding: 80px 0;
-  background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+  background: linear-gradient(135deg, rgba(111, 220, 227, 0.06) 0%, #f5f7fa 100%);
   font-family: "Inter", sans-serif;
   min-height: 100vh;
 }
-
 .user-profile .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 20px;
 }
-
 .user-profile__header {
   display: flex;
   justify-content: space-between;
@@ -18,7 +17,6 @@
   margin-bottom: 40px;
   animation: fadeInDown 0.5s ease-out;
 }
-
 .user-profile h2 {
   font-size: 36px;
   font-weight: 700;
@@ -26,14 +24,11 @@
   margin: 0;
   letter-spacing: 0.5px;
 }
-
 .user-profile__actions {
   display: flex;
   gap: 15px;
 }
-
-.user-profile__edit-button,
-.user-profile__logout-button {
+.user-profile__edit-button, .user-profile__logout-button {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -42,36 +37,169 @@
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
-
 .user-profile__edit-button {
-  background: #007bff;
-  color: #fff;
+  background: #5C88C4;
+  color: #ffffff;
 }
-
 .user-profile__edit-button:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
 }
-
-.user-profile__driver-button {
-  background: #198754;
+.user-profile__logout-button {
+  background: #ff4d4f;
   color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
+}
+.user-profile__logout-button:hover {
+  background: #e63946;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 77, 79, 0.3);
+}
+.user-profile__card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  animation: fadeInUp 0.5s ease-out;
+}
+.user-profile__avatar {
+  flex-shrink: 0;
+}
+.user-profile__avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  background: #5C88C4;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 36px;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+}
+.user-profile__avatar-placeholder:hover {
+  transform: scale(1.05);
+}
+.user-profile__info {
+  flex: 1;
+}
+.user-profile__name {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a2a44;
+  margin-bottom: 20px;
+}
+.user-profile__detail {
+  font-size: 16px;
+  color: rgb(68.3191489362, 110.3617021277, 178.6808510638);
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+.user-profile__detail strong {
+  color: #333;
+  margin-right: 5px;
+}
+.user-profile__detail:hover {
+  color: #333;
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 768px) {
+  .user-profile {
+    padding: 60px 0;
+  }
+  .user-profile .container {
+    padding: 0 15px;
+  }
+  .user-profile h2 {
+    font-size: 28px;
+  }
+  .user-profile__edit-button, .user-profile__logout-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .user-profile__card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+  }
+  .user-profile__avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+  }
+  .user-profile__name {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  .user-profile__detail {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .user-profile {
+    padding: 40px 0;
+  }
+  .user-profile__header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .user-profile h2 {
+    font-size: 24px;
+  }
+  .user-profile__actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .user-profile__edit-button, .user-profile__logout-button {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .user-profile__card {
+    padding: 15px;
+  }
+  .user-profile__avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+  .user-profile__name {
+    font-size: 20px;
+  }
+  .user-profile__detail {
+    font-size: 13px;
+  }
 }
 
-.user-profile__telegram-button {
-  background: #2a9df4;
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
+/* Telegram modal (добавить в конец Profile.scss) */
 .telegram-modal {
   position: fixed;
   left: 0;
@@ -84,230 +212,77 @@
   justify-content: center;
   z-index: 1000;
 }
-
 .telegram-modal__content {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
   width: 420px;
   max-width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
-
 .telegram-modal__actions {
   display: flex;
   gap: 8px;
   align-items: center;
   margin-top: 12px;
+  flex-wrap: wrap;
 }
-
 .telegram-modal__open-bot {
   background: #0088cc;
   color: #fff;
   padding: 8px 12px;
   border-radius: 6px;
-  text-decoration: none
+  text-decoration: none;
+  display: inline-block;
 }
-
 .telegram-modal__check-button {
   background: #198754;
   color: #fff;
   padding: 8px 12px;
   border-radius: 6px;
-  border: none
-}
-
-.user-profile__driver-button {
-  background: #198754;
-  color: #fff;
   border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
   cursor: pointer;
-  margin-left: 8px;
 }
-
-.user-profile__logout-button {
-  background: #ff4d4f;
-  color: #fff;
+.telegram-modal__close-button {
+  background: transparent;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e6e6e6;
+  cursor: pointer;
 }
-
-.user-profile__logout-button:hover {
-  background: #e63946;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 77, 79, 0.3);
+.telegram-modal p {
+  margin: 10px 0 0;
+  color: #333;
 }
-
-.user-profile__card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  padding: 30px;
-  display: flex;
-  gap: 30px;
-  align-items: center;
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.user-profile__avatar {
-  flex-shrink: 0;
-}
-
-.user-profile__avatar-placeholder {
-  width: 100px;
-  height: 100px;
-  background: #007bff;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 36px;
-  font-weight: 700;
-  transition: transform 0.3s ease;
-}
-
-.user-profile__avatar-placeholder:hover {
-  transform: scale(1.05);
-}
-
-.user-profile__info {
-  flex: 1;
-}
-
-.user-profile__name {
-  font-size: 28px;
+.telegram-modal .status {
+  margin-top: 8px;
   font-weight: 600;
-  color: #1a2a44;
-  margin-bottom: 20px;
 }
-
-.user-profile__detail {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 15px;
-  line-height: 1.5;
+.telegram-modal .status--checking {
+  color: #0d6efd;
 }
-
-.user-profile__detail strong {
-  color: #333;
-  margin-right: 5px;
+.telegram-modal { /* синий */ }
+.telegram-modal .status--connected {
+  color: #198754;
 }
-
-.user-profile__detail:hover {
-  color: #333;
+.telegram-modal { /* зелёный */ }
+.telegram-modal .status--timeout {
+  color: #e74c3c;
 }
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .user-profile {
-    padding: 60px 0;
-  }
-
-  .user-profile .container {
-    padding: 0 15px;
-  }
-
-  .user-profile h2 {
-    font-size: 28px;
-  }
-
-  .user-profile__edit-button,
-  .user-profile__logout-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-
-  .user-profile__card {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
-    gap: 20px;
-  }
-
-  .user-profile__avatar-placeholder {
-    width: 80px;
-    height: 80px;
-    font-size: 28px;
-  }
-
-  .user-profile__name {
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-
-  .user-profile__detail {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-}
-
+.telegram-modal { /* красный */ }
 @media (max-width: 480px) {
-  .user-profile {
-    padding: 40px 0;
+  .telegram-modal__content {
+    width: 94%;
+    padding: 16px;
   }
-
-  .user-profile__header {
+  .telegram-modal__actions {
     flex-direction: column;
-    gap: 20px;
-    align-items: flex-start;
-  }
-
-  .user-profile h2 {
-    font-size: 24px;
-  }
-
-  .user-profile__actions {
-    flex-direction: column;
-    width: 100%;
     gap: 10px;
+    align-items: stretch;
   }
-
-  .user-profile__edit-button,
-  .user-profile__logout-button {
+  .telegram-modal__open-bot, .telegram-modal__check-button, .telegram-modal__close-button {
     width: 100%;
     text-align: center;
-    padding: 10px;
-    font-size: 13px;
-  }
-
-  .user-profile__card {
-    padding: 15px;
-  }
-
-  .user-profile__avatar-placeholder {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-  }
-
-  .user-profile__name {
-    font-size: 20px;
-  }
-
-  .user-profile__detail {
-    font-size: 13px;
   }
 }

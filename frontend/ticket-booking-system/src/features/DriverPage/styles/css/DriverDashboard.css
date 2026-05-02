@@ -1,6 +1,6 @@
 .driver-dashboard {
   padding: 80px 0;
-  background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+  background: linear-gradient(135deg, rgba(111, 220, 227, 0.06) 0%, #f5f7fa 100%);
   min-height: 100vh;
   font-family: "Inter", sans-serif;
 }
@@ -18,10 +18,10 @@
   animation: fadeInDown 0.6s ease-out;
 }
 .driver-dashboard__welcome span {
-  color: #007bff;
+  color: #5C88C4;
 }
 .driver-dashboard__route-card, .driver-dashboard__passengers-card {
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   padding: 30px;
@@ -36,7 +36,7 @@
 }
 .driver-dashboard__route-name {
   font-size: 20px;
-  color: #007bff;
+  color: #5C88C4;
   font-weight: 500;
   margin-bottom: 25px;
   text-align: center;
@@ -49,31 +49,33 @@
 }
 .driver-dashboard__radio-btn {
   padding: 12px 40px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.driver-dashboard__radio-btn:hover {
+  background: #456fa8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
+}
+.driver-dashboard__radio-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(76, 140, 228, 0.2);
+}
+.driver-dashboard__radio-btn a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.driver-dashboard__radio-btn {
   padding: 10px 18px;
   font-size: 14px;
   border-radius: 8px;
   text-transform: none;
-}
-.driver-dashboard__radio-btn:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-}
-.driver-dashboard__radio-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-}
-.driver-dashboard__radio-btn a {
-  color: #fff;
-  text-decoration: none;
 }
 .driver-dashboard__stops {
   display: flex;
@@ -85,33 +87,33 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: #f8f9fa;
+  background: rgba(111, 220, 227, 0.06);
   border-radius: 8px;
 }
 .driver-dashboard__stop-name {
   font-size: 17px;
-  color: #333;
+  color: #1a2a44;
   font-weight: 500;
 }
 .driver-dashboard__arrived-btn {
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
-  background: #007bff;
-  color: #fff;
+  background: #5C88C4;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 .driver-dashboard__arrived-btn:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
 }
 .driver-dashboard__arrived-btn--active {
-  background: #28a745;
+  background: #6FDCE3;
 }
 .driver-dashboard__arrived-btn--active:hover {
-  background: #218838;
+  background: rgb(76.8418604651, 211.6976744186, 220.3581395349);
 }
 .driver-dashboard__passengers-list {
   display: flex;
@@ -123,7 +125,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 18px;
-  background: #f9fafc;
+  background: rgba(111, 220, 227, 0.06);
   border-radius: 10px;
   border: 1px solid #ebedf0;
 }
@@ -136,7 +138,7 @@
 .driver-dashboard__passenger-info span {
   display: block;
   font-size: 15px;
-  color: #666;
+  color: rgb(68.3191489362, 110.3617021277, 178.6808510638);
   margin-bottom: 4px;
 }
 .driver-dashboard__passenger-actions {
@@ -146,29 +148,31 @@
 }
 .driver-dashboard__btn-present {
   padding: 12px 40px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-  padding: 10px 16px;
-  font-size: 14px;
 }
 .driver-dashboard__btn-present:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
 }
 .driver-dashboard__btn-present:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(76, 140, 228, 0.2);
 }
 .driver-dashboard__btn-present a {
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
+}
+.driver-dashboard__btn-present {
+  padding: 10px 16px;
+  font-size: 14px;
 }
 .driver-dashboard__btn-complain {
   background: #ff4d4f;
@@ -179,8 +183,6 @@
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
-  padding: 10px 16px;
-  font-size: 14px;
 }
 .driver-dashboard__btn-complain:hover {
   background: #d9363e;
@@ -191,13 +193,17 @@
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }
+.driver-dashboard__btn-complain {
+  padding: 10px 16px;
+  font-size: 14px;
+}
 .driver-dashboard__delay-section {
   text-align: center;
   margin: 40px 0;
 }
 .driver-dashboard__delay-btn {
   padding: 14px 32px;
-  background: #ffc107;
+  background: #FFFDB5;
   color: #212529;
   border: none;
   border-radius: 10px;
@@ -208,13 +214,13 @@
   box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
 .driver-dashboard__delay-btn:hover {
-  background: #e0a800;
+  background: rgb(255, 251.8972972973, 140.2);
   transform: translateY(-3px);
 }
 .driver-dashboard__loading {
   text-align: center;
   font-size: 20px;
-  color: #007bff;
+  color: #5C88C4;
   margin-top: 100px;
 }
 .driver-dashboard__error {

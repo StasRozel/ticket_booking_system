@@ -23,19 +23,19 @@
 }
 
 .radio-back-btn {
-  padding: 10px 20px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  transition: background 0.3s ease;
+    padding: 10px 20px;
+    background: #5C88C4;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background 0.3s ease;
 }
 
 .radio-back-btn:hover {
-  background: #0056b3;
+    background: #456fa8;
 }
 
 /* Status Panel */

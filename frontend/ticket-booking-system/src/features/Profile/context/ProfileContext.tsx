@@ -3,7 +3,7 @@ import { TicketType } from '../../../shared/types/TicketType';
 import { ProfileContextType } from '../../../shared/types/ProfileContextType';
 import { UserType } from '../../../shared/types/UserType';
 import { BookingType } from '../../../shared/types/BookingType';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 

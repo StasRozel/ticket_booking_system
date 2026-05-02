@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/FormStaff.scss';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
 
 interface FormStaffProps {
   isOpen: boolean;

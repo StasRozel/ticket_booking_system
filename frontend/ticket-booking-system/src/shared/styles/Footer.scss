@@ -1,11 +1,15 @@
+@use './colors' as *;
+
 .footer {
-    background: #1a2a44;
-    color: #fff;
+    background: $neutral-100;
+    color: $text-dark;
     padding: 50px 0;
+    border-top: 5px solid #2f5da7;
   
     .container {
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 20px;
     }
   
     &__grid {
@@ -19,6 +23,7 @@
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 20px;
+        color: $text-dark;
       }
   
       ul {
@@ -29,11 +34,13 @@
           margin-bottom: 10px;
   
           a {
-            color: #ccc;
+            color: #666;
             text-decoration: none;
             font-size: 14px;
+            transition: color 0.3s ease;
+
             &:hover {
-              color: #fff;
+              color: $primary;
             }
           }
         }

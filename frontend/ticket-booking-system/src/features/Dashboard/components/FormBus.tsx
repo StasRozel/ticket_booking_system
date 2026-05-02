@@ -30,7 +30,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
     const [error, setError] = useState<string | null>(null);
     const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
-    const { NewBus, UpdateBus } = useDashboard();
+    const { createEntity, updateEntity } = useDashboard();
 
     // Синхронизация состояния формы с пропсом bus
     useEffect(() => {
@@ -99,7 +99,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
     const handleSubmitAdd = async () => {
         if (!validateForm()) return;
         try {
-            await NewBus({
+            await createEntity('/buses',{
                 bus_number: busNumber,
                 capacity: [capacity],
                 type,
@@ -118,7 +118,7 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
         if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID автобуса не определён');
-            await UpdateBus(id, {
+            await updateEntity('/buses', id, {
                 bus_number: busNumber,
                 capacity: [capacity, -1],
                 type,

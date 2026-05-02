@@ -55,7 +55,7 @@
 }
 .contacts__form .form-group input:focus,
 .contacts__form .form-group textarea:focus {
-  border-color: #007bff;
+  border-color: #5C88C4;
   outline: none;
 }
 .contacts__form .form-group textarea {
@@ -65,7 +65,7 @@
 .contacts__submit {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: linear-gradient(135deg, #5C88C4 0%, #456fa8 100%);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -75,7 +75,7 @@
   transition: background 0.3s ease, transform 0.1s ease;
 }
 .contacts__submit:hover {
-  background: linear-gradient(135deg, #0056b3 0%, #003087 100%);
+  background: linear-gradient(135deg, #456fa8 0%, #2b4f79 100%);
   transform: translateY(-2px);
 }
 .contacts__info {

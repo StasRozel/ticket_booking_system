@@ -4,7 +4,7 @@ import FormUpdateBusSchedule from './FormBusSchedule';
 import { useDashboard } from '../context/DashboardContext';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
-import { formatDate, formatTime } from '../../../shared/services/formatDateTime';
+import { formatDate, formatTime } from '../../../shared/utils/formatDateTime';
 import { BusScheduleType } from '../../../shared/types/BusScheduleType'; // Предполагается, что тип BusScheduleType определён
 import { BusType } from '../../../shared/types/BusType'; // Предполагается, что тип BusType определён
 import { ScheduleType } from '../../../shared/types/ScheduleType'; // Предполагается, что тип ScheduleType определён
@@ -22,7 +22,7 @@ const BusSchedulesManagement: React.FC = () => {
         fetchBusSchedules,
         fetchBuses,
         fetchSchedules,
-        DeleteBusSchedule,
+        deleteEntity,
     } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     const [selectedBusSchedule, setSelectedBusSchedule] = useState<BusScheduleType | null>(null);
@@ -31,11 +31,11 @@ const BusSchedulesManagement: React.FC = () => {
         fetchBusSchedules();
         fetchBuses();
         fetchSchedules();
-    }, [trigger]);
+    }, [trigger, fetchBusSchedules, fetchBuses, fetchSchedules]);
 
     const handleEditBusSchedule = (busSchedule: BusScheduleType) => {
         setSelectedBusSchedule(busSchedule);
-        OpenModalForm(false); // Открываем форму в режиме редактирования
+        OpenModalForm(false);
     };
 
     return (
@@ -79,7 +79,7 @@ const BusSchedulesManagement: React.FC = () => {
                                         onClick={() =>
                                             openModal(
                                                 'Вы точно хотите удалить движение транспорта по этому пути?',
-                                                () => DeleteBusSchedule(route.id as number)
+                                                () => deleteEntity('/bus-schedules', route.id as number)
                                             )
                                         }
                                     >

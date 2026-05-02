@@ -36,7 +36,7 @@
   transition: border-color 0.3s;
 }
 .login__field input:focus {
-  border-color: #007bff;
+  border-color: #5C88C4;
 }
 .login__field input::-moz-placeholder {
   color: #999;
@@ -46,7 +46,7 @@
 }
 .login__button {
   padding: 12px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 5px;
   color: #fff;
@@ -56,7 +56,7 @@
   transition: background 0.3s;
 }
 .login__button:hover {
-  background: #0056b3;
+  background: #456fa8;
 }
 .login__link {
   margin-top: 20px;
@@ -64,7 +64,7 @@
   color: #666;
 }
 .login__link a {
-  color: #007bff;
+  color: #5C88C4;
   text-decoration: none;
 }
 .login__link a:hover {

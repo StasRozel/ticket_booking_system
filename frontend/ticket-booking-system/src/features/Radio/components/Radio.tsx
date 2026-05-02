@@ -48,9 +48,9 @@ export const Radio: React.FC = () => {
                   <li key={clientId} style={{ padding: "5px", borderBottom: "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span>{clientId} {isConnected ? "✅" : "❌"}</span>
                     {!isConnected && (
-                      <button
+                        <button
                         onClick={() => createPeerConnection(clientId, true)}
-                        style={{ padding: "5px 10px", background: "#007bff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+                        style={{ padding: "5px 10px", background: "#5C88C4", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
                       >
                         Подключить
                       </button>

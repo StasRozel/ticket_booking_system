@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserType } from '../../../shared/types/UserType';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
 
 type Props = {
   user: UserType;

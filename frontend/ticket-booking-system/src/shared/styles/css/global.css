@@ -1,0 +1,27 @@
+/* Global layout rules to keep footer at the bottom without gaps */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Ensure the app container fills viewport and uses column flex layout */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let main expand to push the footer to the bottom when content is short */
+.app main {
+  flex: 1 0 auto;
+}
+
+/* Reset any default footer margin that could create gaps */
+.footer {
+  margin-top: 0;
+}
+
+/* Optional: ensure body doesn't introduce gaps */
+body {
+  display: block;
+}

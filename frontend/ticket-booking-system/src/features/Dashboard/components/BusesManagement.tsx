@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../styles/css/EntitesManagement.css';
 import { useDashboard } from '../context/DashboardContext';
 import FormUpdateBus from './FormBus';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
-import { BusType } from '../../../shared/types/BusType'; // Предполагается, что тип BusType определён
+import { BusType } from '../../../shared/types/BusType'; 
 
 const BusesManagement: React.FC = () => {
-    const { buses, trigger, fetchBuses, DeleteBus, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen, currentEntity } = useDashboard();
+    const { buses, trigger, fetchBuses, deleteEntity, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen, currentEntity } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
 
     useEffect(() => {
         fetchBuses();
-    }, [trigger]);
+    }, [trigger, fetchBuses]);
 
     const handleEditBus = (bus: BusType) => {
-        OpenModalForm(false, bus); // Открываем форму в режиме редактирования
+        OpenModalForm(false, bus);
     };
 
     return (
@@ -50,7 +50,7 @@ const BusesManagement: React.FC = () => {
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => openModal('Вы точно хотите удалить транспорт?', () => DeleteBus(bus.id as number))}
+                                        onClick={() => openModal('Вы точно хотите удалить транспорт?', () => deleteEntity('/buses', bus.id as number))}
                                     >
                                         🗑️
                                     </button>

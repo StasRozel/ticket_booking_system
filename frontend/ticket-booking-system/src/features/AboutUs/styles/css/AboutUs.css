@@ -82,7 +82,7 @@
   content: "✔";
   position: absolute;
   left: 0;
-  color: #007bff;
+  color: #5C88C4;
   font-size: 14px;
 }
 .about-us__card ul li:hover {
@@ -95,7 +95,7 @@
 .about-us__cta-button {
   display: inline-block;
   padding: 12px 30px;
-  background: #007bff;
+  background: #5C88C4;
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -104,13 +104,13 @@
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
 .about-us__cta-button:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(92, 136, 196, 0.3);
 }
 .about-us__cta-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(92, 136, 196, 0.2);
 }
 @keyframes fadeInDown {
   from {

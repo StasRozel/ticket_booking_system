@@ -1,3 +1,5 @@
+@use '../../../shared/styles/colors' as *;
+@use 'sass:color' as color;
 // src/styles/Contacts.scss
 .contacts {
     padding: 120px 0;
@@ -11,7 +13,7 @@
       h1 {
         font-size: 36px;
         font-weight: 700;
-        color: #1a2a44;
+        color: $text-dark;
         margin-bottom: 16px;
       }
   
@@ -33,7 +35,7 @@
   
     &__form {
       flex: 1;
-      background: #fff;
+      background: $neutral-100;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
@@ -45,7 +47,7 @@
           display: block;
           font-size: 16px;
           font-weight: 500;
-          color: #1a2a44;
+          color: $text-dark;
           margin-bottom: 8px;
         }
   
@@ -53,14 +55,14 @@
         textarea {
           width: 100%;
           padding: 12px;
-          border: 1px solid #ebedf0;
+          border: 1px solid $neutral-border;
           border-radius: 8px;
           font-size: 16px;
           color: #333;
           transition: border-color 0.3s ease;
   
           &:focus {
-            border-color: #007bff;
+            border-color: $primary;
             outline: none;
           }
         }
@@ -75,8 +77,8 @@
     &__submit {
       width: 100%;
       padding: 12px;
-      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-      color: #fff;
+      background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+      color: $neutral-100;
       border: none;
       border-radius: 8px;
       font-size: 16px;
@@ -85,7 +87,7 @@
       transition: background 0.3s ease, transform 0.1s ease;
   
       &:hover {
-        background: linear-gradient(135deg, #0056b3 0%, #003087 100%);
+        background: linear-gradient(135deg, $primary-dark 0%, color.adjust($primary-dark, $lightness: -12%) 100%);
         transform: translateY(-2px);
       }
     }
@@ -93,13 +95,13 @@
     &__info {
       flex: 1;
       padding: 30px;
-      background: #f9fafc;
+      background: $bg-soft;
       border-radius: 12px;
   
       h2 {
         font-size: 24px;
         font-weight: 600;
-        color: #1a2a44;
+        color: $text-dark;
         margin-bottom: 20px;
       }
   

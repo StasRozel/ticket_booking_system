@@ -36,14 +36,17 @@
   transition: border-color 0.3s;
 }
 .register__field input:focus {
-  border-color: #007bff;
+  border-color: #5C88C4;
+}
+.register__field input::-moz-placeholder {
+  color: #999;
 }
 .register__field input::placeholder {
   color: #999;
 }
 .register__button {
   padding: 12px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 5px;
   color: #fff;
@@ -53,7 +56,7 @@
   transition: background 0.3s;
 }
 .register__button:hover {
-  background: #0056b3;
+  background: #456fa8;
 }
 .register__link {
   margin-top: 20px;
@@ -61,7 +64,7 @@
   color: #666;
 }
 .register__link a {
-  color: #007bff;
+  color: #5C88C4;
   text-decoration: none;
 }
 .register__link a:hover {

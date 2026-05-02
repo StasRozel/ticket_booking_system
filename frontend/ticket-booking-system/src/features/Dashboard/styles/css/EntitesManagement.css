@@ -18,26 +18,26 @@
   width: 1150px;
   margin: 15px 0px;
   padding: 12px 40px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
 .routes-management__button__confirm:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
 }
 .routes-management__button__confirm:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(76, 140, 228, 0.2);
 }
 .routes-management__button__confirm a {
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
 }
 .routes-management__table {
@@ -65,7 +65,6 @@
   width: 100%;
   background: #f5f7fa;
   font-weight: 600;
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
 }
@@ -81,7 +80,7 @@
   margin-right: 5px;
 }
 .routes-management__action:first-child {
-  background: #007bff;
+  background: #5C88C4;
   color: #fff;
 }
 .routes-management__action--delete {

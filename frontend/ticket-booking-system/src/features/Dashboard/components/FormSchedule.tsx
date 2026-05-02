@@ -12,6 +12,8 @@ interface FormUpdateScheduleProps {
   schedule?: ScheduleType | null;
 }
 
+const isClosing = false;
+
 const scheduleSchema = z.object({
   route_id: z.number().min(1, 'ID маршрута обязателен'),
   departure_time: z
@@ -38,18 +40,15 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
   const [route_id, setRouteId] = useState<number>(0);
   const [departure_time, setDepartureTime] = useState<string>('');
   const [arrival_time, setArrivalTime] = useState<string>('');
-  const [isClosing, setIsClosing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
-  const { NewSchedule, UpdateSchedule } = useDashboard();
+  const { createEntity, updateEntity } = useDashboard();
 
-  // Синхронизация состояния формы с пропсом schedule
   useEffect(() => {
     if (schedule && !isActive) {
       setId(schedule.id);
       setRouteId(schedule.route_id || 0);
-      // Убедимся, что время в формате HH:mm:ss
       const formatTime = (time: string) => time.replace(/(\d{2}:\d{2}:\d{2}).*/, '$1');
       setDepartureTime(formatTime(schedule.departure_time || ''));
       setArrivalTime(formatTime(schedule.arrival_time || ''));
@@ -60,34 +59,7 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
       setArrivalTime('');
     }
   }, [schedule, isActive]);
-
-  // Обработчик для начала закрытия с анимацией
-  const handleClose = () => {
-    setIsClosing(true);
-    setValidationErrors({}); // Очистка ошибок при закрытии
-  };
-
-  // Эффект для завершения закрытия после анимации
-  useEffect(() => {
-    if (isClosing) {
-      const timer = setTimeout(() => {
-        setIsClosing(false);
-        onClose();
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isClosing, onClose]);
-
-  // Эффект для обработки клавиши Escape
-  useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen && !isClosing) {
-        handleClose();
-      }
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [isOpen, isClosing]);
+  
 
   const validateForm = () => {
     const result = scheduleSchema.safeParse({
@@ -110,14 +82,14 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
   const handleSubmitAdd = async () => {
     if (!validateForm()) return;
     try {
-      await NewSchedule({
+      await createEntity('/schedules', {
         route_id,
         departure_time,
         arrival_time,
       });
       console.log('Расписание успешно добавлено!');
       setError(null);
-      handleClose();
+      onClose();
     } catch (error) {
       console.error('Ошибка при добавлении расписания:', error);
       setError('Ошибка при добавлении расписания. Попробуйте снова.');
@@ -128,14 +100,14 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
     if (!validateForm()) return;
     try {
       if (id === undefined) throw new Error('ID расписания не определён');
-      await UpdateSchedule(id, {
+      await updateEntity('/schedules', id, {
         route_id,
         departure_time,
         arrival_time,
       });
       console.log('Расписание успешно обновлено!');
       setError(null);
-      handleClose();
+      onClose();
     } catch (error) {
       console.error('Ошибка при обновлении расписания:', error);
       setError('Ошибка при обновлении расписания. Попробуйте снова.');
@@ -152,7 +124,7 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
   return (
     <div
       className={`modal-overlay ${isClosing ? 'modal-overlay--fade-out' : 'modal-overlay--fade-in'}`}
-      onClick={handleClose}
+      onClick={onClose}
     >
       <div
         className={`modal-content ${isClosing ? 'modal-content--slide-out' : 'modal-content--slide-in'}`}
@@ -165,7 +137,7 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
             dispatchHandles(isActive);
           }}
         >
-          <button type="button" className="modal-close" onClick={handleClose}>
+          <button type="button" className="modal-close" onClick={onClose}>
             ×
           </button>
           <div className="form-new-routes__field">

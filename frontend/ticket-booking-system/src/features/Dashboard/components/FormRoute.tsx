@@ -4,6 +4,7 @@ import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
 import { RouteType } from '../../../shared/types/RouteType';
 import { z } from 'zod';
+import { validate } from '../../../shared/utils/validateForm';
 
 interface FormUpdateRouteProps {
     isOpen: boolean;
@@ -29,12 +30,10 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
     const [stops, setStops] = useState('');
     const [distance, setDistance] = useState<number>(0);
     const [price, setPrice] = useState<number>(0);
-    const [isClosing, setIsClosing] = useState(false);
     const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
-    const { NewRoute, UpdateRoute } = useDashboard();
+    const { createEntity, updateEntity } = useDashboard();
 
-    // Синхронизация состояния формы с пропсом route
     useEffect(() => {
         if (route && !isActive) {
             setId(route.id);
@@ -45,7 +44,6 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
             setDistance(route.distance || 0);
             setPrice(route.price || 0);
         } else {
-            // Сбрасываем состояние для режима добавления
             setId(undefined);
             setName('');
             setStartingPoint('');
@@ -56,35 +54,9 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
         }
     }, [route, isActive]);
 
-    // Обработчик для начала закрытия с анимацией
-    const handleClose = () => {
-        setIsClosing(true);
-    };
-
-    // Эффект для завершения закрытия после анимации
-    useEffect(() => {
-        if (isClosing) {
-            const timer = setTimeout(() => {
-                setIsClosing(false);
-                onClose();
-            }, 300);
-            return () => clearTimeout(timer);
-        }
-    }, [isClosing, onClose]);
-
-    // Эффект для обработки клавиши Escape
-    useEffect(() => {
-        const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && isOpen && !isClosing) {
-                handleClose();
-            }
-        };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [isOpen, isClosing]);
 
     const validateForm = () => {
-        const result = routeSchema.safeParse({
+        const result = validate(routeSchema, {
             name,
             starting_point,
             ending_point,
@@ -92,22 +64,16 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
             distance,
             price,
         });
-        if (!result.success) {
-            const errors: { [key: string]: string } = {};
-            result.error.errors.forEach((err) => {
-                if (err.path[0]) errors[err.path[0]] = err.message;
-            });
-            setValidationErrors(errors);
-            return false;
-        }
-        setValidationErrors({});
-        return true;
+
+        setValidationErrors(result.errors);
+        return result.success;
+
     };
 
     const handleSubmitAdd = async () => {
         if (!validateForm()) return;
         try {
-            await NewRoute({
+            await createEntity('/routes', {
                 name,
                 starting_point,
                 ending_point,
@@ -126,7 +92,7 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
         if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID маршрута не определён');
-            await UpdateRoute(id, {
+            await updateEntity('/routes', id, {
                 name,
                 starting_point,
                 ending_point,

@@ -1,6 +1,9 @@
+@use '../../../shared/styles/colors' as *;
+@use 'sass:color' as color;
+
 .user-profile {
   padding: 80px 0;
-  background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%); // Соответствует градиенту из minibus-schedule
+  background: linear-gradient(135deg, $bg-soft 0%, $neutral-200 100%); // Соответствует градиенту из minibus-schedule
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
 
@@ -21,7 +24,7 @@
   h2 {
     font-size: 36px;
     font-weight: 700;
-    color: #1a2a44; // Цвет заголовков из общей стилистики
+    color: $text-dark; // Цвет заголовков из общей стилистики
     margin: 0;
     letter-spacing: 0.5px;
   }
@@ -43,18 +46,18 @@
   }
 
   &__edit-button {
-    background: #007bff; // Акцентный цвет
-    color: #fff;
+    background: $primary; // Акцентный цвет
+    color: $neutral-100;
 
     &:hover {
-      background: #0056b3;
+      background: $primary-dark;
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(76,140,228,0.3);
     }
   }
 
   &__logout-button {
-    background: #ff4d4f; // Цвет для кнопки выхода, как в minibus-schedule
+    background: #ff4d4f; // Цвет для кнопки выхода, как в minibus-schedule (красный оставляем)
     color: #fff;
 
     &:hover {
@@ -65,7 +68,7 @@
   }
 
   &__card {
-    background: #fff;
+    background: $neutral-100;
     border-radius: 12px; // Скругления, как в таблице minibus-schedule
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     padding: 30px;
@@ -82,8 +85,8 @@
   &__avatar-placeholder {
     width: 100px;
     height: 100px;
-    background: #007bff;
-    color: #fff;
+    background: $primary;
+    color: $neutral-100;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,16 +104,16 @@
     flex: 1;
   }
 
-  &__name {
+    &__name {
     font-size: 28px;
     font-weight: 600;
-    color: #1a2a44;
+    color: $text-dark;
     margin-bottom: 20px;
   }
 
   &__detail {
     font-size: 16px;
-    color: #666;
+    color: color.adjust($text-dark, $lightness: 30%);
     margin-bottom: 15px;
     line-height: 1.5;
 

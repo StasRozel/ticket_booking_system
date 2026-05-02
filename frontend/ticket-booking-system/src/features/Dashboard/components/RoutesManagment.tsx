@@ -7,17 +7,17 @@ import { useModal } from '../../../shared/context/ModalContext';
 import { RouteType } from '../../../shared/types/RouteType';
 
 const RoutesManagement: React.FC = () => {
-    const { routes, trigger, fetchRoutes, DeleteRoute, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
+    const { routes, trigger, fetchRoutes, deleteEntity, OpenModalForm, CloseModalForm, isAddMode, isModalFormOpen } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     const [selectedRoute, setSelectedRoute] = useState<RouteType | null>(null);
 
     useEffect(() => {
         fetchRoutes();
-    }, [trigger]);
+    }, [trigger, fetchRoutes]);
 
     const handleEditRoute = (route: RouteType) => {
         setSelectedRoute(route);
-        OpenModalForm(false); // Открываем форму в режиме редактирования
+        OpenModalForm(false);
     };
 
     return (
@@ -55,7 +55,7 @@ const RoutesManagement: React.FC = () => {
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => openModal('Вы уверены, что хотите удалить путь?', () => DeleteRoute(route.id as number))}
+                                        onClick={() => openModal('Вы уверены, что хотите удалить путь?', () => deleteEntity('/routes', route.id as number))}
                                     >
                                         🗑️
                                     </button>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
 
 // ---------------------- Типы ----------------------
 interface Stop {

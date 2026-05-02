@@ -73,7 +73,6 @@ const DriverComplaintsManager: React.FC = () => {
                 <th>ID</th>
                 <th>Водитель</th>
                 <th>Пассажир</th>
-                <th>Дата</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -97,7 +96,6 @@ const DriverComplaintsManager: React.FC = () => {
                         </div>
                       )}
                     </td>
-                    <td>{formatDate(complaint.createdAt)}</td>
                     <td>
                       <div className="driver-complaints__actions">
                         <button

@@ -10,7 +10,7 @@
 }
 .minibus-schedule .header__action {
   padding: 12px 40px;
-  background: #007bff;
+  background: #5C88C4;
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -20,7 +20,7 @@
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
 .minibus-schedule .header__action:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
@@ -47,7 +47,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: #007bff;
+  background: #5C88C4;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -57,7 +57,7 @@
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
 .minibus-schedule__refresh-button:hover {
-  background: #0056b3;
+  background: #456fa8;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
@@ -85,7 +85,7 @@
 }
 .minibus-schedule__loading {
   font-size: 18px;
-  color: #007bff;
+  color: #5C88C4;
   text-align: center;
   margin-top: 40px;
   font-weight: 500;
@@ -157,7 +157,6 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 1;

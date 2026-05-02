@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AddEntityButton from './AddEntityButton';
 import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
-import { BusScheduleType, BusScheduleResponse } from '../../../shared/types/BusScheduleType';
+import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { z } from 'zod';
 
 interface FormUpdateBusScheduleProps {
@@ -30,7 +30,7 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
     const [error, setError] = useState<string | null>(null);
     const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
-    const { NewBusSchedule, UpdateBusSchedule } = useDashboard();
+    const { createEntity, updateEntity } = useDashboard();
 
     // Получить сегодняшнюю дату в формате YYYY-MM-DD
     const today = new Date().toISOString().split('T')[0];
@@ -99,7 +99,7 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
     const handleSubmitAdd = async () => {
         if (!validateForm()) return;
         try {
-            await NewBusSchedule({
+            await createEntity('/bus-schedules', {
                 schedule_id,
                 bus_id,
                 operating_days,
@@ -118,7 +118,7 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
         if (!validateForm()) return;
         try {
             if (id === undefined) throw new Error('ID расписания автобуса не определён');
-            await UpdateBusSchedule(id, {
+            await updateEntity('/bus-schedules', id, {
                 schedule_id,
                 bus_id,
                 operating_days,

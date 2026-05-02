@@ -1,0 +1,200 @@
+.urgent-calls {
+  padding: 20px;
+}
+.urgent-calls h2 {
+  margin: 0 0 25px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+}
+.urgent-calls__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.urgent-calls__item {
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.urgent-calls__item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+.urgent-calls__item > div {
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #555;
+}
+.urgent-calls__item > div:last-child {
+  margin-bottom: 0;
+}
+.urgent-calls__item > div strong {
+  color: #333;
+  font-weight: 600;
+}
+.urgent-calls__info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 15px;
+}
+.urgent-calls__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.urgent-calls__info-item label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.urgent-calls__info-item span {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+}
+.urgent-calls__status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.urgent-calls__status--accepted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.urgent-calls__status--pending {
+  background: #fff3e0;
+  color: #e65100;
+}
+.urgent-calls__actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.urgent-calls__actions button {
+  padding: 10px 16px;
+  background: #5C88C4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+.urgent-calls__actions button:hover {
+  background: #456fa8;
+}
+.urgent-calls__actions button:active {
+  transform: scale(0.98);
+}
+.urgent-calls__actions button.cancel {
+  background: #6c757d;
+}
+.urgent-calls__actions button.cancel:hover {
+  background: #5a6268;
+}
+.urgent-calls__actions button.apply {
+  background: #28a745;
+}
+.urgent-calls__actions button.apply:hover {
+  background: #218838;
+}
+.urgent-calls__replace-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.urgent-calls__replace-form input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  flex: 1;
+  min-width: 120px;
+}
+.urgent-calls__replace-form input:focus {
+  border-color: #5C88C4;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+.urgent-calls__replace-form input::-moz-placeholder {
+  color: #999;
+}
+.urgent-calls__replace-form input::placeholder {
+  color: #999;
+}
+.urgent-calls__replace-form button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.urgent-calls__replace-form button:first-of-type {
+  background: #28a745;
+  color: white;
+}
+.urgent-calls__replace-form button:first-of-type:hover {
+  background: #218838;
+}
+.urgent-calls__replace-form button:last-of-type {
+  background: #6c757d;
+  color: white;
+}
+.urgent-calls__replace-form button:last-of-type:hover {
+  background: #5a6268;
+}
+.urgent-calls__empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .urgent-calls {
+    padding: 15px;
+  }
+  .urgent-calls h2 {
+    font-size: 24px;
+  }
+  .urgent-calls__item {
+    padding: 15px;
+  }
+  .urgent-calls__info {
+    grid-template-columns: 1fr;
+  }
+  .urgent-calls__replace-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .urgent-calls__replace-form input {
+    min-width: 100%;
+  }
+  .urgent-calls__replace-form button {
+    width: 100%;
+  }
+  .urgent-calls__actions button {
+    flex: 1;
+    min-width: 120px;
+  }
+}

@@ -1,14 +1,16 @@
-@import '../../../shared/styles/ConfirmButton.scss';
-@import '../../../shared/styles/CanselButton.scss';
+@use '../../../shared/styles/ConfirmButton' as *;
+@use '../../../shared/styles/CanselButton' as *;
+@use '../../../shared/styles/colors' as *;
+@use 'sass:color' as color;
 
 .booking-list {
   padding: 10px 0;
-  background: linear-gradient(135deg, #f9fafc 0%, #f5f7fa 100%);
+  background: linear-gradient(135deg, $bg-soft 0%, $neutral-200 100%);
 
   h2 {
     font-size: 36px;
     font-weight: 700;
-    color: #1a2a44;
+    color: $text-dark;
     margin-bottom: 40px;
     text-align: center;
     animation: fadeInDown 0.5s ease-out;
@@ -22,7 +24,7 @@
 
   &__loading {
     font-size: 18px;
-    color: #007bff;
+    color: $primary;
     text-align: center;
     margin-top: 40px;
     font-weight: 500;
@@ -58,19 +60,19 @@
 
   // Фон в зависимости от статуса
   &--выбран {
-    background: #fff3cd; // Желтый фон
+    background: $highlight; // Желтый фон
   }
 
   &--забронирован {
-    background: #d4edda; // Зеленый фон
+    background: rgba($accent, 0.12); // Акцентный фон
   }
 
   &--отменен {
-    background: #f8d7da; // Красный фон
+    background: #f8d7da; // Красный фон (оставлен)
   }
 
   &--истек {
-    background: #d1ecf1; // Синий фон
+    background: rgba($primary, 0.12); // Синий/инфо фон
   }
 
   &__header {
@@ -78,7 +80,7 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 20px;
-    border-bottom: 1px solid #ebedf0;
+    border-bottom: 1px solid $neutral-border;
     padding-bottom: 10px;
 
     h3 {
@@ -99,13 +101,13 @@
       font-weight: 500;
 
       &--выбран {
-        background: #ffeeba;
-        color: #856404;
+        background: color.adjust($highlight, $lightness: 12%);
+          color: color.adjust($highlight, $lightness: -30%);
       }
 
       &--забронирован {
-        background: #c3e6cb;
-        color: #155724;
+        background: rgba($accent, 0.12);
+        color: color.adjust($accent, $lightness: -30%);
       }
 
       &--отменен {
@@ -114,8 +116,8 @@
       }
 
       &--истек {
-        background: #bee5eb;
-        color: #0c5460;
+        background: rgba($primary, 0.12);
+        color: color.adjust($primary, $lightness: -30%);
       }
     }
   }

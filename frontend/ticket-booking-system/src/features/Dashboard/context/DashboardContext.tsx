@@ -1,12 +1,14 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import { socket } from '../../..';
 import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { BusType } from '../../../shared/types/BusType';
 import { DashboardContextType } from '../../../shared/types/DashboardContextType';
-import { RouteType } from '../../../shared/types/RouteType';
 import { ScheduleType } from '../../../shared/types/ScheduleType';
 import { UserType } from '../../../shared/types/UserType';
-import api from '../../../shared/services/api';
+import api from '../../../shared/utils/api';
+import { RouteType } from '../../../shared/types/RouteType';
+
+type EntityType = RouteType | BusScheduleType | BusType | ScheduleType;
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
@@ -25,123 +27,73 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const NewRoute = async (newRoute: RouteType): Promise<void> => {
-        await api.post('/routes', newRoute);
-        setTrigger(next => ++next);
-    };
+    const createEntity = async (route: string, newEntity: EntityType): Promise<void> => {
+        try {
+            const response = await api.post(route, newEntity);
+            if (response.data) {
+                setTrigger(next => ++next);
+            }
+        } catch (error) {
+            console.error('Error creating entity:', error);
+            throw new Error('Failed to create entity');
+        }
+    } 
 
-    const UpdateRoute = async (id: number, updRoute: RouteType): Promise<void> => {
-        await api.patch(`/routes/${id}`, updRoute);
-        setTrigger(next => ++next);
-    };
+    const updateEntity = async (route: string, id: number, updateEntity: EntityType): Promise<void> => {
+        try {
+            const response = await api.patch(`${route}/${id}`, updateEntity);
+            if (response.data) {
+                setTrigger(next => ++next);
+            }
+        } catch (error: any) {
+            console.error('Error creating entity:', error);
+            throw new Error('Failed to create entity');
+        }
+    }
 
-    const fetchRoutes = async () => {
+    const deleteEntity = async (route: string, id: number): Promise<void> => {
+        await api.delete(`${route}/${id}`);
+        //socket.emit('deleteBusSchedule', id);
+        setTrigger(next => ++next);
+        console.log(`Deleting route ${trigger}`);
+    }
+
+    const fetchRoutes = useCallback(async () => {
         try {
             const response = await api.get('/routes/');
             setRoutes(response.data);
         } catch (error) {
             console.error('Error fetching routes:', error);
         }
-    };
+    }, []);
 
-    const DeleteRoute = async (id: number) => {
-        await api.delete(`/routes/${id}`);
-        setTrigger(next => ++next);
-        console.log(`Deleting route ${trigger}`);
-    };
-
-    const fetchSchedules = async () => {
+    const fetchSchedules = useCallback(async () => {
         try {
             const response = await api.get('/schedules/');
             setSchedules(response.data);
         } catch (error) {
             console.error('Error fetching routes:', error);
         }
-    };
+    }, []);
 
-    const NewSchedule = async (newSchedule: any): Promise<void> => {
-        await api.post('/schedules', newSchedule);
-        setTrigger(next => ++next);
-    };
 
-    const UpdateSchedule = async (id: number, updSchedule: ScheduleType): Promise<void> => {
-        await api.patch(`/schedules/${id}`, updSchedule);
-        setTrigger(next => ++next);
-    };
-
-    const DeleteSchedule = async (id: number) => {
-        await api.delete(`/schedules/${id}`);
-        setTrigger(next => ++next);
-        console.log(`Deleting route ${trigger}`);
-    };
-
-    const fetchBuses = async () => {
+    const fetchBuses = useCallback(async () => {
         try {
             const response = await api.get('/buses/');
             setBuses(response.data);
         } catch (error) {
             console.error('Error fetching routes:', error);
         }
-    };
+    }, []);
 
-    const NewBus = async (newSchedule: any): Promise<void> => {
-        await api.post('/buses', newSchedule);
-        setTrigger(next => ++next);
-    };
-
-    const UpdateBus = async (id: number, updSchedule: BusType): Promise<void> => {
-        await api.patch(`/buses/${id}`, updSchedule);
-        setTrigger(next => ++next);
-    };
-
-    const DeleteBus = async (id: number) => {
-        await api.delete(`/buses/${id}`);
-        setTrigger(next => ++next);
-        console.log(`Deleting route ${trigger}`);
-    };
-
-    const fetchBusSchedules = async () => {
+    const fetchBusSchedules = useCallback(async () => {
         try {
             const response = await api.get('/bus-schedules/');
             setBusSchedules(response.data);
         } catch (error) {
             console.error('Error fetching routes:', error);
         }
-    };
-
-    const NewBusSchedule = async (newBusSchedule: BusScheduleType): Promise<void> => {
-        try {
-            const response = await api.post('/bus-schedules', newBusSchedule);
-            if (response.data) {
-                setTrigger(next => ++next);
-            }
-        } catch (error) {
-            console.error('Error creating bus schedule:', error);
-            throw new Error('Failed to create bus schedule');
-        }
-    };
-
-    const UpdateBusSchedule = async (id: number, updBusSchedule: BusScheduleType): Promise<void> => {
-        try {
-            const response = await api.patch(`/bus-schedules/${id}`, updBusSchedule);
-            if (response.data) {
-                setTrigger(next => ++next);
-            } else {
-                throw new Error('Сервер не вернул обновленные данные');
-            }
-        } catch (error: any) {
-            console.error('Error updating bus schedule:', error);
-            const errorMessage = error.response?.data?.message || error.message || 'Не удалось обновить расписание';
-            throw new Error(errorMessage);
-        }
-    };
-
-    const DeleteBusSchedule = async (id: number) => {
-        await api.delete(`/bus-schedules/${id}`);
-        socket.emit('deleteBusSchedule', id);
-        setTrigger(next => ++next);
-        console.log(`Deleting route ${trigger}`);
-    };
+    }, []);
 
     const fetchUrgentCalls = async () => {
         try {
@@ -155,7 +107,6 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const updateUrgentCalls = async (id: number) => {
         try {
             await api.patch(`/urgentcalls/${id}`, {accepted: true});
-
         } catch (error) {
             
         }
@@ -241,11 +192,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     return (
         <DashboardContext.Provider value={{
-            routes, trigger, NewRoute, UpdateRoute, fetchRoutes, DeleteRoute,
-            schedules, fetchSchedules, NewSchedule, UpdateSchedule, DeleteSchedule,
+            routes, trigger, createEntity, updateEntity, fetchRoutes, deleteEntity,
+            schedules, fetchSchedules,
             users, loading, error, fetchUsers, toggleUserBlock,
-            buses, fetchBuses, NewBus, UpdateBus, DeleteBus,
-            busSchedules, fetchBusSchedules, NewBusSchedule, UpdateBusSchedule, DeleteBusSchedule,
+            buses, fetchBuses,
+            busSchedules, fetchBusSchedules,
             urgentCalls, fetchUrgentCalls, replaceBusScheduleDriverAndBus,
             driverComplaints, fetchDriverComplaints, deleteDriverComplaint,
             currentEntity,

@@ -45,19 +45,20 @@
   transition: background 0.3s ease, transform 0.1s ease;
 }
 .modal-button--confirm {
-  background: #28a745;
+  background: #ff4d4f; /* danger */
   color: #fff;
 }
 .modal-button--confirm:hover {
-  background: #218838;
+  background: #e63946;
   transform: translateY(-2px);
 }
 .modal-button--cancel {
-  background: #dc3545;
-  color: #fff;
+  background: #f5f7fa; /* neutral */
+  color: #1a2a44;
+  border: 1px solid #ebedf0;
 }
 .modal-button--cancel:hover {
-  background: #c82333;
+  background: #e9eef5;
   transform: translateY(-2px);
 }
 

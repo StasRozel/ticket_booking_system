@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
-import api, { login as apiLogin, register as apiRegister } from '../../../shared/services/api';
+import React, { createContext, useState, useContext, useCallback } from 'react';
+import api, { login as apiLogin, register as apiRegister } from '../../../shared/utils/api';
 import { socket } from '../../..';
 
 interface AuthContextType {
@@ -85,10 +85,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('accessToken', newAccessToken);
     };
 
-    const getRoleId = async (): Promise<void> =>  {
+    const getRoleId = useCallback(async (): Promise<void> =>  {
         const response = await api.get(`/users/${id}`);
         setRoleId(response.data.role_id);
-    }
+    }, [id])
 
     const getIsBlocked = async (): Promise<void> => {
         const response = await api.get(`/users/${id}`);

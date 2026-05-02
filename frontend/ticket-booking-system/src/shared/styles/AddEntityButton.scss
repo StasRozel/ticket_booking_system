@@ -1,15 +1,16 @@
+@use './colors' as *;
 .add-entity-button {
-    padding: 10px 20px;
-    background: #007bff;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-    width: 100%;;
-
-    &:hover {
-      background: #0056b3;
-    }
-  }
+  padding: 12px 20px;
+  background: $primary; // Акцент
+  border: none;
+  border-radius: 8px;
+  color: $neutral-100;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+.add-entity-button:hover {
+  background: $primary-dark;
+}

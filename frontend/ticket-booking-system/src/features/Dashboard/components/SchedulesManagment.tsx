@@ -4,17 +4,17 @@ import { useDashboard } from '../context/DashboardContext';
 import FormUpdateSchedule from './FormSchedule';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useModal } from '../../../shared/context/ModalContext';
-import { formatTime } from '../../../shared/services/formatDateTime';
+import { formatTime } from '../../../shared/utils/formatDateTime';
 import { ScheduleType } from '../../../shared/types/ScheduleType'; // Предполагается, что тип ScheduleType определён
 
 const SchedulesManagement: React.FC = () => {
-    const { schedules, trigger, fetchSchedules, DeleteSchedule, OpenModalForm, isAddMode, isModalFormOpen, CloseModalForm } = useDashboard();
+    const { schedules, trigger, fetchSchedules, deleteEntity, OpenModalForm, isAddMode, isModalFormOpen, CloseModalForm } = useDashboard();
     const { modalMessage, isModalOpen, openModal, handleModalClose } = useModal();
     const [selectedSchedule, setSelectedSchedule] = useState<ScheduleType | null>(null);
 
     useEffect(() => {
         fetchSchedules();
-    }, [trigger]);
+    }, [trigger, fetchSchedules]);
 
     const handleEditSchedule = (schedule: ScheduleType) => {
         setSelectedSchedule(schedule);
@@ -51,7 +51,7 @@ const SchedulesManagement: React.FC = () => {
                                     </button>
                                     <button
                                         className="routes-management__action routes-management__action--delete"
-                                        onClick={() => openModal('Вы точно хотите удалить расписание?', () => DeleteSchedule(schedule.id as number))}
+                                        onClick={() => openModal('Вы точно хотите удалить расписание?', () => deleteEntity('/schedules', schedule.id as number))}
                                     >
                                         🗑️
                                     </button>

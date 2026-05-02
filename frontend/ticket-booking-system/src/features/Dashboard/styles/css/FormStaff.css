@@ -11,7 +11,6 @@
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
 }
-
 .modal-overlay .modal-content {
   background: #ffffff;
   padding: 30px;
@@ -24,7 +23,6 @@
   max-height: 90vh;
   overflow-y: auto;
 }
-
 .modal-overlay .modal-content .modal-close {
   position: absolute;
   top: 15px;
@@ -40,11 +38,9 @@
   width: 30px;
   height: 30px;
 }
-
 .modal-overlay .modal-content .modal-close:hover {
   color: #000;
 }
-
 .modal-overlay .modal-content h2 {
   margin: 0 0 25px 0;
   color: #333;
@@ -57,19 +53,16 @@
   flex-direction: column;
   gap: 20px;
 }
-
 .form__field {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
 .form__field label {
   font-size: 14px;
   font-weight: 500;
   color: #333;
 }
-
 .form__field input,
 .form__field select {
   width: 100%;
@@ -81,30 +74,28 @@
   transition: border-color 0.3s, box-shadow 0.3s;
   background: #fff;
 }
-
 .form__field input:focus,
 .form__field select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #5C88C4;
+  box-shadow: 0 0 0 3px rgba(92, 136, 196, 0.1);
 }
-
-.form__field input::placeholder {
+.form__field input::-moz-placeholder, .form__field select::-moz-placeholder {
   color: #999;
 }
-
-.form__field input[type="number"] {
+.form__field input::placeholder,
+.form__field select::placeholder {
+  color: #999;
+}
+.form__field input[type=number] {
   -moz-appearance: textfield;
 }
-
-.form__field input[type="number"]::-webkit-outer-spin-button,
-.form__field input[type="number"]::-webkit-inner-spin-button {
+.form__field input[type=number]::-webkit-outer-spin-button, .form__field input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 .form__button {
   padding: 12px 24px;
-  background: #007bff;
+  background: #5C88C4;
   color: white;
   border: none;
   border-radius: 5px;
@@ -114,11 +105,9 @@
   transition: background 0.3s, transform 0.1s;
   margin-top: 10px;
 }
-
 .form__button:hover {
-  background: #0056b3;
+  background: #456fa8;
 }
-
 .form__button:active {
   transform: scale(0.98);
 }
@@ -142,7 +131,6 @@
     opacity: 1;
   }
 }
-
 @keyframes slideIn {
   from {
     transform: translateY(-20px);
@@ -153,24 +141,19 @@
     opacity: 1;
   }
 }
-
-/* Адаптивность */
 @media (max-width: 600px) {
   .modal-overlay .modal-content {
     max-width: 90%;
     padding: 20px;
   }
-
   .modal-overlay .modal-content h2 {
     font-size: 20px;
   }
-
   .form__field input,
   .form__field select {
     font-size: 14px;
     padding: 10px;
   }
-
   .form__button {
     font-size: 14px;
     padding: 10px 20px;

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './features/Auth/components/Login';
 import Register from './features/Auth/components/Register';
 import { useAuth, AuthProvider } from './features/Auth/context/AuthContext';
-import { setupAxiosInterceptors } from './shared/services/api';
+import { setupAxiosInterceptors } from './shared/utils/api';
 import Dashboard from './features/Dashboard/components/Dashboard';
 import Home from './features/Home/components/Home';
 import { DashboardProvider } from './features/Dashboard/context/DashboardContext';
