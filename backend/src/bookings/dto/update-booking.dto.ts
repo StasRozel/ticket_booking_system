@@ -1,3 +1,3 @@
 export class UpdateBookingDto {
-  public status: 'Забронирован';
+  public status: string;
 }

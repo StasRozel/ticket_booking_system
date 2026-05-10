@@ -13,6 +13,8 @@ export function getTypeOrmConfig(
     database: configService.getOrThrow('DB_NAME'),
     autoLoadEntities: true,
     entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
-    synchronize: true,
+    migrations: [join(__dirname, '..', '..', 'migrations', '*.{ts,js}')],
+    migrationsRun: true,
+    synchronize: false,
   };
 }

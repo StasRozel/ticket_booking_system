@@ -1,9 +1,8 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateTriggerCountTrips1746521451825 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
 CREATE OR REPLACE FUNCTION increment_user_trips()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -20,10 +19,8 @@ CREATE TRIGGER update_user_trips_trigger
 AFTER UPDATE OF status ON Bookings
 FOR EACH ROW
 EXECUTE FUNCTION increment_user_trips();
-            `)
-    }
+            `);
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {}
 }

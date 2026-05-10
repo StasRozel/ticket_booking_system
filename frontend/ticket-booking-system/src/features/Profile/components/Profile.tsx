@@ -32,19 +32,19 @@ const UserProfile: React.FC = () => {
             <h2>Профиль пользователя</h2>
             {user && (
               <div className="user-profile__actions">
-                <button className="user-profile__edit-button" onClick={() => setIsModalOpen(true)}>
+                <button className="user-profile__action-button" onClick={() => setIsModalOpen(true)}>
                   Редактировать
                 </button>
                 {user.role_id === 3 && (
                   <button
-                    className="user-profile__driver-button"
+                    className="user-profile__action-button"
                     onClick={() => navigate('/driver-dashboard')}
                   >
                     Перейти в панель водителя
                   </button>
                 )}
                 <button
-                  className="user-profile__telegram-button"
+                  className="user-profile__action-button"
                   onClick={() => setIsTelegramModalOpen(true)}
                 >
                   Подключить Telegram

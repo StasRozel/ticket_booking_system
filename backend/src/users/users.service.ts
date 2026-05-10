@@ -105,6 +105,10 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) return null;
 
+    const { password } = updateUserDto;
+
+    updateUserDto.password = await bcrypt.hash(String(password), 10);
+
     await this.userRepository.update(id, updateUserDto);
     return await this.userRepository.findOneBy({ id });
   }

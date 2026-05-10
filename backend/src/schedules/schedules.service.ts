@@ -37,11 +37,11 @@ export class SchedulesService {
     }
   }
   async findAll() {
-    return await this.scheduleRepository.find();
+    return await this.scheduleRepository.find({ relations: ['route'] });
   }
 
   async findOne(id: number) {
-    return await this.scheduleRepository.findOneBy({ id });
+    return await this.scheduleRepository.findOne({ where: { id }, relations: ['route'] });
   }
 
   async validateScheduleData(

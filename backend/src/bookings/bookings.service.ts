@@ -130,4 +130,11 @@ export class BookingsService {
   async updateStatusByUserId(user_id: number, status: string): Promise<void> {
     await this.bookingRepository.update({ user_id }, { status });
   }
+
+  async completeByScheduleId(bus_schedule_id: number): Promise<void> {
+    await this.bookingRepository.update(
+      { bus_schedule_id },
+      { status: 'Завершен' },
+    );
+  }
 }

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/FormStaff.scss';
 import api from '../../../shared/utils/api';
+import { useDashboard } from '../context/DashboardContext';
 
 interface FormStaffProps {
   isOpen: boolean;
   onClose: () => void;
-  isActive: boolean; // true - добавление, false - редактирование
+  isActive: boolean;
   staff: any | null;
   initialBusId?: number | '';
   driverId?: number | null;
@@ -18,9 +19,15 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
   const [middle_name, setMiddleName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role_id, setRoleId] = useState<number>(3); // default driver
+  const [role_id, setRoleId] = useState<number>(3);
   const [busId, setBusId] = useState<number | ''>('');
   const [errors, setErrors] = useState<{ [k: string]: string }>({});
+
+  const { buses, fetchBuses } = useDashboard();
+
+  useEffect(() => {
+    fetchBuses();
+  }, [fetchBuses]);
 
   useEffect(() => {
     if (isOpen && !isActive && staff) {
@@ -45,7 +52,7 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
     setErrors({});
   }, [isOpen, isActive, staff]);
 
-  const payload: any = { first_name, last_name, middle_name, role_id, email };
+  const payload: any = { first_name, last_name, middle_name, role_id, email, password };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,8 +64,6 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
 
     try {
       if (isActive) {
-        if (role_id === 3 && busId) payload.bus_id = Number(busId);
-
         const res = await api.post('/users/auth/register/', payload); //TODO если так создать то получу новый refresh токен
         const user_id = res.data.user_id;
 
@@ -66,8 +71,6 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
           await api.post('/drivers', { user_id, bus_id: Number(busId) });
         }
       } else {
-
-        if (role_id === 3 && busId) payload.bus_id = Number(busId);
 
         if (role_id === 3 && busId) {
           if (driverId) {
@@ -77,9 +80,7 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
           }
         }
 
-
         await api.patch(`/users/${staff.id}`, payload);
-
 
       }
 
@@ -129,18 +130,21 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
           <div className="form__field">
             <label>Роль *</label>
             <select value={role_id} onChange={e => setRoleId(Number(e.target.value))}>
-              <option value={2}>Менеджер</option>
+              <option value={4}>Менеджер</option>
               <option value={3}>Водитель</option>
             </select>
           </div>
           {role_id === 3 && (
             <div className="form__field">
-              <label>ID автобуса</label>
-              <input
-                type="number"
-                value={busId as any}
-                onChange={e => setBusId(e.target.value ? Number(e.target.value) : '')}
-              />
+              <label>Автобус</label>
+              <select value={busId} onChange={e => setBusId(e.target.value ? Number(e.target.value) : '')}>
+                <option value="" disabled>Выберите автобус</option>
+                {buses.map((b: any) => (
+                  <option key={b.id} value={b.id}>
+                    {b.bus_number} — {b.type}
+                  </option>
+                ))}
+              </select>
             </div>
           )}
           <button type="submit" className="form__button">{isActive ? 'Создать' : 'Сохранить'}</button>

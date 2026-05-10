@@ -12,24 +12,31 @@
   animation: fadeIn 0.3s ease-out;
 }
 .modal-overlay .modal-content {
+  background: #ffffff;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   max-width: 500px;
   width: 100%;
   position: relative;
   animation: slideIn 0.3s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .modal-overlay .modal-content .modal-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   color: #666;
   cursor: pointer;
   transition: color 0.3s;
+  line-height: 1;
+  padding: 0;
+  width: 30px;
+  height: 30px;
 }
 .modal-overlay .modal-content .modal-close:hover {
   color: #000;
@@ -40,6 +47,14 @@
 }
 .form-new-routes__field {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-new-routes__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
 }
 .form-new-routes__checkbox {
   margin: 0px 5px 20px 0px;
@@ -51,23 +66,48 @@
   border-radius: 5px;
   font-size: 16px;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background: #fff;
 }
 .form-new-routes__input:focus {
-  border-color: #007bff;
+  border-color: #5C88C4;
+  box-shadow: 0 0 0 3px rgba(92, 136, 196, 0.1);
 }
 .form-new-routes__input::placeholder {
   color: #999;
 }
+.form-new-routes__input[type="number"] {
+  -moz-appearance: textfield;
+}
+.form-new-routes__input[type="number"]::-webkit-outer-spin-button,
+.form-new-routes__input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.form-new-routes__select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background: #fff;
+  cursor: pointer;
+}
+.form-new-routes__select:focus {
+  border-color: #5C88C4;
+  box-shadow: 0 0 0 3px rgba(92, 136, 196, 0.1);
+}
 .form-new-routes__error {
   color: #ff4d4f;
   font-size: 14px;
-  margin-bottom: 20px;
-  text-align: center;
+  margin-top: 4px;
 }
 .form-new-routes__actions {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
 }
 
 @keyframes fadeIn {
@@ -86,5 +126,20 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay .modal-content {
+    max-width: 90%;
+    padding: 20px;
+  }
+  .form-new-routes__input,
+  .form-new-routes__select {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .form-new-routes__label {
+    font-size: 13px;
   }
 }

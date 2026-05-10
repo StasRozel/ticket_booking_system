@@ -10,12 +10,14 @@ import api from '../../../shared/utils/api';
 const HomeContext = createContext<HomeContextType | undefined>(undefined);
 
 export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const today = new Date().toISOString().split('T')[0];
+
   const [busSchedules, setSchedules] = useState<BusScheduleType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchFrom, setSearchFrom] = useState<string>('');
   const [searchTo, setSearchTo] = useState<string>('');
-  const [searchDate, setSearchDate] = useState<string>('');
+  const [searchDate, setSearchDate] = useState<string>(today);
   const [searchPassengers, setSearchPassengers] = useState<string>('');
 
   const navigate = useNavigate();
@@ -39,16 +41,16 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const filteredSchedules = busSchedules.filter((schedule) => {
     const route = schedule.schedule?.route;
-    const matchesFrom = !searchFrom || 
-        route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase());
-    const matchesTo = !searchTo || 
-        route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase());
+    const matchesFrom = !searchFrom ||
+      route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase());
+    const matchesTo = !searchTo ||
+      route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase());
     const matchesDate = !searchDate || formatDate(schedule.operating_days) === formatDate(searchDate);
-    const matchesPassengers = !searchPassengers || 
-        (schedule.bus?.capacity?.length as number >= parseInt(searchPassengers));
-    
+    const matchesPassengers = !searchPassengers ||
+      (schedule.bus?.capacity?.length as number >= parseInt(searchPassengers));
+
     return matchesFrom && matchesTo && matchesDate && matchesPassengers;
-});
+  });
 
   const booking = async (busSchedule: BusScheduleType) => {
     if (!accessToken) {

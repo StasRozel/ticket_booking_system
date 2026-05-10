@@ -180,7 +180,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const handleTicketTypeChange = async (ticketId: number, routeId: number, bookingId: number, isChild: boolean) => {
     try {
-      const ticketPrice = await api.get(`/price/${routeId}`);
+      const ticketPrice = await api.get(`/tickets/${routeId}`);
       setTickets((prev) => ({
         ...prev,
         [bookingId]: prev[bookingId].map((ticket) =>
@@ -188,7 +188,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
             ? {
               ...ticket,
               is_child: !isChild,
-              price: !isChild ? '0.00' : ticketPrice.data,
+              price: !isChild ? '0.00' : ticketPrice.data.price,
             }
             : ticket
         ),

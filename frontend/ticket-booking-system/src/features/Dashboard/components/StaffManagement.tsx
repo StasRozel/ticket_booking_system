@@ -54,7 +54,7 @@ const StaffManagement: React.FC = () => {
 
     const getRoleName = (roleId: number) => {
         switch (roleId) {
-            case 2: return 'Менеджер';
+            case 4: return 'Менеджер';
             case 3: return 'Водитель';
             default: return 'Неизвестно';
         }

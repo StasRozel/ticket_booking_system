@@ -28,7 +28,7 @@
   display: flex;
   gap: 15px;
 }
-.user-profile__edit-button, .user-profile__logout-button {
+.user-profile__action-button, .user-profile__edit-button, .user-profile__logout-button {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -37,11 +37,11 @@
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
-.user-profile__edit-button {
+.user-profile__edit-button, .user-profile__action-button {
   background: #5C88C4;
   color: #ffffff;
 }
-.user-profile__edit-button:hover {
+.user-profile__edit-button:hover, .user-profile__action-button:hover {
   background: #456fa8;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);

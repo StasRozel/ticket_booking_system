@@ -7,7 +7,7 @@ import EmergencyButton from './EmergencyButton';
 import { useDriver } from '../context/DriverContext'; // предположим, что у тебя есть такой контекст
 
 const DriverDashboard: React.FC = () => {
-    const { driver, loading, error, fetchDriverData, markArrivalAtStop, markPassengerPresent, notifyDelaySchedule, submitComplaint } = useDriver();
+    const { driver, loading, error, fetchDriverData, markArrivalAtStop, markPassengerPresent, notifyDelaySchedule, submitComplaint, finishTrip } = useDriver();
     const navigate = useNavigate();
     const [selectedStop, setSelectedStop] = useState<number | null>(null); // теперь id остановки
 
@@ -15,8 +15,11 @@ const DriverDashboard: React.FC = () => {
         fetchDriverData();
     }, []);
 
-    const handleArrived = async (stopId: number) => {
+    const handleArrived = async (stopId: number, isLastStop: boolean) => {
         await markArrivalAtStop(stopId);
+        if (isLastStop) {
+            await finishTrip();
+        }
         setSelectedStop(stopId);
     };
 
@@ -85,7 +88,7 @@ const DriverDashboard: React.FC = () => {
                                 <div key={stop.id ?? idx} className={`driver-dashboard__stop-item ${arrived ? 'driver-dashboard__stop-item--arrived' : ''}`}>
                                     <span className="driver-dashboard__stop-name">{stop.name}</span>
                                     <button
-                                        onClick={() => handleArrived(stop.id)}
+                                        onClick={() => handleArrived(stop.id, isLast)}
                                         className={`driver-dashboard__arrived-btn ${arrived ? 'driver-dashboard__arrived-btn--active' : ''}`}
                                     >
                                         {arrived ? 'Прибыли ✓' : isFirst ? 'Начать рейс' : isLast ? 'Завершить рейс' : 'Прибыли на остановку'}

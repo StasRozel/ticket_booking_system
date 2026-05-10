@@ -4,6 +4,7 @@ import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
 import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { z } from 'zod';
+import { formatTime } from '../../../shared/utils/formatDateTime';
 
 interface FormUpdateBusScheduleProps {
     isOpen: boolean;
@@ -13,8 +14,8 @@ interface FormUpdateBusScheduleProps {
 }
 
 const busScheduleSchema = z.object({
-    schedule_id: z.coerce.number().min(1, 'ID расписания обязателен'),
-    bus_id: z.coerce.number().min(1, 'ID автобуса обязателен'),
+    schedule_id: z.coerce.number().min(1, 'Выберите расписание'),
+    bus_id: z.coerce.number().min(1, 'Выберите автобус'),
     operating_days: z
         .string()
         .min(1, 'Дата обязательна')
@@ -30,12 +31,15 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
     const [error, setError] = useState<string | null>(null);
     const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
-    const { createEntity, updateEntity } = useDashboard();
+    const { createEntity, updateEntity, schedules, buses, fetchSchedules, fetchBuses } = useDashboard();
 
-    // Получить сегодняшнюю дату в формате YYYY-MM-DD
     const today = new Date().toISOString().split('T')[0];
 
-    // Синхронизация состояния формы с пропсом busSchedule
+    useEffect(() => {
+        fetchSchedules();
+        fetchBuses();
+    }, [fetchSchedules, fetchBuses]);
+
     useEffect(() => {
         if (busSchedule && !isActive) {
             setId(busSchedule.id);
@@ -43,7 +47,6 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
             setBusId(busSchedule.bus_id || 0);
             setOperatingDays(busSchedule.operating_days ? new Date(busSchedule.operating_days).toISOString().slice(0, 10) : '');
         } else {
-            // Сбрасываем состояние для режима добавления
             setId(undefined);
             setScheduleId(0);
             setBusId(0);
@@ -51,12 +54,10 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
         }
     }, [busSchedule, isActive]);
 
-    // Обработчик для начала закрытия с анимацией
     const handleClose = () => {
         setIsClosing(true);
     };
 
-    // Эффект для завершения закрытия после анимации
     useEffect(() => {
         if (isClosing) {
             const timer = setTimeout(() => {
@@ -67,7 +68,6 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
         }
     }, [isClosing, onClose]);
 
-    // Эффект для обработки клавиши Escape
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
             if (event.key === 'Escape' && isOpen && !isClosing) {
@@ -104,8 +104,6 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
                 bus_id,
                 operating_days,
             });
-            
-            console.log('Расписание автобуса успешно добавлено!');
             setError(null);
             handleClose();
         } catch (error) {
@@ -123,9 +121,6 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
                 bus_id,
                 operating_days,
             });
-
-
-            console.log('Расписание автобуса успешно обновлено!');
             setError(null);
             handleClose();
         } catch (error) {
@@ -160,45 +155,64 @@ const FormUpdateBusSchedule: React.FC<FormUpdateBusScheduleProps> = ({ isOpen, o
                     <button type="button" className="modal-close" onClick={handleClose}>
                         ×
                     </button>
+                    {!isActive && (
+                        <div className="form-new-routes__field">
+                            <label className="form-new-routes__label">ID расписания</label>
+                            <input
+                                type="number"
+                                value={id ?? ''}
+                                onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
+                                className="form-new-routes__input"
+                                disabled
+                            />
+                        </div>
+                    )}
                     <div className="form-new-routes__field">
-                        <input
-                            type="number"
-                            value={id ?? ''}
-                            onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
-                            placeholder="ID расписания"
-                            className={`form-new-routes__input ${isActive ? 'form-new-routes__none' : ''}`}
-                            required={!isActive}
-                            disabled={isActive}
-                        />
-                    </div>
-                    <div className="form-new-routes__field">
-                        <input
-                            type="number"
+                        <label className="form-new-routes__label">Расписание (маршрут, время)</label>
+                        <select
                             value={schedule_id}
                             onChange={(e) => setScheduleId(Number(e.target.value))}
-                            placeholder="ID расписания"
-                            className="form-new-routes__input"
+                            className="form-new-routes__select"
                             required
-                        />
+                        >
+                            <option value={0} disabled>Выберите расписание</option>
+                            {schedules.map((s: any) => {
+                                const routeName = s.route
+                                    ? s.route.name
+                                    : `#${s.route_id}`;
+                                const label = `${routeName} | ${formatTime(s.departure_time)} - ${formatTime(s.arrival_time)}`;
+                                return (
+                                    <option key={s.id} value={s.id}>
+                                        {label}
+                                    </option>
+                                );
+                            })}
+                        </select>
                         {validationErrors.schedule_id && <span className="form-new-routes__error">{validationErrors.schedule_id}</span>}
                     </div>
                     <div className="form-new-routes__field">
-                        <input
-                            type="number"
+                        <label className="form-new-routes__label">Автобус</label>
+                        <select
                             value={bus_id}
                             onChange={(e) => setBusId(Number(e.target.value))}
-                            placeholder="ID автобуса"
-                            className="form-new-routes__input"
+                            className="form-new-routes__select"
                             required
-                        />
+                        >
+                            <option value={0} disabled>Выберите автобус</option>
+                            {buses.map((b: any) => (
+                                <option key={b.id} value={b.id}>
+                                    {b.bus_number} — {b.type}
+                                </option>
+                            ))}
+                        </select>
                         {validationErrors.bus_id && <span className="form-new-routes__error">{validationErrors.bus_id}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Дата работы</label>
                         <input
                             type="date"
                             value={operating_days}
                             onChange={(e) => setOperatingDays(e.target.value)}
-                            placeholder="Дни работы (например, 2025-01-01)"
                             className="form-new-routes__input"
                             required
                             min={today}

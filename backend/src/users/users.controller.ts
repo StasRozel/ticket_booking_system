@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,7 +33,7 @@ export class UsersController {
         await this.usersService.register(newUser);
       return { user_id, accessToken, refreshToken };
     } catch (error) {
-      return { message: (error as Error).message };
+      throw new HttpException((error as Error).message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -43,7 +45,10 @@ export class UsersController {
         await this.usersService.login(email, password);
       return { user_id, accessToken, refreshToken, isAdmin, isBlocked };
     } catch (error) {
-      return { message: (error as Error).message };
+      throw new HttpException(
+        (error as Error).message,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 
@@ -55,7 +60,10 @@ export class UsersController {
         await this.jwtService.refreshAccessToken(refresh_token);
       return { accessToken };
     } catch (error) {
-      return { message: (error as Error).message };
+      throw new HttpException(
+        (error as Error).message,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 
@@ -66,7 +74,7 @@ export class UsersController {
       await this.usersService.logout(refreshToken);
       return { message: 'Logged out successfully' };
     } catch (error) {
-      return { message: (error as Error).message };
+      throw new HttpException((error as Error).message, HttpStatus.BAD_REQUEST);
     }
   }
 

@@ -51,6 +51,7 @@ interface DriverContextType {
   notifyDelaySchedule: (minutes: number, reason?: string) => Promise<void>;
   sendUrgentCall: (coords?: { latitude: number; longitude: number }) => Promise<any>;
   submitComplaint: (passengerId: number, complaintText: string) => Promise<void>;
+  finishTrip: () => Promise<void>;
 }
 
 const DriverContext = createContext<DriverContextType | undefined>(undefined);
@@ -311,7 +312,6 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       const userId = localStorage.getItem('userId');
       if (!userId) throw new Error('User ID not found');
 
-      // Получаем ID водителя из таблицы Drivers
       const driverResp = await api.get(`/drivers/user/${userId}`);
       const driverId = driverResp.data.id;
 
@@ -327,6 +327,19 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.error('[driver] submitComplaint failed', err?.response?.data || err?.message || err);
       throw err;
     }
+  };
+
+  const finishTrip = async () => {
+    const bus_schedule_id = driver?.id;
+    if (!bus_schedule_id) return;
+    await api.patch(`/bookings/schedule/${bus_schedule_id}/complete`);
+    setDriver(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        passengers: prev.passengers.map(p => ({ ...p, status: 'Завершен' })),
+      };
+    });
   };
 
   // Загружаем мок сразу при монтировании
@@ -349,6 +362,7 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         notifyDelaySchedule,
         sendUrgentCall,
         submitComplaint,
+        finishTrip,
       }}
     >
       {children}

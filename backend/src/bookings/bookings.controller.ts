@@ -35,6 +35,12 @@ export class BookingsController {
     return await this.bookingsService.getBookingByScheduleId(id);
   }
 
+  @Patch('/schedule/:id/complete')
+  async completeByScheduleId(@Param('id') id: number) {
+    await this.bookingsService.completeByScheduleId(+id);
+    return { success: true };
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
     return this.bookingsService.update(+id, updateBookingDto);

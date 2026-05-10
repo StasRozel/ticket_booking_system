@@ -1,21 +1,6 @@
 .busSchedules-management {
   padding: 40px;
 }
-.busSchedules-management .busSchedules-container {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 1fr;
-  grid-gap: 10px;
-  place-items: center;
-}
-.busSchedules-management .busSchedules-tableBusschedules {
-  width: 90%;
-  grid-column: 1/3;
-}
-.busSchedules-management .busSchedules-tableBuses,
-.busSchedules-management .busSchedules-tableSchedules {
-  width: 80%;
-}
 .busSchedules-management h2 {
   font-size: 28px;
   font-weight: 700;
@@ -24,12 +9,9 @@
 }
 .busSchedules-management .busSchedules-actions {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 .busSchedules-management .busSchedules-buttonConfirm {
-  width: 1150px;
-  margin: 15px 0px;
-  text-align: center;
   padding: 12px 40px;
   background: #5C88C4;
   border: none;
@@ -53,19 +35,22 @@
   color: #ffffff;
   text-decoration: none;
 }
+.busSchedules-management .busSchedules-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.busSchedules-management .busSchedules-tableWrapper {
+  width: 95%;
+  max-height: 700px;
+  overflow-y: auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 .busSchedules-management .busSchedules-table {
-  height: 350px;
+  width: 100%;
   border-collapse: collapse;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow-x: auto;
-  display: block;
-}
-.busSchedules-management .busSchedules-table table {
-  width: 70%;
-  overflow-y: hidden;
-  table-layout: auto;
 }
 .busSchedules-management .busSchedules-table th,
 .busSchedules-management .busSchedules-table td {
@@ -74,11 +59,11 @@
   border-bottom: 1px solid #ddd;
 }
 .busSchedules-management .busSchedules-table th {
-  width: 100%;
   background: #f5f7fa;
   font-weight: 600;
   position: sticky;
   top: 0;
+  z-index: 1;
 }
 .busSchedules-management .busSchedules-table td {
   color: #333;
@@ -89,7 +74,7 @@
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
-  margin-right: 5px;
+  margin: 10px 5px;
 }
 .busSchedules-management .busSchedules-action:first-child {
   background: #5C88C4;

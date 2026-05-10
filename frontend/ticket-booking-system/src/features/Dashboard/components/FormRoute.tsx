@@ -121,76 +121,77 @@ const FormUpdateRoute: React.FC<FormUpdateRouteProps> = ({ isOpen, onClose, isAc
                     <button type="button" className="modal-close" onClick={onClose}>
                         ×
                     </button>
+                    {!isActive && (
+                        <div className="form-new-routes__field">
+                            <label className="form-new-routes__label">ID маршрута</label>
+                            <input
+                                type="text"
+                                value={id ?? ''}
+                                onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
+                                className="form-new-routes__input"
+                                disabled
+                            />
+                        </div>
+                    )}
                     <div className="form-new-routes__field">
-                        <input
-                            type="text"
-                            value={id ?? ''}
-                            onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
-                            placeholder="ID маршрута"
-                            className={`form-new-routes__input ${isActive ? 'form-new-routes__none' : ''}`}
-                            required={!isActive}
-                            disabled={isActive} // Отключаем поле ID в режиме добавления
-                        />
-                    </div>
-                    <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Название маршрута</label>
                         <input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="Название маршрута"
                             className="form-new-routes__input"
                             required
                         />
                         {validationErrors.name && <span className="form-new-routes__error">{validationErrors.name}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Начальная точка</label>
                         <input
                             type="text"
                             value={starting_point}
                             onChange={(e) => setStartingPoint(e.target.value)}
-                            placeholder="Начальная точка"
                             className="form-new-routes__input"
                             required
                         />
                         {validationErrors.starting_point && <span className="form-new-routes__error">{validationErrors.starting_point}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Конечная точка</label>
                         <input
                             type="text"
                             value={ending_point}
                             onChange={(e) => setEndingPoint(e.target.value)}
-                            placeholder="Конечная точка"
                             className="form-new-routes__input"
                             required
                         />
                         {validationErrors.ending_point && <span className="form-new-routes__error">{validationErrors.ending_point}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Остановки (через запятую)</label>
                         <input
                             type="text"
                             value={stops}
                             onChange={(e) => setStops(e.target.value)}
-                            placeholder="Остановки (через запятую)"
                             className="form-new-routes__input"
                         />
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Расстояние (км)</label>
                         <input
                             type="number"
                             value={distance}
                             onChange={(e) => setDistance(Number(e.target.value))}
-                            placeholder="Расстояние (км)"
                             className="form-new-routes__input"
                             required
                         />
                         {validationErrors.distance && <span className="form-new-routes__error">{validationErrors.distance}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Цена (BYN)</label>
                         <input
                             type="number"
                             value={price}
                             onChange={(e) => setPrice(Number(e.target.value))}
-                            placeholder="Цена (BYN)"
                             className="form-new-routes__input"
                             required
                         />

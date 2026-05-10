@@ -68,7 +68,7 @@ const Schedule: React.FC = () => {
     {
       header: 'Дни работы',
       accessorKey: 'operating_days',
-      cell: (info) => formatDate(info.getValue() as string) || '-',
+      cell: (info) =>  formatDate(info.getValue() as string) || '-',
       sortingFn: (rowA, rowB, columnId) => {
         const aDate = parseDate(formatDate(rowA.getValue(columnId)));
         const bDate = parseDate(formatDate(rowB.getValue(columnId)));

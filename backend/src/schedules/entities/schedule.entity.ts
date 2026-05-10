@@ -18,7 +18,7 @@ export class Schedule {
   route_id: number;
 
   @Column({ type: 'time' })
-  departure_time: Date;
+  departure_time!: Date;
 
   @Column({ type: 'time' })
   arrival_time: Date;

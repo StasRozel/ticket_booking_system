@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AddEntityButton from './AddEntityButton';
 import '../styles/css/FormNewEntity.css';
 import { useDashboard } from '../context/DashboardContext';
-import { BusType } from '../../../shared/types/BusType'; // Предполагается, что тип BusType определён
+import { BusType } from '../../../shared/types/BusType';
 import { z } from 'zod';
 
 interface FormUpdateBusProps {
@@ -12,7 +12,6 @@ interface FormUpdateBusProps {
     bus?: BusType | null;
 }
 
-// Схема валидации
 const busSchema = z.object({
     busNumber: z.string().min(1, 'Номер автобуса обязателен'),
     capacity: z.number().min(1, 'Вместимость должна быть больше 0'),
@@ -32,16 +31,14 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
 
     const { createEntity, updateEntity } = useDashboard();
 
-    // Синхронизация состояния формы с пропсом bus
     useEffect(() => {
         if (bus && !isActive) {
             setId(bus.id);
             setBusNumber(bus.bus_number || '');
-            setCapacity(bus.capacity?.[0] || 0); // Берём первый элемент массива capacity
+            setCapacity(bus.capacity?.[0] || 0);
             setType(bus.type || '');
             setIsAvailable(bus.available || false);
         } else {
-            // Сбрасываем состояние для режима добавления
             setId(undefined);
             setBusNumber('');
             setCapacity(0);
@@ -50,12 +47,10 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
         }
     }, [bus, isActive]);
 
-    // Обработчик для начала закрытия с анимацией
     const handleClose = () => {
         setIsClosing(true);
     };
 
-    // Эффект для завершения закрытия после анимации
     useEffect(() => {
         if (isClosing) {
             const timer = setTimeout(() => {
@@ -66,7 +61,6 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
         }
     }, [isClosing, onClose]);
 
-    // Эффект для обработки клавиши Escape
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
             if (event.key === 'Escape' && isOpen && !isClosing) {
@@ -159,45 +153,46 @@ const FormUpdateBus: React.FC<FormUpdateBusProps> = ({ isOpen, onClose, isActive
                     <button type="button" className="modal-close" onClick={handleClose}>
                         ×
                     </button>
+                    {!isActive && (
+                        <div className="form-new-routes__field">
+                            <label className="form-new-routes__label">ID автобуса</label>
+                            <input
+                                type="number"
+                                value={id ?? ''}
+                                onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
+                                className="form-new-routes__input"
+                                disabled
+                            />
+                        </div>
+                    )}
                     <div className="form-new-routes__field">
-                        <input
-                            type="number"
-                            value={id ?? ''}
-                            onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
-                            placeholder="ID автобуса"
-                            className={`form-new-routes__input ${isActive ? 'form-new-routes__none' : ''}`}
-                            required={!isActive}
-                            disabled={isActive}
-                        />
-                    </div>
-                    <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Номер автобуса</label>
                         <input
                             type="text"
                             value={busNumber}
                             onChange={(e) => setBusNumber(e.target.value)}
-                            placeholder="Номер автобуса"
                             className="form-new-routes__input"
                             required
                         />
                         {validationErrors.busNumber && <span className="form-new-routes__error">{validationErrors.busNumber}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Вместимость (мест)</label>
                         <input
                             type="number"
                             value={capacity}
                             onChange={(e) => setCapacity(Number(e.target.value))}
-                            placeholder="Вместимость (мест)"
                             className="form-new-routes__input"
                             required
                         />
                         {validationErrors.capacity && <span className="form-new-routes__error">{validationErrors.capacity}</span>}
                     </div>
                     <div className="form-new-routes__field">
+                        <label className="form-new-routes__label">Тип автобуса</label>
                         <input
                             type="text"
                             value={type}
                             onChange={(e) => setType(e.target.value)}
-                            placeholder="Тип автобуса"
                             className="form-new-routes__input"
                             required
                         />

@@ -43,7 +43,11 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
-  const { createEntity, updateEntity } = useDashboard();
+  const { createEntity, updateEntity, schedules, fetchSchedules } = useDashboard();
+
+  useEffect(() => {
+    fetchSchedules();
+  }, [fetchSchedules]);
 
   useEffect(() => {
     if (schedule && !isActive) {
@@ -140,45 +144,59 @@ const FormUpdateSchedule: React.FC<FormUpdateScheduleProps> = ({ isOpen, onClose
           <button type="button" className="modal-close" onClick={onClose}>
             ×
           </button>
+          {!isActive && (
+            <div className="form-new-routes__field">
+              <label className="form-new-routes__label">ID расписания</label>
+              <input
+                type="number"
+                value={id ?? ''}
+                onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
+                className="form-new-routes__input"
+                disabled
+              />
+            </div>
+          )}
           <div className="form-new-routes__field">
-            <input
-              type="number"
-              value={id ?? ''}
-              onChange={(e) => setId(e.target.value ? Number(e.target.value) : undefined)}
-              placeholder="ID расписания"
-              className={`form-new-routes__input ${isActive ? 'form-new-routes__none' : ''}`}
-              required={!isActive}
-              disabled={isActive}
-            />
-          </div>
-          <div className="form-new-routes__field">
-            <input
-              type="number"
+            <label className="form-new-routes__label">Маршрут</label>
+            <select
               value={route_id}
               onChange={(e) => setRouteId(Number(e.target.value))}
-              placeholder="ID маршрута"
-              className="form-new-routes__input"
+              className="form-new-routes__select"
               required
-            />
+            >
+              <option value={0} disabled>Выберите маршрут</option>
+              {schedules.map((s: any) => {
+                const routeName = s.route
+                  ? s.route.name
+                  : `#${s.route_id}`;
+                return (
+                  <option key={s.id} value={s.route_id}>
+                    {routeName} | {s.departure_time} - {s.arrival_time}
+                  </option>
+                );
+              })}
+            </select>
             {validationErrors.route_id && <span className="form-new-routes__error">{validationErrors.route_id}</span>}
           </div>
           <div className="form-new-routes__field">
+            <label className="form-new-routes__label">Время отправления</label>
             <input
               type="time"
               value={departure_time}
               onChange={(e) => setDepartureTime(e.target.value)}
-              step="1" // Указываем шаг в 1 секунду для поддержки секунд
+              step="1"
               className="form-new-routes__input"
               required
             />
             {validationErrors.departure_time && <span className="form-new-routes__error">{validationErrors.departure_time}</span>}
           </div>
           <div className="form-new-routes__field">
+            <label className="form-new-routes__label">Время прибытия</label>
             <input
               type="time"
               value={arrival_time}
               onChange={(e) => setArrivalTime(e.target.value)}
-              step="1" // Указываем шаг в 1 секунду для поддержки секунд
+              step="1"
               className="form-new-routes__input"
               required
             />

@@ -72,7 +72,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             const response = await api.get('/schedules/');
             setSchedules(response.data);
         } catch (error) {
-            console.error('Error fetching routes:', error);
+            console.error('Error fetching schedules:', error);
         }
     }, []);
 
@@ -82,7 +82,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             const response = await api.get('/buses/');
             setBuses(response.data);
         } catch (error) {
-            console.error('Error fetching routes:', error);
+            console.error('Error fetching buses:', error);
         }
     }, []);
 
@@ -91,9 +91,28 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             const response = await api.get('/bus-schedules/');
             setBusSchedules(response.data);
         } catch (error) {
-            console.error('Error fetching routes:', error);
+            console.error('Error fetching bus-schedules:', error);
         }
     }, []);
+
+    const fetchOneBusSchedule = async (bus_schedule_id: number) => {
+        try {
+            const response = await api.get(`/bus-schedules/${bus_schedule_id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching bus-schedule:', error);
+        }
+    }
+
+    const fetchOneDriver = async (driver_id: number) => {
+        try {
+            const response = await api.get(`/drivers/${driver_id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching driver:', error);
+        }
+    }
+
 
     const fetchUrgentCalls = async () => {
         try {
@@ -196,7 +215,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             schedules, fetchSchedules,
             users, loading, error, fetchUsers, toggleUserBlock,
             buses, fetchBuses,
-            busSchedules, fetchBusSchedules,
+            busSchedules, fetchBusSchedules, fetchOneBusSchedule,
+            fetchOneDriver,
             urgentCalls, fetchUrgentCalls, replaceBusScheduleDriverAndBus,
             driverComplaints, fetchDriverComplaints, deleteDriverComplaint,
             currentEntity,
