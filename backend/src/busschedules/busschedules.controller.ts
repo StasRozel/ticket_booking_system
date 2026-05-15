@@ -30,6 +30,11 @@ export class BusschedulesController {
     return this.busschedulesService.findOne(+id);
   }
 
+  @Get('/date/:date')
+  findByDate(@Param('date') date: string) {
+    return this.busschedulesService.findByDate(date);
+  }
+
   @Get('/bus/:id')
   async getBusByBusId(@Param('id') id: number) {
     return await this.busschedulesService.findOneByBusId(id);

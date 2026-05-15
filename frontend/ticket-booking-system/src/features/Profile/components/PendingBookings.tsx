@@ -86,9 +86,14 @@ const PendingBookings: React.FC= () => {
                     <p>
                       <strong>Время прибытия:</strong> {booking.busSchedule?.schedule?.arrival_time}
                     </p>
-                    <p>
-                      <strong>Автобус:</strong> {booking.busSchedule?.bus?.type} ({booking.busSchedule?.bus?.bus_number})
-                    </p>
+<p>
+                       <strong>Автобус:</strong> {booking.busSchedule?.bus?.type} ({booking.busSchedule?.bus?.bus_number})
+                     </p>
+                     {booking.boarding_point && (
+                       <p>
+                         <strong>Место посадки:</strong> {booking.boarding_point}
+                       </p>
+                     )}
                   </div>
                   <div className="booking-item__tickets">
                     <h4>Билеты:</h4>

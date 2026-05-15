@@ -58,6 +58,7 @@ const Header: React.FC = () => {
         <nav className="header__nav">
           <ul>
             <li><Link to="/">Главная</Link></li>
+            <li><Link to="/map">Карта</Link></li>
             <li><Link to="/profile">Профиль</Link></li>
             <li><Link to="/contacts">Контакты</Link></li>
             <li><Link to="/about">О нас</Link></li>

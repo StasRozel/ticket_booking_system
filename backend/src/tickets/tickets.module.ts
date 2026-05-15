@@ -7,9 +7,10 @@ import { Bus } from 'src/buses/entities/bus.entity';
 import { Booking } from 'src/bookings/entities/booking.entity';
 import { BusSchedule } from 'src/busschedules/entities/busschedule.entity';
 import { BusScheduleRepository } from 'src/busschedules/busschedule.repository';
+import { SeatReservation } from 'src/seat-reservations/entities/seat-reservation.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ticket, Booking, Bus, BusSchedule])],
+  imports: [TypeOrmModule.forFeature([Ticket, Booking, Bus, BusSchedule, SeatReservation])],
   controllers: [TicketsController],
   providers: [TicketsService, BusScheduleRepository],
 })

@@ -23,13 +23,12 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigate = useNavigate();
   const { accessToken } = useAuth();
   const { setOptionNotification } = useNotification();
-  const currentDate = new Date();
 
   const fetchBusSchedule = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<BusScheduleType[]>('/bus-schedules/');
+      const response = await api.get<BusScheduleType[]>(`/bus-schedules/date/${searchDate}`);
       setSchedules(response.data);
     } catch (err) {
       console.error('Ошибка при загрузке расписания:', err);
@@ -37,7 +36,7 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [searchDate]);
 
   const filteredSchedules = busSchedules.filter((schedule) => {
     const route = schedule.schedule?.route;
@@ -47,7 +46,7 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
       route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase());
     const matchesDate = !searchDate || formatDate(schedule.operating_days) === formatDate(searchDate);
     const matchesPassengers = !searchPassengers ||
-      (schedule.bus?.capacity?.length as number >= parseInt(searchPassengers));
+      ((schedule.available_seats ?? schedule.bus?.capacity?.length ?? 0) >= parseInt(searchPassengers));
 
     return matchesFrom && matchesTo && matchesDate && matchesPassengers;
   });
@@ -57,32 +56,12 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setOptionNotification("Вы не авторизованны", "error");
       return;
     };
-
-    const bookingObj = {
-      user_id: Number(localStorage.getItem('userId')) || 0,
-      bus_schedule_id: busSchedule.id,
-      booking_date: currentDate.toISOString(),
-      status: 'Выбран',
-      total_price: Number(busSchedule.schedule?.route?.price) || 0,
-    };
-
-    console.log(bookingObj);
-
-    const response = await api.post('/bookings', bookingObj);
-    const { id } = response.data;
-    const ticketObj = {
-      booking_id: id,
-      seat_number: 0,
-      is_child: false,
-      price: busSchedule.schedule?.route?.price ?? '0',
-    };
-    await api.post('/tickets', ticketObj);
-    navigate('/pending-bookings');
+    navigate(`/booking/${busSchedule.id}`);
   };
 
   useEffect(() => {
     fetchBusSchedule();
-  }, [fetchBusSchedule]);
+  }, [searchDate]);
 
   return (
     <HomeContext.Provider

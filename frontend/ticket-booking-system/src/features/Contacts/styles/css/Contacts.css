@@ -169,3 +169,31 @@
     font-size: 14px;
   }
 }
+
+.routes-map {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.routes-map h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a2a44;
+  margin-bottom: 20px;
+}
+
+.map-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.map-loading,
+.map-error {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  background: rgba(111, 220, 227, 0.06);
+  border-radius: 12px;
+  margin-bottom: 30px;
+}

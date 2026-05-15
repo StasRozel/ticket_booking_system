@@ -6,5 +6,6 @@ export type BookingType = {
   user_id: number;
   booking_date: string;
   status: string;
+  boarding_point?: string;
   busSchedule?: BusScheduleType;
 }

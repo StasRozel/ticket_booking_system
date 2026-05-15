@@ -77,8 +77,8 @@ const Schedule: React.FC = () => {
     },
     {
       header: 'Кол-во мест',
-      accessorKey: 'bus.capacity.length',
-      cell: (info) => `${info.row.original.bus?.capacity.length}`,
+      accessorKey: 'available_seats',
+      cell: (info) => `${info.row.original.available_seats ?? info.row.original.bus?.capacity?.length ?? 0}`,
     },
     {
       header: 'Стоимость',
@@ -146,7 +146,7 @@ const Schedule: React.FC = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr key={row.id}>
                       {row.getVisibleCells().map((cell) => (
-                        row.original.bus?.capacity.length > 0 || row.original.bus?.available ? <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td> : '' 
+                        row.original.bus?.capacity.length > 0 && (row.original.available_seats ?? row.original.bus?.capacity?.length ?? 0) > 0 || row.original.bus?.available ? <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td> : '' 
                       ))}
                     </tr>
                   ))}

@@ -17,6 +17,8 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SocketModule } from './socket/socket.module';
+import { SeatReservationsModule } from './seat-reservations/seat-reservations.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { SocketModule } from './socket/socket.module';
       inject: [ConfigService],
     }),
 
+    ScheduleModule.forRoot(),
+
     UsersModule,
     TicketsModule,
     BusesModule,
@@ -42,6 +46,7 @@ import { SocketModule } from './socket/socket.module';
     UrgentcallsModule,
     SchedulesModule,
     SocketModule,
+    SeatReservationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

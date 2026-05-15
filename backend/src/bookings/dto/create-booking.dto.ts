@@ -4,4 +4,5 @@ export class CreateBookingDto {
   public booking_date: string;
   public status: 'Выбран';
   public total_price: number;
+  public boarding_point?: string;
 }

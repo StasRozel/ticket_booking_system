@@ -40,6 +40,13 @@ export class Booking {
   })
   status: string;
 
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  boarding_point: string;
+
   @ManyToOne(() => BusSchedule, (busSchedule) => busSchedule.id)
   @JoinColumn({ name: 'bus_schedule_id' })
   busSchedule: BusSchedule;

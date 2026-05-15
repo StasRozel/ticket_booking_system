@@ -10,6 +10,7 @@ import { DashboardProvider } from './features/Dashboard/context/DashboardContext
 import Profile from './features/Profile/components/Profile';
 import AboutUs from './features/AboutUs/components/AboutUs';
 import Contacts from './features/Contacts/components/Contacts';
+import MapPage from './features/Map/components/MapPage';
 import { ProfileProvider } from './features/Profile/context/ProfileContext';
 import { HomeProvider } from './features/Home/context/HomeContext';
 import PendingBookings from './features/Profile/components/PendingBookings';
@@ -22,6 +23,8 @@ import DriverDashboard from './features/DriverPage/components/DriverDashboard';
 import DriverProvider from './features/DriverPage/context/DriverContext';
 import RoleProtectedRoute from './features/Auth/components/RoleProtectedRoute';
 import { RadioProvider } from './features/Radio/context/RadioContext';
+import BookingPage from './features/Booking/components/BookingPage';
+import { BookingProvider } from './features/Booking/context/BookingContext';
 
     const AppContent: React.FC = () => {
         const { refreshAccessToken, logout } = useAuth();
@@ -37,6 +40,7 @@ import { RadioProvider } from './features/Radio/context/RadioContext';
                     <Route path="/" element={<HomeProvider><Home /></HomeProvider>} />
                     <Route path="/about" element={<AboutUs />} />
                     <Route path="/contacts" element={<Contacts />} />
+                    <Route path="/map" element={<MapPage />} />
                     <Route path="/401" element={<ErrorPage statusCode={401} />} />
                     <Route path="/403" element={<ErrorPage statusCode={403} />} />
                     <Route path="*" element={<ErrorPage statusCode={404} />} />
@@ -49,8 +53,9 @@ import { RadioProvider } from './features/Radio/context/RadioContext';
                             
                             <Route path='/driver-dashboard' element={<DriverProvider><DriverDashboard /></DriverProvider>}></Route>
                         </Route>
-                        <Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
-                        <Route path="/pending-bookings" element={<ProfileProvider> <PendingBookings /></ProfileProvider>} />
+<Route path="/profile" element={<ProfileProvider><Profile /></ProfileProvider>} />
+                    <Route path="/pending-bookings" element={<ProfileProvider> <PendingBookings /></ProfileProvider>} />
+                    <Route path="/booking/:id" element={<BookingProvider><BookingPage /></BookingProvider>} />
 
                     </Route>
                 </Routes>

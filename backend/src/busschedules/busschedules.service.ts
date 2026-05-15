@@ -3,12 +3,15 @@ import { CreateBusscheduleDto } from './dto/create-busschedule.dto';
 import { UpdateBusscheduleDto } from './dto/update-busschedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusSchedule } from './entities/busschedule.entity';
-import { Repository } from 'typeorm';
+import { Repository, LessThan } from 'typeorm';
 import { Bus } from 'src/buses/entities/bus.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Driver } from 'src/drivers/entities/driver.entity';
 import { BusScheduleRepository } from './busschedule.repository';
 import { Urgentcall } from 'src/urgentcalls/entities/urgentcall.entity';
+import { SeatReservation } from 'src/seat-reservations/entities/seat-reservation.entity';
+import { Ticket } from 'src/tickets/entities/ticket.entity';
+import { Booking } from 'src/bookings/entities/booking.entity';
 
 @Injectable()
 export class BusschedulesService {
@@ -23,6 +26,12 @@ export class BusschedulesService {
     private driverRepository: Repository<Driver>,
     @InjectRepository(Urgentcall)
     private urgentCallRepository: Repository<Urgentcall>,
+    @InjectRepository(SeatReservation)
+    private seatReservationRepository: Repository<SeatReservation>,
+    @InjectRepository(Ticket)
+    private ticketRepository: Repository<Ticket>,
+    @InjectRepository(Booking)
+    private bookingRepository: Repository<Booking>,
   ) {}
   async create(createBusscheduleDto: CreateBusscheduleDto) {
     const validation = await this.validateBusScheduleData(createBusscheduleDto);
@@ -52,6 +61,49 @@ export class BusschedulesService {
       .leftJoinAndSelect('busSchedule.bus', 'bus')
       .where({ id: id })
       .getOne();
+  }
+
+  async findByDate(date: string) {
+    const busSchedules = await this.busScheduleRepository
+      .createQueryBuilder('busSchedule')
+      .leftJoinAndSelect('busSchedule.schedule', 'schedule')
+      .leftJoinAndSelect('schedule.route', 'route')
+      .leftJoinAndSelect('busSchedule.bus', 'bus')
+      .where({ operating_days: date })
+      .getMany();
+
+    const now = new Date();
+    await this.seatReservationRepository.delete({
+      status: 'reserved',
+      expires_at: LessThan(now),
+    });
+
+    for (const bs of busSchedules) {
+      const totalSeats = bs.bus?.capacity?.length || 0;
+
+      const takenTickets = await this.ticketRepository
+        .createQueryBuilder('ticket')
+        .innerJoin('ticket.booking', 'booking')
+        .where('booking.bus_schedule_id = :busScheduleId', {
+          busScheduleId: bs.id,
+        })
+        .andWhere('booking.status NOT IN (:...statuses)', {
+          statuses: ['Отменен', 'истек'],
+        })
+        .getCount();
+
+      const activeReservations = await this.seatReservationRepository.count({
+        where: {
+          bus_schedule_id: bs.id,
+          status: 'reserved',
+        },
+      });
+
+      (bs as any).available_seats =
+        totalSeats - takenTickets - activeReservations;
+    }
+
+    return busSchedules;
   }
 
   async findOneByBusId(bus_id: number): Promise<BusSchedule[] | null> {

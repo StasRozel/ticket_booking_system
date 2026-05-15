@@ -8,6 +8,7 @@ export interface BusScheduleType {
     operating_days: string;
     schedule?: ScheduleType;
     bus?: BusType;
+    available_seats?: number;
 }
 
 export interface BusScheduleResponse {

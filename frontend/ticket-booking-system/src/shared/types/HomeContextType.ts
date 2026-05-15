@@ -1,4 +1,3 @@
-// src/types/HomeContextType.ts
 import { BusScheduleType } from './BusScheduleType';
 
 export type HomeContextType = {
@@ -6,7 +5,7 @@ export type HomeContextType = {
   loading: boolean;
   error: string | null;
   fetchBusSchedule: () => Promise<void>;
-  booking: (busSchedule: BusScheduleType) => Promise<void>;
+  booking: (busSchedule: BusScheduleType) => void;
   searchFrom: string;
   setSearchFrom: (value: string) => void;
   searchTo: string;

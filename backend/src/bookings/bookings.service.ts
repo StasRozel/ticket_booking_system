@@ -4,12 +4,15 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './entities/booking.entity';
+import { SeatReservation } from 'src/seat-reservations/entities/seat-reservation.entity';
 
 @Injectable()
 export class BookingsService {
   constructor(
     @InjectRepository(Booking)
     private bookingRepository: Repository<Booking>,
+    @InjectRepository(SeatReservation)
+    private seatReservationRepository: Repository<SeatReservation>,
   ) {}
 
   findAll(): Promise<Booking[]> {
@@ -33,8 +36,6 @@ export class BookingsService {
   }
 
   async create(createBookingDto: CreateBookingDto): Promise<Booking | null> {
-    console.log(createBookingDto);
-
     const id = await this.checkByIsSelect(
       createBookingDto.user_id,
       createBookingDto.bus_schedule_id,
@@ -67,6 +68,17 @@ export class BookingsService {
 
     if (!booking) return null;
 
+    if (
+      updateBookingDto.status === 'Отменен' ||
+      updateBookingDto.status === 'истек'
+    ) {
+      await this.seatReservationRepository.delete({
+        user_id: booking.user_id,
+        bus_schedule_id: booking.bus_schedule_id,
+        status: 'reserved',
+      });
+    }
+
     await this.bookingRepository.update(id, updateBookingDto);
 
     return await this.bookingRepository.findOneBy({ id });
@@ -82,7 +94,6 @@ export class BookingsService {
   async getBookingByScheduleId(id: number) {
     const bookings = await this.findAllByBusScheduleId(id);
 
-    // sanitize user and include tickets only for this booking
     return bookings.map((b) => {
       const user = { ...b.user } as any;
       if (user) {
@@ -99,30 +110,22 @@ export class BookingsService {
         user_id: b.user_id,
         booking_date: b.booking_date,
         status: b.status,
+        boarding_point: b.boarding_point,
         user,
         tickets,
       };
     });
   }
 
-  // TODO наверное я лучше не буду использовать этот метод так как нужно будет менять логику бронирвания места
-  // async cansel(id: number, data: Partial<Booking>) {
-  //   const tickets = await ticketRepository.findByBookingId(id);
-  //   const booking = await bookingRepository.findOneById(id);
-  //   const busSchedule = await busScheduleRepository.findOneById(
-  //     booking.bus_schedule_id,
-  //   );
-  //   const bus = await busRepository.findOneById(busSchedule.bus_id);
-  //   const seats = new Set(bus.capacity);
-  //   tickets.forEach((ticket) => {
-  //     seats.add(ticket.seat_number);
-  //   });
-  //   await busRepository.update(bus.id, { capacity: [...seats] });
-  //   await this.bookingRepository.update(id, data);
-  //   return await this.bookingRepository.findOneBy({ id });
-  // }
-
   async remove(id: number): Promise<boolean> {
+    const booking = await this.bookingRepository.findOneBy({ id });
+    if (booking) {
+      await this.seatReservationRepository.delete({
+        user_id: booking.user_id,
+        bus_schedule_id: booking.bus_schedule_id,
+        status: 'reserved',
+      });
+    }
     const result = await this.bookingRepository.delete(id);
     return result.affected !== 0;
   }

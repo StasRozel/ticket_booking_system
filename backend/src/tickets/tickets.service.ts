@@ -8,6 +8,8 @@ import { Booking } from 'src/bookings/entities/booking.entity';
 import { BusSchedule } from 'src/busschedules/entities/busschedule.entity';
 import { Bus } from 'src/buses/entities/bus.entity';
 import { CanselTicketDto } from './dto/cansel-ticket.dto';
+import { SeatReservation } from 'src/seat-reservations/entities/seat-reservation.entity';
+import { LessThan } from 'typeorm';
 
 @Injectable()
 export class TicketsService {
@@ -20,6 +22,8 @@ export class TicketsService {
     private busScheduleRepository: Repository<BusSchedule>,
     @InjectRepository(Bus)
     private busRepository: Repository<Bus>,
+    @InjectRepository(SeatReservation)
+    private reservationRepository: Repository<SeatReservation>,
   ) {}
   async create(createTicketDto: CreateTicketDto) {
     const booking = await this.bookingRepository.findOneBy({
