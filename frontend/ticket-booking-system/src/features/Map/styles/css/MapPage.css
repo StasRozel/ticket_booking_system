@@ -26,6 +26,35 @@
   max-width: 600px;
   margin: 0 auto;
 }
+.map-page__info {
+  text-align: center;
+  font-size: 15px;
+  color: #1a2a44;
+  padding: 10px 20px;
+  background: #e8f0fe;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  animation: fadeInDown 0.3s ease-out;
+}
+.map-page__info .departure-label {
+  color: #2b8a3e;
+}
+.map-page__info .arrival-label {
+  color: #c92a2a;
+}
+.map-page__route-matched {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: #d3f9d8;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: #1a2a44;
+  animation: fadeInDown 0.3s ease-out;
+}
 .map-page__map {
   border-radius: 12px;
   overflow: hidden;

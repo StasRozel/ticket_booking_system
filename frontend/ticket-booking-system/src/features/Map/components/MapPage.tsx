@@ -1,151 +1,136 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../../shared/components/Header';
 import Footer from '../../../shared/components/Footer';
-import api from '../../../shared/utils/api';
-import { RouteType } from '../../../shared/types/RouteType';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
 import '../styles/css/MapPage.css';
-
-interface Stop {
-    name: string;
-    lon: number;
-    lat: number;
-}
+import { useMap } from '../context/MapContext';
+import StatusComponent from './StatusComponent';
 
 const MapPage: React.FC = () => {
+    const navigate = useNavigate();
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<any>(null);
-    const [stops, setStops] = useState<Stop[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const lastStopsKeyRef = useRef('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const { filteredStops, loading, error, loadRoutes, departure, arrival, matchedRoute, resetSelection, updateArrayMarkers } = useMap();
 
     useEffect(() => {
         loadRoutes();
-    }, []);
+    }, [loadRoutes]);
 
     useEffect(() => {
-        if (stops.length > 0 && !mapInstanceRef.current) {
-            waitForYmaps();
+        if (matchedRoute) {
+            setModalOpen(true);
         }
-    }, [stops]);
+    }, [matchedRoute]);
 
-    const waitForYmaps = () => {
+    const initMap = useCallback((ymaps: any) => {
+        if (!mapRef.current || mapInstanceRef.current) return;
+
+        const map = new ymaps.Map(mapRef.current, {
+            center: [53.9, 27.5],
+            zoom: 7,
+            controls: ['zoomControl', 'fullscreenControl']
+        });
+
+        mapInstanceRef.current = map;
+
+        map.events.add('click', () => {
+            resetSelection();
+        });
+
+        updateArrayMarkers(ymaps, map);
+    }, [resetSelection, updateArrayMarkers]);
+
+    const waitForYmaps = useCallback(() => {
         const ymaps = (window as any).ymaps;
         if (ymaps) {
             ymaps.ready(() => initMap(ymaps));
         } else {
             setTimeout(waitForYmaps, 100);
         }
-    };
+    }, [initMap]);
 
-    const loadRoutes = async () => {
-        try {
-            const response = await api.get('/routes');
-            const routes: RouteType[] = response.data;
-
-            const allStops = new Set<string>();
-
-            for (const route of routes) {
-                const stopsList = route.stops.split(',').map(s => s.trim());
-                const startPoint = route.starting_point.trim();
-                const endPoint = route.ending_point.trim();
-
-                [startPoint, endPoint, ...stopsList].forEach(stop => {
-                    if (stop) allStops.add(stop);
-                });
-            }
-
-            setStops(Array.from(allStops).map(name => ({ name, lon: 0, lat: 0 })));
-        } catch (err) {
-            setError('Не удалось загрузить маршруты');
-            console.error(err);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (filteredStops.length > 0 && !mapInstanceRef.current) {
+            waitForYmaps();
         }
-    };
+    }, [filteredStops, waitForYmaps]);
 
-    const initMap = (ymaps: any) => {
-        if (!mapRef.current || mapInstanceRef.current) return;
+    useEffect(() => {
+        const key = filteredStops.map(s => s.name).sort().join(',');
+        if (key === lastStopsKeyRef.current) return;
+        lastStopsKeyRef.current = key;
 
-        const map = new ymaps.Map(mapRef.current, {
-            center: [27.5, 53.9],
-            zoom: 6,
-            controls: ['zoomControl', 'fullscreenControl']
-        });
+        const ymaps = (window as any).ymaps;
+        const map = mapInstanceRef.current;
+        if (ymaps && map) {
+            updateArrayMarkers(ymaps, map);
+        }
+    }, [filteredStops, departure, arrival, updateArrayMarkers]);
 
-        mapInstanceRef.current = map;
-
-        geocodeAll(ymaps, map);
-    };
-
-    const geocodeAll = (ymaps: any, map: any) => {
-        stops.forEach((stop, i) => {
-            setTimeout(() => {
-                ymaps.geocode(stop.name + ', Беларусь', { results: 1 }).then((res: any) => {
-                    const obj = res.geoObjects.get(0);
-                    if (obj) {
-                        const coords = obj.geometry.getCoordinates();
-                        const placemark = new ymaps.Placemark(
-                            coords,
-                            {
-                                balloonContentHeader: stop.name,
-                                balloonContentBody: 'Остановка'
-                            },
-                            {
-                                preset: 'islands#blueDotIcon'
-                            }
-                        );
-                        map.geoObjects.add(placemark);
-                    }
-                }).catch((err: any) => {
-                    console.error(`Geocode failed for ${stop.name}:`, err);
-                });
-            }, i * 300);
-        });
+    const handleModalClose = (confirmed: boolean) => {
+        setModalOpen(false);
+        if (confirmed && matchedRoute) {
+            navigate('/', {
+                state: {
+                    fromMap: true,
+                    departure,
+                    arrival,
+                    routeId: matchedRoute.id
+                }
+            });
+        }
     };
 
     if (loading) {
         return (
-            <>
-                <Header />
-                <section className="map-page">
-                    <div className="container">
-                        <div className="map-loading">Загрузка карты...</div>
-                    </div>
-                </section>
-                <Footer />
-            </>
+          <StatusComponent status='loading'/>
         );
     }
 
     if (error) {
         return (
-            <>
-                <Header />
-                <section className="map-page">
-                    <div className="container">
-                        <div className="map-error">{error}</div>
-                    </div>
-                </section>
-                <Footer />
-            </>
+          <StatusComponent status='error' error={error}/>
         );
     }
 
+    const showNoRoute = departure && arrival && !matchedRoute;
+
     return (
+        
         <>
             <Header />
             <section className="map-page">
                 <div className="container">
                     <div className="map-page__header">
                         <h1>Карта остановок</h1>
-                        <p>Все остановки и маршруты на одной карте</p>
+                        {!departure && <p>Выберите точку отправления</p>}
+                        {departure && !arrival && <p>Выберите точку прибытия</p>}
+                        {showNoRoute && <p>Маршрут не найден. Попробуйте другие точки</p>}
                     </div>
                     <div className="map-page__map">
                         <div ref={mapRef} className="map-container" style={{ width: '100%', height: '500px' }}></div>
                     </div>
+                    {departure && (
+                        <div className="map-page__info">
+                            Отправление: <strong className="departure-label">{departure}</strong>
+                            {arrival && <> → Прибытие: <strong className="arrival-label">{arrival}</strong></>}
+                        </div>
+                    )}
                 </div>
             </section>
             <Footer />
+            <ConfirmModal
+                isOpen={modalOpen}
+                onClose={handleModalClose}
+                message={
+                    matchedRoute
+                        ? `Выбранные точки лежат на маршруте «${matchedRoute.name}». Перейти к бронированию?`
+                        : ''
+                }
+            />
         </>
     );
 };

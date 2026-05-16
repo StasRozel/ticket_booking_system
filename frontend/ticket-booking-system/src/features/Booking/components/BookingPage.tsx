@@ -17,6 +17,8 @@ const BookingPage: React.FC = () => {
     reservations,
     boardingPoint,
     boardingPoints,
+    arrivalPoint,
+    arrivalPoints,
     loading,
     error,
     timeLeft,
@@ -24,6 +26,7 @@ const BookingPage: React.FC = () => {
     toggleChildTicket,
     childSeats,
     setBoardingPoint,
+    setArrivalPoint,
     confirmBooking,
     cancelAll,
   } = useBooking();
@@ -239,6 +242,22 @@ const BookingPage: React.FC = () => {
                 >
                   <option value="">Выберите место посадки</option>
                   {boardingPoints.map((point, index) => (
+                    <option key={index} value={point}>
+                      {point}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="booking-page__boarding">
+                <h3>Место прибытия</h3>
+                <select
+                  className="booking-page__boarding-select"
+                  value={arrivalPoint}
+                  onChange={(e) => setArrivalPoint(e.target.value)}
+                >
+                  <option value="">Выберите место прибытия</option>
+                  {arrivalPoints.map((point, index) => (
                     <option key={index} value={point}>
                       {point}
                     </option>

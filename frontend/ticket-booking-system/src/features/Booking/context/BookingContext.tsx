@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   SeatMapType,
   SeatReservationType,
@@ -15,6 +15,8 @@ type BookingContextType = {
   reservations: SeatReservationType[];
   boardingPoint: string;
   boardingPoints: string[];
+  arrivalPoint: string;
+  arrivalPoints: string[];
   loading: boolean;
   error: string | null;
   timeLeft: number;
@@ -22,6 +24,7 @@ type BookingContextType = {
   toggleChildTicket: (seatNumber: number) => void;
   childSeats: Set<number>;
   setBoardingPoint: (point: string) => void;
+  setArrivalPoint: (point: string) => void;
   confirmBooking: () => Promise<void>;
   cancelAll: () => Promise<void>;
   fetchSeatMap: () => Promise<void>;
@@ -33,6 +36,7 @@ const BookingContext = createContext<BookingContextType | undefined>(undefined);
 export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { accessToken } = useAuth();
   const { setOptionNotification } = useNotification();
   const userId = Number(localStorage.getItem('userId')) || 0;
@@ -42,6 +46,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [reservations, setReservations] = useState<SeatReservationType[]>([]);
   const [childSeats, setChildSeats] = useState<Set<number>>(new Set());
   const [boardingPoint, setBoardingPoint] = useState<string>('');
+  const [arrivalPoint, setArrivalPoint] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(600);
@@ -53,6 +58,25 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
           ? seatMap.route.stops.split(',').map((s) => s.trim())
           : []),
       ]
+    : [];
+
+  const allStops = seatMap?.route
+    ? [
+        seatMap.route.starting_point,
+        ...(seatMap.route.stops
+          ? seatMap.route.stops.split(',').map((s) => s.trim())
+          : []),
+        seatMap.route.ending_point,
+      ].filter(Boolean)
+    : [];
+
+  const arrivalPoints = seatMap?.route
+    ? [
+        ...(seatMap.route.stops
+          ? seatMap.route.stops.split(',').map((s) => s.trim())
+          : []),
+        seatMap.route.ending_point,
+      ].filter(Boolean)
     : [];
 
   const fetchSeatMap = useCallback(async () => {
@@ -244,6 +268,20 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [fetchReservations, accessToken]);
 
   useEffect(() => {
+    if (!seatMap) return;
+    const state = location.state as { fromMapDeparture?: string; fromMapArrival?: string } | null;
+    if (state?.fromMapDeparture && boardingPoints.includes(state.fromMapDeparture)) {
+      setBoardingPoint(state.fromMapDeparture);
+    }
+    if (state?.fromMapArrival && arrivalPoints.includes(state.fromMapArrival)) {
+      setArrivalPoint(state.fromMapArrival);
+    }
+    if (state?.fromMapDeparture || state?.fromMapArrival) {
+      window.history.replaceState({}, document.title);
+    }
+  }, [seatMap]);
+
+  useEffect(() => {
     if (reservations.length === 0) return;
 
     const timer = setInterval(() => {
@@ -272,6 +310,8 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         reservations,
         boardingPoint,
         boardingPoints,
+        arrivalPoint,
+        arrivalPoints,
         loading,
         error,
         timeLeft,
@@ -279,6 +319,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         toggleChildTicket,
         childSeats,
         setBoardingPoint,
+        setArrivalPoint,
         confirmBooking,
         cancelAll,
         fetchSeatMap,

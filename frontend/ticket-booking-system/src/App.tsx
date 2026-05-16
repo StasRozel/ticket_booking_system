@@ -25,6 +25,7 @@ import RoleProtectedRoute from './features/Auth/components/RoleProtectedRoute';
 import { RadioProvider } from './features/Radio/context/RadioContext';
 import BookingPage from './features/Booking/components/BookingPage';
 import { BookingProvider } from './features/Booking/context/BookingContext';
+import { MapProvider } from './features/Map/context/MapContext';
 
     const AppContent: React.FC = () => {
         const { refreshAccessToken, logout } = useAuth();
@@ -40,7 +41,7 @@ import { BookingProvider } from './features/Booking/context/BookingContext';
                     <Route path="/" element={<HomeProvider><Home /></HomeProvider>} />
                     <Route path="/about" element={<AboutUs />} />
                     <Route path="/contacts" element={<Contacts />} />
-                    <Route path="/map" element={<MapPage />} />
+                    <Route path="/map" element={<MapProvider><MapPage /></MapProvider>} />
                     <Route path="/401" element={<ErrorPage statusCode={401} />} />
                     <Route path="/403" element={<ErrorPage statusCode={403} />} />
                     <Route path="*" element={<ErrorPage statusCode={404} />} />

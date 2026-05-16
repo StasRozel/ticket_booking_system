@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { BusScheduleType } from '../../../shared/types/BusScheduleType';
 import { HomeContextType } from '../../../shared/types/HomeContextType';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { formatDate } from '../../../shared/utils/formatDateTime';
 import { useAuth } from '../../Auth/context/AuthContext';
 import { useNotification } from '../../../shared/context/NotificationContext';
@@ -21,8 +21,18 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [searchPassengers, setSearchPassengers] = useState<string>('');
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { accessToken } = useAuth();
   const { setOptionNotification } = useNotification();
+
+  useEffect(() => {
+    const state = location.state as { fromMap?: boolean; departure?: string; arrival?: string } | null;
+    if (state?.fromMap) {
+      if (state.departure) setSearchFrom(state.departure);
+      if (state.arrival) setSearchTo(state.arrival);
+      window.history.replaceState({}, document.title);
+    }
+  }, []);
 
   const fetchBusSchedule = useCallback(async () => {
     setLoading(true);
@@ -40,10 +50,12 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const filteredSchedules = busSchedules.filter((schedule) => {
     const route = schedule.schedule?.route;
+    const allStops = [route?.starting_point, ...(route?.stops?.split(',').map(s => s.trim()) || []), route?.ending_point].filter(Boolean);
+
     const matchesFrom = !searchFrom ||
-      route?.starting_point?.toLowerCase().includes(searchFrom.toLowerCase());
+      allStops.some(s => s?.toLowerCase().includes(searchFrom.toLowerCase()));
     const matchesTo = !searchTo ||
-      route?.ending_point?.toLowerCase().includes(searchTo.toLowerCase());
+      allStops.some(s => s?.toLowerCase().includes(searchTo.toLowerCase()));
     const matchesDate = !searchDate || formatDate(schedule.operating_days) === formatDate(searchDate);
     const matchesPassengers = !searchPassengers ||
       ((schedule.available_seats ?? schedule.bus?.capacity?.length ?? 0) >= parseInt(searchPassengers));
@@ -56,12 +68,17 @@ export const HomeProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setOptionNotification("Вы не авторизованны", "error");
       return;
     };
-    navigate(`/booking/${busSchedule.id}`);
+    navigate(`/booking/${busSchedule.id}`, {
+      state: {
+        fromMapDeparture: searchFrom || undefined,
+        fromMapArrival: searchTo || undefined,
+      }
+    });
   };
 
   useEffect(() => {
     fetchBusSchedule();
-  }, [searchDate]);
+  }, [searchDate, fetchBusSchedule]);
 
   return (
     <HomeContext.Provider
