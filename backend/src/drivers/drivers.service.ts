@@ -20,7 +20,7 @@ export class DriversService {
   }
 
   findAll() {
-    return this.driverRepository.find();
+    return this.driverRepository.find({ relations: ['user'] });
   }
 
   findOne(id: number) {

@@ -211,22 +211,22 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const handleBooking = async (bookingId: number) => {
     try {
-      // Получаем тикеты для bookingId
       const ticketPromises = tickets[bookingId]?.map((ticket) =>
         api.patch(`/tickets/${ticket.id}`, { is_child: ticket.is_child })
       ) || [];
 
-      // Запрос на обновление брони
-      const bookingPromise = api.patch(`/bookings/${bookingId}`, { status: 'Забронирован' });
+      await Promise.all(ticketPromises);
 
-      // Выполняем все запросы параллельно
-      await Promise.all([...ticketPromises, bookingPromise]);
+      const response = await api.post('/payments/create-checkout-session', {
+        bookingId,
+      });
 
-      // Обновляем триггер
-      setTrigger((next) => ++next);
+      const { url } = response.data;
+
+      window.location.href = url;
     } catch (err) {
-      console.error('Ошибка при обновлении тикетов или брони:', err);
-      setError('Не удалось обновить бронирование. Попробуйте снова.');
+      console.error('Ошибка при оплате бронирования:', err);
+      setError('Не удалось начать оплату. Попробуйте снова.');
     }
   };
 

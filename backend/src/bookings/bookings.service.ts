@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './entities/booking.entity';
 import { SeatReservation } from 'src/seat-reservations/entities/seat-reservation.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class BookingsService {
@@ -135,6 +136,17 @@ export class BookingsService {
   }
 
   async completeByScheduleId(bus_schedule_id: number): Promise<void> {
+    const bookings = await this.findAllByBusScheduleId(bus_schedule_id);
+
+    for (const booking of bookings) {
+      await this.bookingRepository.manager.increment(
+        User,
+        { id: booking.user_id },
+        'count_trips',
+        1,
+      );
+    }
+
     await this.bookingRepository.update(
       { bus_schedule_id },
       { status: 'Завершен' },

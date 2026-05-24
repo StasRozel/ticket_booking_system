@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserType } from '../../../shared/types/UserType';
 import api from '../../../shared/utils/api';
+import '../styles/css/TelegramModal.css';
 
 type Props = {
   user: UserType;
@@ -57,10 +58,6 @@ const TelegramConnectModal: React.FC<Props> = ({ user, isOpen, onClose }) => {
         <div className="telegram-modal__actions">
           <button className="telegram-modal__open-bot" onClick={openBotLink}>
             Открыть бота
-          </button>
-
-          <button className="telegram-modal__check-button" onClick={checkConnection}>
-            Проверить подключение
           </button>
 
           <button className="telegram-modal__close-button" onClick={() => { setStatus(null); onClose(); }}>

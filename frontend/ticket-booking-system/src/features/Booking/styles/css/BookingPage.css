@@ -96,15 +96,23 @@
 }
 
 .booking-page__seat-scheme {
-  background: #f9fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafc url('../../img/schemaOfBus(3).png') no-repeat center;
+  background-size: cover;
   border-radius: 12px;
-  padding: 24px;
+  padding: 60px 24px 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 24px;
+  height: 700px;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .booking-page__driver {
-  text-align: center;
   padding: 10px;
   background: #2c3e50;
   color: #fff;
@@ -117,7 +125,56 @@
 .booking-page__seats-grid {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+  position: relative;
+  margin-top: 20px;
+  z-index: 1;
+}
+
+.booking-page__seats-row {
+  display: flex;
+  justify-content: center;
   gap: 8px;
+  align-items: center;
+}
+
+
+.booking-page__seat {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.booking-page__seat--available {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: #ddd;
+  color: #333;
+}
+
+.booking-page__seat--occupied {
+  background: rgba(231, 76, 60, 0.85);
+  border-color: #c0392b;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.booking-page__seat--selected {
+  background: rgba(39, 174, 96, 0.85);
+  border-color: #219a52;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.4);
 }
 
 .booking-page__seats-row {
@@ -384,9 +441,7 @@
     font-size: 12px;
   }
 
-  .booking-page__aisle {
-    width: 16px;
-  }
+
 
   .booking-page__selected-seat {
     flex-direction: column;

@@ -75,7 +75,7 @@ export class TelegramService {
           parse_mode: 'HTML',
         });
         return;
-      } catch (err) {
+      } catch (err: any) {
         console.error('[telegram] bot sendMessage failed', err?.message || err);
       }
     }

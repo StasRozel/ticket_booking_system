@@ -73,10 +73,34 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const { first_name, last_name, middle_name } = await api.get(`/users/${userId}`).then(res => res.data);
       const busId = await api.get(`/drivers/user/${userId}`).then(res => res.data.bus_id);
-      const busSchedulesData = await api.get(`/bus-schedules/bus/${busId}`).then(res => res.data);
-      const busScheduleId = busSchedulesData?.[0]?.id;
-      const resp = await api.get(`/bus-schedules/${busScheduleId}`);
-      const scheduleData = resp.data;
+      const today = new Date().toISOString().split('T')[0];
+      const now = new Date();
+      const curTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+      const todaySchedules = await api.get(`/bus-schedules/date/${today}`).then(res => res.data);
+      const driverSchedules = (Array.isArray(todaySchedules) ? todaySchedules : []).filter(
+        (s: any) => s.bus_id === busId
+      );
+
+      let scheduleData: any;
+      if (driverSchedules.length === 0) {
+        throw new Error('No schedule for today');
+      } else if (driverSchedules.length === 1) {
+        scheduleData = driverSchedules[0];
+      } else {
+        scheduleData =
+          driverSchedules.find(
+            (s: any) =>
+              s.schedule?.departure_time &&
+              s.schedule?.arrival_time &&
+              curTime >= s.schedule.departure_time &&
+              curTime <= s.schedule.arrival_time
+          ) ||
+          driverSchedules
+            .filter((s: any) => s.schedule?.departure_time && curTime < s.schedule.departure_time)
+            .sort((a: any, b: any) => a.schedule.departure_time.localeCompare(b.schedule.departure_time))[0] ||
+          driverSchedules[driverSchedules.length - 1];
+      }
 
       const routeData = scheduleData.schedule?.route;
 
@@ -100,6 +124,12 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
 
       if (!stops.length) stops = [];
+
+      // Добавляем начальную остановку (starting_point) и конечную (ending_point)
+      // 0 — старт, 1..N — промежуточные (как было), N+1 — финиш
+      const startStop = { id: 0, name: routeData.starting_point ?? routeData.from ?? '', order: 0 };
+      const endStop = { id: stops.length + 1, name: routeData.ending_point ?? routeData.to ?? '', order: stops.length + 1 };
+      stops = [startStop, ...stops, endStop];
 
       const visitedStops = scheduleData.visited_stops || [];
       if (Array.isArray(visitedStops) && visitedStops.length > 0) {
@@ -180,8 +210,13 @@ const DriverProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         const busId = driverResp.bus_id;
         if (!busId) throw new Error('Bus id not found for driver');
         const schedules = await api.get(`/bus-schedules/bus/${busId}`).then(res => res.data);
-        // try to pick the first or second schedule like other code does
-        if (Array.isArray(schedules) && schedules.length > 0) {
+        const today = new Date().toISOString().split('T')[0];
+        const todaySchedule = Array.isArray(schedules)
+          ? schedules.find((s: any) => s.operating_days === today)
+          : undefined;
+        if (todaySchedule) {
+          busScheduleId = todaySchedule.id;
+        } else if (Array.isArray(schedules) && schedules.length > 0) {
           busScheduleId = (schedules[1] && schedules[1].id) || schedules[0].id;
         }
       }

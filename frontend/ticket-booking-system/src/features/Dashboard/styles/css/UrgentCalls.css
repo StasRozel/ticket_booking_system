@@ -120,7 +120,8 @@
   flex-wrap: wrap;
   width: 100%;
 }
-.urgent-calls__replace-form input {
+.urgent-calls__replace-form input,
+.urgent-calls__replace-form select {
   padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -130,7 +131,8 @@
   flex: 1;
   min-width: 120px;
 }
-.urgent-calls__replace-form input:focus {
+.urgent-calls__replace-form input:focus,
+.urgent-calls__replace-form select:focus {
   border-color: #5C88C4;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
@@ -139,6 +141,10 @@
 }
 .urgent-calls__replace-form input::placeholder {
   color: #999;
+}
+.urgent-calls__replace-form select {
+  background: #fff;
+  cursor: pointer;
 }
 .urgent-calls__replace-form button {
   padding: 10px 16px;
@@ -187,7 +193,8 @@
     flex-direction: column;
     align-items: stretch;
   }
-  .urgent-calls__replace-form input {
+  .urgent-calls__replace-form input,
+  .urgent-calls__replace-form select {
     min-width: 100%;
   }
   .urgent-calls__replace-form button {

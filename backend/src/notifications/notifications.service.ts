@@ -55,7 +55,7 @@ export class NotificationsService {
     if (!chatId)
       throw new BadRequestException(400, 'chatId or userId required');
 
-    const text = `Маршрутка \u003Cb\u003E${data.routeName}\u003C/b\u003E прибывает на остановку <b>${data.stopName}</b>. Пожалуйста, приготовьтесь к посадке.`;
+    const text = `🚌 <b>${data.routeName}</b>\n\nПрибывает на остановку <b>${data.stopName}</b>.\n\nПожалуйста, приготовьтесь к посадке.`;
     await this.telegramService.sendTelegramMessage(chatId, text);
     return { success: true };
   }
@@ -96,7 +96,7 @@ export class NotificationsService {
           (b as any).busSchedule?.schedule?.route?.name ||
           'маршрут';
         const stopName = data.stopName || 'остановке';
-        const text = `Маршрутка <b>${routeName}</b> прибывает на остановку <b>${stopName}</b>. Пожалуйста, приготовьтесь.`;
+        const text = `🚌 <b>${routeName}</b>\n\nПрибывает на остановку <b>${stopName}</b>.\n\nПожалуйста, приготовьтесь к посадке.`;
 
         await this.telegramService.sendTelegramMessage(chatId, text);
         results.push({ bookingId: b.id as number, sent: true });
@@ -131,7 +131,15 @@ export class NotificationsService {
     if (!chatId)
       throw new BadRequestException(400, 'chatId or userId required');
 
-    const text = `Рейс \u003Cb\u003E${data.routeName}\u003C/b\u003E задерживается на ${data.minutes} минут. ${data.reason ? 'Причина: ' + data.reason : ''}`;
+    const minutesWord =
+      data.minutes % 10 === 1 && data.minutes % 100 !== 11
+        ? 'минуту'
+        : data.minutes % 10 >= 2 &&
+            data.minutes % 10 <= 4 &&
+            (data.minutes % 100 < 10 || data.minutes % 100 >= 20)
+          ? 'минуты'
+          : 'минут';
+    const text = `⚠️ <b>${data.routeName}</b>\n\nРейс задерживается на <b>${data.minutes} ${minutesWord}</b>.${data.reason ? `\n\nПричина: ${data.reason}` : ''}\n\nПриносим извинения за неудобства.`;
     await this.telegramService.sendTelegramMessage(chatId, text);
     return { success: true };
   }
@@ -173,7 +181,15 @@ export class NotificationsService {
           (b as any).busSchedule?.schedule?.route?.name ||
           'маршрут';
         const minutes = data.minutes;
-        const text = `Рейс <b>${routeName}</b> задерживается на ${minutes} минут. ${data.reason ? 'Причина: ' + data.reason : ''}`;
+        const minutesWord =
+          minutes % 10 === 1 && minutes % 100 !== 11
+            ? 'минуту'
+            : minutes % 10 >= 2 &&
+                minutes % 10 <= 4 &&
+                (minutes % 100 < 10 || minutes % 100 >= 20)
+              ? 'минуты'
+              : 'минут';
+        const text = `⚠️ <b>${routeName}</b>\n\nРейс задерживается на <b>${minutes} ${minutesWord}</b>.${data.reason ? `\n\nПричина: ${data.reason}` : ''}\n\nПриносим извинения за неудобства.`;
 
         await this.telegramService.sendTelegramMessage(chatId, text);
         results.push({ bookingId: b.id as number, sent: true });

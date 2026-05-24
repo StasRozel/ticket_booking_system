@@ -13,7 +13,7 @@ export type ProfileContextType = {
   bookings: BookingType[];
   tickets: { [bookingId: number]: TicketType[] };
   fetchBookings: () => Promise<void>;
-  handleBooking: (bookingId: number, tickets?: Map<number, boolean>) => void;
+  handleBooking: (bookingId: number) => void;
   handleCanselBooking: (id: number) => void;
   handleCanselTicket: (data: TicketType) => void;
   fetchPendingBookings: () => Promise<void>;

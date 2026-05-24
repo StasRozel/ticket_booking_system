@@ -57,6 +57,18 @@ export class BusschedulesController {
     return await this.busschedulesService.addVisitedStop(id, body.stopId);
   }
 
+  @Patch('/:id/replace-driver')
+  async replaceDriver(
+    @Param('id') id: number,
+    @Body() body: { driver_id: number; urgent_call_id: number },
+  ) {
+    return await this.busschedulesService.replaceDriverAndBus(
+      id,
+      body.driver_id,
+      body.urgent_call_id,
+    );
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.busschedulesService.remove(+id);

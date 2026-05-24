@@ -63,16 +63,16 @@ const EmergencyButton: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       <button
         onClick={handleClick}
         disabled={loading}
         className="driver-dashboard__emergency-btn"
       >
-        {loading ? 'Отправка...' : 'Экстренный вызов'}
+        {loading ? '...' : 'SOS'}
       </button>
       {message && <div className="driver-dashboard__emergency-message">{message}</div>}
-    </div>
+    </>
   );
 };
 

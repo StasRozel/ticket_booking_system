@@ -14,6 +14,7 @@ import MapPage from './features/Map/components/MapPage';
 import { ProfileProvider } from './features/Profile/context/ProfileContext';
 import { HomeProvider } from './features/Home/context/HomeContext';
 import PendingBookings from './features/Profile/components/PendingBookings';
+import PaymentSuccess from './features/Profile/components/PaymentSuccess';
 import { ModalProvider } from './shared/context/ModalContext';
 import AuthProtectedRoute from './features/Auth/components/AuthProtectedRoute';
 import ErrorPage from './features/Error/components/ErrorPage';
@@ -42,6 +43,7 @@ import { MapProvider } from './features/Map/context/MapContext';
                     <Route path="/about" element={<AboutUs />} />
                     <Route path="/contacts" element={<Contacts />} />
                     <Route path="/map" element={<MapProvider><MapPage /></MapProvider>} />
+                    <Route path="/payment-success" element={<PaymentSuccess />} />
                     <Route path="/401" element={<ErrorPage statusCode={401} />} />
                     <Route path="/403" element={<ErrorPage statusCode={403} />} />
                     <Route path="*" element={<ErrorPage statusCode={404} />} />

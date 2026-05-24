@@ -139,7 +139,7 @@ const FormStaff: React.FC<FormStaffProps> = ({ isOpen, onClose, isActive, staff,
               <label>Автобус</label>
               <select value={busId} onChange={e => setBusId(e.target.value ? Number(e.target.value) : '')}>
                 <option value="" disabled>Выберите автобус</option>
-                {buses.map((b: any) => (
+                {buses.filter((b: any) => b.available).map((b: any) => (
                   <option key={b.id} value={b.id}>
                     {b.bus_number} — {b.type}
                   </option>

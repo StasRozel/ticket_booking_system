@@ -8,7 +8,7 @@ import Notification from '../../../shared/components/Notification';
 import { useNotification } from '../../../shared/context/NotificationContext';
 import '../styles/css/BookingPage.css';
 
-const SEATS_PER_ROW = 4;
+const SEATS_PER_ROW = 3;
 
 const BookingPage: React.FC = () => {
   const {
@@ -164,14 +164,10 @@ const BookingPage: React.FC = () => {
             <div className="booking-page__seats-grid">
               {seatRows.map((row, rowIndex) => (
                 <div key={rowIndex} className="booking-page__seats-row">
-                  {row.map((seatNum, seatIndex) => {
+                  {row.map((seatNum) => {
                     const status = getSeatStatus(seatNum);
                     const seatClass = `booking-page__seat booking-page__seat--${status}`;
                     return (
-                      <React.Fragment key={seatNum}>
-                        {seatIndex === 2 && (
-                          <div className="booking-page__aisle" />
-                        )}
                         <button
                           className={seatClass}
                           onClick={() => toggleSeat(seatNum)}
@@ -186,7 +182,6 @@ const BookingPage: React.FC = () => {
                         >
                           {seatNum}
                         </button>
-                      </React.Fragment>
                     );
                   })}
                 </div>

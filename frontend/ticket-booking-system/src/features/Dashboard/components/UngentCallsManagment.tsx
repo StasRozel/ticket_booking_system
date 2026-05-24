@@ -3,27 +3,45 @@ import { useDashboard } from '../context/DashboardContext';
 import '../styles/UrgentCalls.scss';
 
 const UrgentCallsManagement: React.FC = () => {
-  const { trigger, urgentCalls, fetchUrgentCalls, replaceBusScheduleDriverAndBus, fetchOneBusSchedule, fetchOneDriver } = useDashboard() as any;
+  const { trigger, urgentCalls, fetchUrgentCalls, replaceBusScheduleDriverAndBus, fetchOneBusSchedule, fetchOneDriver, driversList, fetchAllDrivers, fetchBusSchedulesByDate } = useDashboard() as any;
   const [selectedSchedule, setSelectedSchedule] = useState<number | null>(null);
   const [driverId, setDriverId] = useState<number | ''>('');
   const [busSchedulesData, setBusSchedulesData] = useState<{ [key: number]: any[] }>({});
+  const [busyBusIds, setBusyBusIds] = useState<number[]>([]);
 
   useEffect(() => {
     fetchUrgentCalls();
+    fetchAllDrivers();
   }, [trigger]);
 
   useEffect(() => {
     if (urgentCalls && urgentCalls.length > 0) {
       const fetchData = async () => {
         const data: { [key: number]: any[] } = {};
+        let allDates = new Set<string>();
         await Promise.all(
           urgentCalls.map(async (call: any) => {
             const bsData = await fetchOneBusSchedule(call.busScheduleId);
             const driverData = await fetchOneDriver(call.driverId);
             data[call.id] = [bsData, driverData];
+            if (bsData?.operating_days) allDates.add(bsData.operating_days);
           })
         );
         setBusSchedulesData(data);
+
+        // Собираем занятые автобусы на каждую дату
+        const busy: number[] = [];
+        await Promise.all(
+          Array.from(allDates).map(async (date) => {
+            try {
+              const schedules = await fetchBusSchedulesByDate(date);
+              if (Array.isArray(schedules)) {
+                schedules.forEach((s: any) => busy.push(s.bus_id));
+              }
+            } catch (_) {}
+          })
+        );
+        setBusyBusIds(busy);
       };
       fetchData();
     }
@@ -106,12 +124,25 @@ const UrgentCallsManagement: React.FC = () => {
                   )}
                   {selectedSchedule === call.id && (
                     <div className="urgent-calls__replace-form">
-                      <input 
-                        type="number"
-                        placeholder="ID водителя" 
-                        value={driverId as any} 
-                        onChange={e => setDriverId(e.target.value ? Number(e.target.value) : '')} 
-                      />
+                      <select
+                        value={driverId}
+                        onChange={e => setDriverId(e.target.value ? Number(e.target.value) : '')}
+                      >
+                        <option value="">Выберите водителя</option>
+                        {driversList
+                          .filter((d: any) => {
+                            const bsData = busSchedulesData[call.id]?.[0];
+                            const currentBusId = bsData?.bus_id;
+                            // Показываем только водителей, чей автобус свободен
+                            // (текущий автобус рейса не считается занятым — мы его заменяем)
+                            return d.bus_id !== currentBusId ? !busyBusIds.includes(d.bus_id) : true;
+                          })
+                          .map((d: any) => (
+                          <option key={d.id} value={d.id}>
+                            {d.user ? `${d.user.last_name} ${d.user.first_name}` : `Водитель #${d.id}`}
+                          </option>
+                        ))}
+                      </select>
                       <button className="apply" onClick={() => handleReplace(call)}>Применить</button>
                       <button className="cancel" onClick={() => setSelectedSchedule(null)}>Отмена</button>
                     </div>

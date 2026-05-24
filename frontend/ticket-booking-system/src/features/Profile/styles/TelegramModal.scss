@@ -1,0 +1,113 @@
+@use '../../../shared/styles/colors' as *;
+
+.telegram-modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  &__content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 420px;
+    max-width: 90%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  &__open-bot,
+  &__check-button,
+  &__close-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  }
+
+  &__open-bot {
+    background: $primary;
+    color: $neutral-100;
+
+    &:hover {
+      background: $primary-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
+    }
+  }
+
+  &__check-button {
+    background: #198754;
+    color: $neutral-100;
+
+    &:hover {
+      background: #146c43;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+    }
+  }
+
+  &__close-button {
+    background: transparent;
+    color: $text-dark;
+    border: 1px solid $neutral-border;
+
+    &:hover {
+      background: $neutral-200;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  p {
+    margin: 10px 0 0;
+    color: #333;
+  }
+
+  .status {
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .status--checking { color: #0d6efd; }
+  .status--connected { color: #198754; }
+  .status--timeout { color: #e74c3c; }
+
+  @media (max-width: 480px) {
+    &__content {
+      width: 94%;
+      padding: 16px;
+    }
+
+    &__actions {
+      flex-direction: column;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    &__open-bot,
+    &__check-button,
+    &__close-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

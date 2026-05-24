@@ -19,6 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SocketModule } from './socket/socket.module';
 import { SeatReservationsModule } from './seat-reservations/seat-reservations.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     SchedulesModule,
     SocketModule,
     SeatReservationsModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

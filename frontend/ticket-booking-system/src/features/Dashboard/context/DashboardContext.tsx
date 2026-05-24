@@ -20,6 +20,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [busSchedules, setBusSchedules] = useState([]);
     const [urgentCalls, setUrgentCalls] = useState([]);
     const [driverComplaints, setDriverComplaints] = useState([]);
+    const [driversList, setDriversList] = useState([]);
     const [users, setUsers] = useState<UserType[]>([]);
     const [isModalFormOpen, setIsModalFormOpen] = useState(false);
     const [isAddMode, setIsAddMode] = useState(true);
@@ -95,6 +96,15 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     }, []);
 
+    const fetchBusSchedulesByDate = async (date: string) => {
+        try {
+            const response = await api.get(`/bus-schedules/date/${date}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching bus-schedules by date:', error);
+        }
+    }
+
     const fetchOneBusSchedule = async (bus_schedule_id: number) => {
         try {
             const response = await api.get(`/bus-schedules/${bus_schedule_id}`);
@@ -113,6 +123,15 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     }
 
+    const fetchAllDrivers = async () => {
+        try {
+            const response = await api.get('/drivers/');
+            setDriversList(response.data);
+        } catch (error) {
+            console.error('Error fetching drivers:', error);
+        }
+    }
+
 
     const fetchUrgentCalls = async () => {
         try {
@@ -125,7 +144,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const updateUrgentCalls = async (id: number) => {
         try {
-            await api.patch(`/urgentcalls/${id}`, {accepted: true});
+            const res = await api.patch(`/urgentcalls/${id}`, {accepted: true});
+            return res.data;
         } catch (error) {
             
         }
@@ -152,11 +172,10 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const replaceBusScheduleDriverAndBus = async (busScheduleId: number, driverId: number, urgentCallId: number) => {
         try {
-            // Backend does not expose a dedicated replace endpoint; update bus-schedule directly
-            const response = await api.patch(`/bus-schedules/${busScheduleId}`, { driver_id: driverId, urgent_call_id: urgentCallId });
+            const response = await api.patch(`/bus-schedules/${busScheduleId}/replace-driver`, { driver_id: driverId, urgent_call_id: urgentCallId });
             if (response.data) setTrigger(next => ++next);
 
-            updateUrgentCalls(urgentCallId);
+            await updateUrgentCalls(urgentCallId);
             return response.data;
         } catch (error) {
             console.error('Error replacing driver/bus for bus schedule:', error);
@@ -216,7 +235,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             users, loading, error, fetchUsers, toggleUserBlock,
             buses, fetchBuses,
             busSchedules, fetchBusSchedules, fetchOneBusSchedule,
-            fetchOneDriver,
+            fetchOneDriver, driversList, fetchAllDrivers, fetchBusSchedulesByDate,
             urgentCalls, fetchUrgentCalls, replaceBusScheduleDriverAndBus,
             driverComplaints, fetchDriverComplaints, deleteDriverComplaint,
             currentEntity,

@@ -23,6 +23,9 @@ export type DashboardContextType = {
     buses: BusType[];
     fetchBuses: () => Promise<void>;
     fetchOneDriver: (driver_id: number) => Promise<any>
+    driversList: any[];
+    fetchAllDrivers: () => Promise<void>;
+    fetchBusSchedulesByDate: (date: string) => Promise<any>;
     currentEntity: any;
     users: UserType[];
     loading: boolean;

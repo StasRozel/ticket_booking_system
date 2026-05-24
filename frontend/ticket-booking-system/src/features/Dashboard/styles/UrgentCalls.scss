@@ -142,7 +142,8 @@
     flex-wrap: wrap;
     width: 100%;
 
-    input {
+    input,
+    select {
       padding: 10px 12px;
       border: 1px solid #ddd;
       border-radius: 5px;
@@ -160,6 +161,11 @@
       &::placeholder {
         color: #999;
       }
+    }
+
+    select {
+      background: #fff;
+      cursor: pointer;
     }
 
     button {
@@ -220,7 +226,8 @@
       flex-direction: column;
       align-items: stretch;
 
-      input {
+      input,
+      select {
         min-width: 100%;
       }
 

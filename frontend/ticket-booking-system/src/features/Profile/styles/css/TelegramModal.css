@@ -1,0 +1,97 @@
+.telegram-modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.telegram-modal__content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+.telegram-modal__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.telegram-modal__open-bot,
+.telegram-modal__check-button,
+.telegram-modal__close-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+.telegram-modal__open-bot {
+  background: #5C88C4;
+  color: #ffffff;
+}
+.telegram-modal__open-bot:hover {
+  background: #456fa8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(76, 140, 228, 0.3);
+}
+.telegram-modal__check-button {
+  background: #198754;
+  color: #ffffff;
+}
+.telegram-modal__check-button:hover {
+  background: #146c43;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+}
+.telegram-modal__close-button {
+  background: transparent;
+  color: #1a2a44;
+  border: 1px solid #ebedf0;
+}
+.telegram-modal__close-button:hover {
+  background: #f5f7fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+.telegram-modal p {
+  margin: 10px 0 0;
+  color: #333;
+}
+.telegram-modal .status {
+  margin-top: 8px;
+  font-weight: 600;
+}
+.telegram-modal .status--checking { color: #0d6efd; }
+.telegram-modal .status--connected { color: #198754; }
+.telegram-modal .status--timeout { color: #e74c3c; }
+@media (max-width: 480px) {
+  .telegram-modal__content {
+    width: 94%;
+    padding: 16px;
+  }
+  .telegram-modal__actions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .telegram-modal__open-bot,
+  .telegram-modal__check-button,
+  .telegram-modal__close-button {
+    width: 100%;
+    text-align: center;
+  }
+}

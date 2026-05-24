@@ -123,7 +123,7 @@ const PendingBookings: React.FC= () => {
                       className="button__action"
                       onClick={() =>handleBooking(booking.id)}
                     >
-                      Забронировать
+                      Купить
                     </button>
                     <button
                       className="button__cansel"
