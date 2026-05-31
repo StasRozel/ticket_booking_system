@@ -62,10 +62,9 @@ export class TelegramService {
       }
     });
 
-    this.bot
-      .launch()
-      .then(() => console.log('[telegram] bot started'))
-      .catch((e) => console.error('[telegram] bot launch error', e));
+    this.bot.launch();
+    // .then(() => console.log('[telegram] bot started'))
+    // .catch((e) => console.error('[telegram] bot launch error', e));
   }
 
   async sendTelegramMessage(chatId: string | number, text: string) {
